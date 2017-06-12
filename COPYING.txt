@@ -1,6 +1,6 @@
-A business-friendly OSS license for sources and binaries of the codegenj project:
+tA business-friendly OSS license for sources and binaries of the Frankenstein project:
 
-Copyright (c) 2016 Oliver Rode
+Copyright (c) 2017 Oliver Rode
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use sources and binary files except in compliance with the License.
