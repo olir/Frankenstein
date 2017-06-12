@@ -1,4 +1,4 @@
-tA business-friendly OSS license for sources and binaries of the Frankenstein project:
+A business-friendly OSS license for sources and binaries of the Frankenstein project:
 
 Copyright (c) 2017 Oliver Rode
 
