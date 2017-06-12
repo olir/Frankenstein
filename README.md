@@ -8,8 +8,12 @@ Frankenstein is a video converter with the following video filters/features:
 - Over/Under to Left/Right (side-by-side) converter
 - Left/Right side swapper
 - Test Image (good for calibrating videos on a VR display)
-
 Some filters can be chained together.
+
+It's is not designed for movies on dvd/blueray. There is no need: Your VR plattform should have a movie player capable of playing 3D Movies over VR.
+
+The output of Frankenstein can be perfectly viewed with video players like [LittlStar](http://littlstar.info).
+
 
 ## Summary for Programmers
 Frankenstein is a very small and easy to extend Java Tool.
