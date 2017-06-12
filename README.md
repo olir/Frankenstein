@@ -13,6 +13,6 @@ Some filters can be chained together.
 
 ## Summary for Programmers
 Frankenstein is a very small and easy to extend Java Tool.
-It is very fast because it is mostly build on existing libraries: OpenCV for graphic processing and ffmpeg for video/audio processing. The Graphical Interface (Java FX) is optional.
+It is very fast because it is mostly build on existing libraries: OpenCV for graphic processing and ffmpeg for video/audio processing. The Graphical Interface (Java FX) is optional. It's a little bit tricky to get the toolchain working with acceptable quality. But now...
 
 It's alive!
