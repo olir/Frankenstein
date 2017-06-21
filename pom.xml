@@ -145,6 +145,7 @@
 					<encoding>UTF-8</encoding><!-- try to force encoding -->
 				</configuration>
 			</plugin>
+			<!--
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>webstart-maven-plugin</artifactId>
@@ -161,7 +162,7 @@
 							<jnlp>
 								<mainClass>${mainClass}</mainClass>
 							</jnlp>
-							<pack200>true</pack200>
+							<!-- <pack200>true</pack200> -->
 							<sign>
 								<keystore>${jks.keystore}</keystore>
 								<keypass>${jks.keypass}</keypass>
@@ -174,6 +175,7 @@
 					</execution>
 				</executions>
 			</plugin>
+			-->
 		</plugins>
 	</build>
 
