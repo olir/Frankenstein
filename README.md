@@ -14,6 +14,10 @@ The output of Frankenstein VR can be perfectly viewed with video players like [L
 
 Issues: Temporary Video Output is uncompressed and can get very hugh. You need to have at least 100GB disk space.
 
+# Pre-Requisites
+- [FFmpeg 3.1.1+](https://ffmpeg.org) installed.
+- [OpenCV 3.2.0+](http://www.opencv.org/releases.html) installed.
+
 
 ## Summary for Programmers
 If you like to experiment with video filters based on OpenCV just fork it.
