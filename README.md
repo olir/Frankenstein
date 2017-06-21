@@ -1,7 +1,7 @@
 # Frankenstein VR
 Free Video Converter for Virtual Reality and 3D based on ffmpeg and OpenCV for Java.
 
-[![Dependency Status](https://www.versioneye.com/user/projects/594a6802368b0800421af505/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/594a6802368b0800421af505)
+[![Build Status](https://travis-ci.org/olir/Frankenstein.png)](https://travis-ci.org/olir/Frankenstein/builds) [![Dependency Status](https://www.versioneye.com/user/projects/594a6802368b0800421af505/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/594a6802368b0800421af505)
 
 ## Summary for Users
 Frankenstein VR is an experimental video converter with some video filters/features:
