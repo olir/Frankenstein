@@ -145,6 +145,53 @@
 					<encoding>UTF-8</encoding><!-- try to force encoding -->
 				</configuration>
 			</plugin>
+
+			<plugin>
+			    <groupId>org.apache.maven.plugins</groupId>
+			    <artifactId>maven-jar-plugin</artifactId>
+			    <executions>
+				<execution>
+				    <phase>compile</phase>
+				    <goals>
+					<goal>jar</goal>
+				    </goals>
+				    <configuration>
+					<archive>
+					    <manifest>
+						<mainClass>
+						    ${mainClass}
+						</mainClass>
+					    </manifest>
+					</archive>
+					<outputDirectory>
+					    ${project.basedir}/target/jws
+					</outputDirectory>
+				    </configuration>
+				</execution>
+			    </executions>
+			</plugin>
+
+			<!--
+			<plugin>
+			    <groupId>org.apache.maven.plugins</groupId>
+			    <artifactId>maven-war-plugin</artifactId>
+
+			    <configuration>
+				<webResources>
+				    <resource>
+					<directory>
+					    ${project.basedir}/java-core-samples-lib/
+					</directory>
+					<includes>
+					    <include>**/*.jar</include>
+					</includes>
+					<targetPath>WEB-INF/lib</targetPath>
+				    </resource>
+				</webResources>
+			    </configuration>
+			</plugin>
+			-->
+			
 			<!--
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
