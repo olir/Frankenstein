@@ -16,7 +16,7 @@ Issues: Temporary Video Output is uncompressed and can get very hugh. You need t
 
 # Pre-Requisites
 - [FFmpeg 3.1.1+](https://ffmpeg.org) installed.
-- [OpenCV 3.2.0+](http://www.opencv.org/releases.html) installed.
+- [OpenCV 3.2.0+](http://www.opencv.org/releases.html) installed. * trying to provide as library later *
 
 
 ## Summary for Programmers
