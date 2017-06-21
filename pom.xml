@@ -8,6 +8,8 @@
 		<lbt4j.version>0.0.1</lbt4j.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
 		<jnlp.URL></jnlp.URL>
 		<mainClass></mainClass>
 		<!-- <jks.keystore></jks.keystore> -->
