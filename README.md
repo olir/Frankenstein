@@ -8,7 +8,8 @@ No release yet. You can use maven to build the jar and run java  de.screenflow.f
 Issues: Temporary Video Output is uncompressed and can get very hugh. You need to have at least 100GB disk space. Developed on a Windows 10 64bit.
 
 # Pre-Requisites
-- [FFmpeg 3.1.1+](https://ffmpeg.org) installed.
+- [FFmpeg 3.1.1+](https://java.com) installed.
+- [Java JRE 1.8+](https://ffmpeg.org) installed.
 - [OpenCV 3.2.0+](http://www.opencv.org/releases.html) installed. * trying to provide as library later *
 
 
