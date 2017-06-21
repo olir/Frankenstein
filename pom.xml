@@ -162,7 +162,7 @@
 							<jnlp>
 								<mainClass>${mainClass}</mainClass>
 							</jnlp>
-							<!-- <pack200>true</pack200> -->
+							<pack200>true</pack200>
 							<sign>
 								<keystore>${jks.keystore}</keystore>
 								<keypass>${jks.keypass}</keypass>
