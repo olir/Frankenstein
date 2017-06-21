@@ -3,6 +3,15 @@ Free Video Converter for Virtual Reality and 3D based on ffmpeg and OpenCV for J
 
 [![Build Status](https://travis-ci.org/olir/Frankenstein.png)](https://travis-ci.org/olir/Frankenstein/builds) [![Dependency Status](https://www.versioneye.com/user/projects/594a6802368b0800421af505/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/594a6802368b0800421af505)
 
+# Status
+No release yet. You can use maven to build the jar and run java  de.screenflow.frankenstein.fxml.Main with this jar and opencv jar (you must include native libs). The path to ffmpeg (parent of bin) is still hardcoded in de.screenflow.frankenstein.Configuration. Good luck ;-)
+Issues: Temporary Video Output is uncompressed and can get very hugh. You need to have at least 100GB disk space. Developed on a Windows 10 64bit.
+
+# Pre-Requisites
+- [FFmpeg 3.1.1+](https://ffmpeg.org) installed.
+- [OpenCV 3.2.0+](http://www.opencv.org/releases.html) installed. * trying to provide as library later *
+
+
 ## Summary for Users
 Frankenstein VR is an experimental video converter with some video filters/features:
 - Virtual Reality side-by-side converter (projection, padding, shrinking)
@@ -12,12 +21,6 @@ Frankenstein VR is an experimental video converter with some video filters/featu
 - Test Image (good for calibrating configurations on a VR display)
 Some filters can be chained together.
 The output of Frankenstein VR can be perfectly viewed with video players like [LittlStar](http://littlstar.info).
-
-Issues: Temporary Video Output is uncompressed and can get very hugh. You need to have at least 100GB disk space.
-
-# Pre-Requisites
-- [FFmpeg 3.1.1+](https://ffmpeg.org) installed.
-- [OpenCV 3.2.0+](http://www.opencv.org/releases.html) installed. * trying to provide as library later *
 
 
 ## Summary for Programmers
