@@ -99,8 +99,26 @@
 		<!-- No credits so far. -->
 	</contributors>
 
+	<repositories>
+	    <repository>
+		<id>javaopencvbook</id>
+		<url>https://raw.github.com/JavaOpenCVBook/code/maven2/</url>
+	    </repository>
+	</repositories>
+
 	<!-- POM Relationships -->
 	<dependencies>
+		<dependency>
+		    <groupId>org.javaopencvbook</groupId>
+		    <artifactId>opencvjar</artifactId>
+		    <version>3.0.0</version>
+		</dependency>
+		<dependency>
+		    <groupId>org.javaopencvbook</groupId>
+		    <artifactId>opencvjar-runtime</artifactId>
+		    <version>3.0.0</version>
+		    <classifier>natives-windows-x86_64</classifier>
+		</dependency>
 	</dependencies>
 
 	<!-- Build Settings -->
