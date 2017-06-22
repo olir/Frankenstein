@@ -206,7 +206,11 @@ public class ProcessingSceneController implements ProcessingListener {
 		double tt = (frames - 1) / fps;
 
 		// Background
-		gc.setFill(rootBorder.getBackground().getFills().get(0).getFill());
+		try {
+			gc.setFill(rootBorder.getBackground().getFills().get(0).getFill());
+		} catch (Exception e) {
+			gc.setFill(Color.WHITE);
+		}
 		gc.fillRect(0, 0, editCanvas.getWidth(), editCanvas.getHeight());
 
 		if (taskErrorMessage != null) {

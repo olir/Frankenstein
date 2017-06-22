@@ -9,7 +9,6 @@ No release yet.
 You can use maven to run it with "mvn clean package exec:exec"
 
 Issues:
-- Currently video input is buggy. I'm working on it.
 - The path to ffmpeg (parent of bin) is still hardcoded in de.screenflow.frankenstein.Configuration . Good luck ;-)
 - Temporary Video Output is uncompressed and can get very hugh. You need to have at least 100GB disk space. Developed on a Windows 10 64bit.
 
@@ -28,7 +27,7 @@ Frankenstein VR is an experimental video converter with some video filters/featu
 - Left/Right side swapper
 - Test Image (good for calibrating configurations on a VR display)
 Some filters can be chained together.
-The output of Frankenstein VR can be perfectly viewed with video players like [LittlStar](http://littlstar.info).
+The output of Frankenstein VR can be perfectly viewed in 3D with video players like [LittlStar](http://littlstar.info). It appears on a virtual 160-inch curved display.
 
 
 ## Summary for Programmers

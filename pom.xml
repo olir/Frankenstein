@@ -64,17 +64,29 @@
 			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
 			<distribution>repo</distribution>
 			<comments>
+				Frankenstein VR
 				Copyright 2017 Oliver Rode
-				
 				Licensed under the Apache License, Version 2.0 (the "License");
-				you may not use sources and binary files except in compliance with the License.
-				You may obtain a copy of the License at
-				 http://www.apache.org/licenses/LICENSE-2.0
-				Unless required by applicable law or agreed to in writing, software
-				distributed under the License is distributed on an "AS IS" BASIS,
-				WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-				See the License for the specific language governing permissions and
-				limitations under the License.
+			</comments>
+		</license>
+		<license>
+			<name>BSD 3-clause</name>
+			<url>http://www.opencv.org/license.html</url>
+			<distribution>repo</distribution>
+			<comments>
+				license of OpenCV including project	https://github.com/openpnp/opencv
+			</comments>
+		</license>
+		<license>
+			<name>GNU LGPL, Version 2.1</name>
+			<url>http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html</url>
+			<distribution>repo</distribution>
+			<comments>
+				FFmpeg is licensed under the GNU Lesser General Public License (LGPL) version 2.1 or later.
+				On Windows OpenCV uses pre-built ffmpeg binaries, built with proper flags (without GPL components) and
+				wrapped with simple, stable OpenCV-compatible API.
+				The binaries are opencv_ffmpeg.dll (version for 32-bit Windows) and
+				opencv_ffmpeg_64.dll (version for 64-bit Windows).
 			</comments>
 		</license>
 	</licenses>
@@ -205,8 +217,8 @@
 						</goals>
 						<configuration>
 							<executable>javaw</executable>
-							<!-- optional -->
-							<workingDirectory>/tmp</workingDirectory>
+							<!-- ffmpeg dll must be present: -->
+							<workingDirectory>${basedir}/bin</workingDirectory>
 							<arguments>
 								<argument>-jar</argument>
 								<argument>${basedir}/target/frankenstein.jar</argument>

@@ -72,7 +72,13 @@ public class MovieProcessor {
 	}
 
 	public void init(ProcessingListener l) {
-		openInput();
+		currentPos = 1;
+		
+		if (!openInput()) {
+			if (l != null)
+				l.prematureEnd(1);
+			return;
+		}
 		openOutput(l);
 
 		ffmpeg = new File(ffmpegPath, "\\bin\\ffmpeg.exe");
@@ -187,7 +193,7 @@ public class MovieProcessor {
 			movie = new VideoCapture(configuration.inputVideo);
 
 			if (!movie.isOpened()) {
-				System.err.println("Input Movie Opening Error");
+				System.err.println("Input Movie Opening Error for "+configuration.inputVideo);
 				return false;
 			} else {
 				movie.read(frame);
