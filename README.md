@@ -37,3 +37,11 @@ Uncompressed temporary video makes it a little bit slow, but the rest of it is p
 
 
 But now... It's alive!
+
+
+### FFMPEG OpenH264 support ###
+FFMPEG build contains H264 encoder based on the OpenH264 library, that should be installed separatelly.
+  OpenH264 Video Codec provided by Cisco Systems, Inc.
+  See https://github.com/cisco/openh264/releases for details and OpenH264 license.
+  Downloaded binary file can be placed into global system path (System32 or SysWOW64) or near application binaries (bin/).
+  You can also specify location of binary file via OPENH264_LIBRARY_PATH environment variable.

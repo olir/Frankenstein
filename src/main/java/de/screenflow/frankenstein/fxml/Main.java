@@ -50,17 +50,20 @@ public class Main extends Application {
 
 	private Locale locale = Locale.getDefault();
 
-	
-	
 	@Override
 	public void start(Stage primaryStage) {
 		try {
 
 			// https://github.com/openpnp/opencv
-			nu.pattern.OpenCV.loadShared();
-			//nu.pattern.OpenCV.loadLocal();
+			try {
+				Class.forName("nu.pattern.OpenCV").getMethod("loadShared", null).invoke(null, null);
+				// nu.pattern.OpenCV.loadShared();
+				// nu.pattern.OpenCV.loadLocal();
+			} catch (ClassNotFoundException e) {
+				System.out.println("Warning: nu.pattern.OpenCV not found."); // eclipse environment
+			}
 			System.loadLibrary(org.opencv.core.Core.NATIVE_LIBRARY_NAME);
-			
+
 			theStage = primaryStage;
 
 			theStage.setTitle(APP_NAME);
