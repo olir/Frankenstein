@@ -6,7 +6,7 @@ Free Video Converter for Virtual Reality and 3D based on ffmpeg and OpenCV for J
 # Status
 No release yet. 
 
-You can use maven to run it with "mvn exec:exec"
+You can use maven to run it with "mvn clean package exec:exec"
 
 Issues:
 - Currently video input is buggy. I'm working on it.
