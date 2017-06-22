@@ -16,7 +16,8 @@ Issues:
 # Pre-Requisites
 - [FFmpeg 3.1.1+](https://java.com) installed.
 - [Java JRE 1.8+](https://ffmpeg.org) installed.
-- [OpenCV 3.2.0+](http://www.opencv.org/releases.html) installed. * trying to provide as library later *
+# Provided (do not install)(
+- [OpenCV 3.2.0+](http://www.opencv.org/releases.html)
 
 
 ## Summary for Users
