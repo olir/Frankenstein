@@ -50,11 +50,20 @@ public class Main extends Application {
 
 	private Locale locale = Locale.getDefault();
 
+	//static {
+	//  System.loadLibrary(org.opencv.core.Core.NATIVE_LIBRARY_NAME);
+	//}			
+	
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-			System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
+//			System.loadLibrary(Core.NATIVE_LIBRARY_NAME);
 
+			nu.pattern.OpenCV.loadShared();
+			//nu.pattern.OpenCV.loadLocal();
+			
+			System.loadLibrary(org.opencv.core.Core.NATIVE_LIBRARY_NAME);
+			
 			theStage = primaryStage;
 
 			theStage.setTitle(APP_NAME);

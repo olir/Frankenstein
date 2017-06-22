@@ -4,8 +4,14 @@ Free Video Converter for Virtual Reality and 3D based on ffmpeg and OpenCV for J
 [![Build Status](https://travis-ci.org/olir/Frankenstein.png)](https://travis-ci.org/olir/Frankenstein/builds) [![Dependency Status](https://www.versioneye.com/user/projects/594a6802368b0800421af505/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/594a6802368b0800421af505)
 
 # Status
-No release yet. You can use maven to build the jar and run java  de.screenflow.frankenstein.fxml.Main with this jar and opencv jar (you must include native libs). The path to ffmpeg (parent of bin) is still hardcoded in de.screenflow.frankenstein.Configuration. Good luck ;-)
-Issues: Temporary Video Output is uncompressed and can get very hugh. You need to have at least 100GB disk space. Developed on a Windows 10 64bit.
+No release yet. 
+
+You can use maven to run it with "mvn exec:exec"
+
+Issues:
+- Currently video input is buggy. I'm working on it.
+- The path to ffmpeg (parent of bin) is still hardcoded in de.screenflow.frankenstein.Configuration . Good luck ;-)
+- Temporary Video Output is uncompressed and can get very hugh. You need to have at least 100GB disk space. Developed on a Windows 10 64bit.
 
 # Pre-Requisites
 - [FFmpeg 3.1.1+](https://java.com) installed.

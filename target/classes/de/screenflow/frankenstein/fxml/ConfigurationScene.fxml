@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.BorderPane?>
+
+<BorderPane maxHeight="750.0" maxWidth="1024.0" prefHeight="750.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.screenflow.frankenstein.fxml.ConfigurationSceneController">
+   <top>
+      <Label text="%scene.title" textAlignment="CENTER" BorderPane.alignment="CENTER">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+         <padding>
+            <Insets bottom="16.0" top="16.0" />
+         </padding>
+      </Label>
+   </top>
+   <center>
+      <GridPane maxHeight="-Infinity" minHeight="400.0" minWidth="640.0" BorderPane.alignment="TOP_CENTER">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints fillHeight="false" minHeight="260.0" prefHeight="30.0" valignment="TOP" vgrow="NEVER" />
+            <RowConstraints fillHeight="false" minHeight="350.0" prefHeight="30.0" valignment="TOP" vgrow="NEVER" />
+            <RowConstraints fillHeight="false" minHeight="50.0" prefHeight="30.0" valignment="TOP" vgrow="NEVER" />
+        </rowConstraints>
+         <children>
+            <VBox spacing="8.0">
+               <children>
+                  <Label text="Input Action">
+                     <font>
+                        <Font name="System Bold" size="16.0" />
+                     </font>
+                  </Label>
+                  <RadioButton fx:id="rVideoFileInput" onAction="#rActionVideoFileInput" text="Video File Input">
+                     <toggleGroup>
+                        <ToggleGroup fx:id="InputGroup" />
+                     </toggleGroup>
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </RadioButton>
+                  <RadioButton fx:id="rTestVideoGenerator" onAction="#rActionTestVideoGenerator" text="Test Video Generator" toggleGroup="$InputGroup">
+                     <font>
+                        <Font size="16.0" />
+                     </font></RadioButton>
+                  <RadioButton disable="true" text="Slides" toggleGroup="$InputGroup">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </RadioButton>
+                  <Label />
+                  <CheckBox disable="true" mnemonicParsing="false" text="Pre-Processing">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </CheckBox>
+               </children>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+            </VBox>
+            <VBox minWidth="-Infinity" prefWidth="213.0" spacing="8.0" GridPane.columnIndex="1">
+               <children>
+                  <Label text="Normalization Action">
+                     <font>
+                        <Font name="System Bold" size="16.0" />
+                     </font>
+                  </Label>
+                  <RadioButton fx:id="rNoNormalization" mnemonicParsing="false" onAction="#rActionNoNormalization" text="None">
+                     <toggleGroup>
+                        <ToggleGroup fx:id="NormalizationGroup" />
+                     </toggleGroup>
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </RadioButton>
+                  <RadioButton fx:id="rAnaglyph" mnemonicParsing="false" onAction="#rActionAnaglyph" text="Anaglyph to Left/Right" toggleGroup="$NormalizationGroup">
+                     <font>
+                        <Font size="16.0" />
+                     </font></RadioButton>
+                  <RadioButton fx:id="rOverUnder" mnemonicParsing="false" onAction="#rActionOverUnder" text="Over/Under to Left/Right" toggleGroup="$NormalizationGroup">
+                     <font>
+                        <Font size="16.0" />
+                     </font></RadioButton>
+                  <RadioButton fx:id="rCloneLR" mnemonicParsing="false" onAction="#rActionCloneLR" text="Clone to Left/Right" toggleGroup="$NormalizationGroup">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </RadioButton>
+                  <RadioButton fx:id="rDelayLeft" mnemonicParsing="false" onAction="#rActionDelayLeft" text="Delay Left" toggleGroup="$NormalizationGroup">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </RadioButton>
+                  <RadioButton fx:id="r3DConverter" disable="true" mnemonicParsing="false" text="Left/Right 3D Converter" toggleGroup="$NormalizationGroup">
+                     <font>
+                        <Font size="16.0" />
+                     </font></RadioButton>
+               </children>
+            </VBox>
+            <VBox spacing="8.0" GridPane.columnIndex="2">
+               <children>
+                  <Label text="Alignment Action">
+                     <font>
+                        <Font name="System Bold" size="16.0" />
+                     </font>
+                  </Label>
+                  <RadioButton fx:id="rNoAlignment" mnemonicParsing="false" onAction="#rActionNoAlignment" text="None">
+                     <toggleGroup>
+                        <ToggleGroup fx:id="AlignmentGroup" />
+                     </toggleGroup>
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </RadioButton>
+                  <RadioButton fx:id="rSwapLR" mnemonicParsing="false" onAction="#rActionSwapLR" text="Swap Left/Right" toggleGroup="$AlignmentGroup">
+                     <font>
+                        <Font size="16.0" />
+                     </font></RadioButton>
+               </children>
+            </VBox>
+            <VBox spacing="8.0" GridPane.columnIndex="3">
+               <children>
+                  <Label text="Virtual Reality Action">
+                     <font>
+                        <Font name="System Bold" size="16.0" />
+                     </font>
+                  </Label>
+                  <RadioButton fx:id="rNoVR" mnemonicParsing="false" onAction="#rActionNoVR" text="None">
+                     <toggleGroup>
+                        <ToggleGroup fx:id="VirtualRealityGroup" />
+                     </toggleGroup>
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </RadioButton>
+                  <RadioButton fx:id="rVRConverter" mnemonicParsing="false" onAction="#rActionVRConverter" text="VR Converter" toggleGroup="$VirtualRealityGroup">
+                     <font>
+                        <Font size="16.0" />
+                     </font></RadioButton>
+               </children>
+            </VBox>
+            <VBox spacing="8.0" GridPane.columnIndex="4">
+               <children>
+                  <Label text="Output Action">
+                     <font>
+                        <Font name="System Bold" size="16.0" />
+                     </font>
+                  </Label>
+                  <RadioButton fx:id="rNoOutput" mnemonicParsing="false" onAction="#rActionNoOutput"  text="None">
+                     <toggleGroup>
+                        <ToggleGroup fx:id="OutputGroup" />
+                     </toggleGroup>
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </RadioButton>
+                  <RadioButton fx:id="rVideoFileOutput" mnemonicParsing="false" onAction="#rActionVideoFileOutput" text="Video File Output" toggleGroup="$OutputGroup">
+                     <font>
+                        <Font size="16.0" />
+                     </font></RadioButton>
+                  <Label />
+                  <CheckBox fx:id="cPostProcessing" mnemonicParsing="false" onAction="#cbActionPostProcessing" text="Post-Processing">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </CheckBox>
+               </children>
+            </VBox>
+            <Button fx:id="doneButton" alignment="CENTER" mnemonicParsing="false" onAction="#doneButtonPressed" text="%button.done" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2">
+               <GridPane.margin>
+                  <Insets top="16.0" />
+               </GridPane.margin></Button>
+            <TabPane fx:id="tabPane" maxHeight="-Infinity" prefHeight="350.0" tabClosingPolicy="UNAVAILABLE" GridPane.columnSpan="2147483647" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS">
+               <tabs>
+                  <Tab fx:id="tabVideoFileInput" closable="false" text="Video File Input">
+                    <content>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                    </content>
+                  </Tab>
+                  <Tab fx:id="tabTestVideoGenerator" closable="false" text="Test Video Generator">
+                    <content>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                    </content>
+                  </Tab>
+                  <Tab fx:id="tabAnaglyph" closable="false" text="Anaglyph">
+                    <content>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                    </content>
+                  </Tab>
+                  <Tab fx:id="tabOverUnder" closable="false" text="OverUnder">
+                    <content>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                    </content>
+                  </Tab>
+                  <Tab fx:id="tabClone" closable="false" text="Clone">
+                    <content>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                    </content>
+                  </Tab>
+                  <Tab fx:id="tabDelay" closable="false" text="Delay">
+                    <content>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                    </content>
+                  </Tab>
+                  <Tab fx:id="tabSwap" closable="false" text="Swap">
+                    <content>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                    </content>
+                  </Tab>
+                  <Tab fx:id="tabVRConverter" closable="false" text="VR Converter">
+                    <content>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                    </content>
+                  </Tab>
+                  <Tab fx:id="tabVideoFileOutput" closable="false" text="Video File Output">
+                    <content>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                    </content>
+                  </Tab>
+                  <Tab fx:id="tabPostProcessing" closable="false" text="Post-Processing">
+                    <content>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                    </content>
+                  </Tab>
+               </tabs></TabPane>
+         </children>
+         <BorderPane.margin>
+            <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+         </BorderPane.margin>
+      </GridPane>
+   </center>
+</BorderPane>
