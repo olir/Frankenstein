@@ -12,7 +12,5 @@ notifications:
   email: false
   
 ignore:
-  - *.md
-  - *.txt
-  
-  
+  - "*.md"
+  - "*.txt"
