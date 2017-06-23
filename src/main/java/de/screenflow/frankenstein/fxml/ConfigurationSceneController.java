@@ -1,12 +1,12 @@
 /*
  * Copyright 2017 Oliver Rode, https://github.com/olir/Frankenstein
- *  
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -29,17 +29,16 @@ import de.screenflow.frankenstein.vf.RL2LR;
 import de.screenflow.frankenstein.vf.StereoEffect;
 import de.screenflow.frankenstein.vf.TestImage;
 import de.screenflow.frankenstein.vf.VideoFilter;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
-import javafx.scene.control.RadioButton;
-import javafx.stage.FileChooser;
-import javafx.stage.FileChooser.ExtensionFilter;
-import javafx.stage.Stage;
 import javafx.scene.control.CheckBox;
-import javafx.scene.control.TabPane;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
+import javafx.stage.DirectoryChooser;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
 public class ConfigurationSceneController {
 
@@ -137,7 +136,13 @@ public class ConfigurationSceneController {
 	 * Initialize method, automatically called by @{link FXMLLoader}
 	 */
 	public void initialize() {
-		configuration = new Configuration();
+		configuration = new Configuration(new Configuration.ConfigHelper() {
+			public File getFFmpegPath() {
+				DirectoryChooser dirChooser = new DirectoryChooser();
+				dirChooser.setTitle("Select FFmpeg Home Path");
+				return dirChooser.showDialog(stage);
+			}
+		});
 
 		removeTab(tabVideoFileInput);
 		addTab(tabTestVideoGenerator);
@@ -155,8 +160,7 @@ public class ConfigurationSceneController {
 		rNoAlignment.setSelected(true);
 		rNoVR.setSelected(true);
 		rVideoFileOutput.setSelected(true);
-		
-		
+
 	}
 
 	public void configure(Main main, Stage stage) {
@@ -234,8 +238,11 @@ public class ConfigurationSceneController {
 			File f = new File(configuration.inputVideo);
 			if (!f.isDirectory())
 				f = f.getParentFile();
+			if (f == null || !f.isDirectory())
+				f = new File(".");
 			fileChooser.setInitialDirectory(f);
-		}
+		} else
+			fileChooser.setInitialDirectory(new File("."));
 		File file = fileChooser.showOpenDialog(stage);
 		if (file != null && file.exists()) {
 			configuration.inputVideo = file.getAbsolutePath();
@@ -300,34 +307,41 @@ public class ConfigurationSceneController {
 		addTab(tabDelay);
 	}
 
-	@FXML public void cbActionPostProcessing() {
+	@FXML
+	public void cbActionPostProcessing() {
 		if (cPostProcessing.isSelected())
 			addTab(tabPostProcessing);
 		else
 			removeTab(tabPostProcessing);
 	}
 
-	@FXML public void rActionNoAlignment() {
+	@FXML
+	public void rActionNoAlignment() {
 		removeTab(tabSwap);
 	}
 
-	@FXML public void rActionSwapLR() {
+	@FXML
+	public void rActionSwapLR() {
 		addTab(tabSwap);
 	}
 
-	@FXML public void rActionNoVR() {
+	@FXML
+	public void rActionNoVR() {
 		removeTab(tabVRConverter);
 	}
 
-	@FXML public void rActionVRConverter() {
+	@FXML
+	public void rActionVRConverter() {
 		addTab(tabVRConverter);
 	}
 
-	@FXML public void rActionNoOutput() {
+	@FXML
+	public void rActionNoOutput() {
 		removeTab(tabVideoFileOutput);
 	}
 
-	@FXML public void rActionVideoFileOutput() {
+	@FXML
+	public void rActionVideoFileOutput() {
 		addTab(tabVideoFileOutput);
 	}
 

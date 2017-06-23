@@ -1,12 +1,12 @@
 /*
  * Copyright 2017 Oliver Rode, https://github.com/olir/Frankenstein
- *  
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -66,14 +66,14 @@ public class MovieProcessor {
 	private File ffmpeg;
 
 	public MovieProcessor(Configuration configuration) {
-		this.ffmpegPath = configuration.ffmpegPath;
+		this.ffmpegPath = configuration.getFFmpegPath();
 		this.configuration = configuration;
 		filters = configuration.filters;
 	}
 
 	public void init(ProcessingListener l) {
 		currentPos = 1;
-		
+
 		if (!openInput()) {
 			if (l != null)
 				l.prematureEnd(1);
@@ -81,6 +81,7 @@ public class MovieProcessor {
 		}
 		openOutput(l);
 
+		// TODO: Currently Windows only
 		ffmpeg = new File(ffmpegPath, "\\bin\\ffmpeg.exe");
 
 		if (configuration.doInput) {
@@ -350,7 +351,7 @@ public class MovieProcessor {
 		private File log;
 		private ProcessingListener l;
 		private final String taskMessage;
-		
+
 		Task(String command, ProcessingListener l, String taskMessage) {
 			this.taskMessage = taskMessage;
 			this.command = command;
@@ -389,7 +390,7 @@ public class MovieProcessor {
 		private class LogHandler implements Runnable {
 			InputStream is;
 			ProcessingListener l;
-			
+
 			LogHandler(InputStream is, ProcessingListener l) {
 				LogHandler.this.is = is;
 				LogHandler.this.l = l;

@@ -4,7 +4,7 @@ Free Video Converter for Virtual Reality and 3D based on ffmpeg and OpenCV for J
 [![Build Status](https://travis-ci.org/olir/Frankenstein.png)](https://travis-ci.org/olir/Frankenstein/builds) [![Dependency Status](https://www.versioneye.com/user/projects/594a6802368b0800421af505/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/594a6802368b0800421af505)
 
 # Status
-No release yet. 
+No release yet. Plattforms: Windows
 
 You can use maven to run it with "mvn clean package exec:exec"
 
@@ -13,7 +13,7 @@ Issues:
 - Temporary Video Output is uncompressed and can get very hugh. You need to have at least 100GB disk space. Developed on a Windows 10 64bit.
 
 # Pre-Requisites
-- [FFmpeg 3.1.1+](https://java.com) installed.
+- [FFmpeg 3.1.1+](https://java.com) installed. Select path at first startup (is stored in frankenstein.ini at user-home)
 - [Java JRE 1.8+](https://ffmpeg.org) installed.
 # Provided (do not install)
 - [OpenCV 3.2.0+](http://www.opencv.org/releases.html)
