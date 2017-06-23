@@ -10,3 +10,9 @@ addons:
       
 notifications:
   email: false
+  
+ignore:
+  - *.md
+  - *.txt
+  
+  
