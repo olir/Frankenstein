@@ -12,6 +12,6 @@ notifications:
   email: false
   
 ignore:
-    "doc/"
+  - "doc/"
   - "*.md"
   - "*.txt"
