@@ -55,3 +55,24 @@ USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
     You should have received a copy of the GNU Lesser General Public
     License along with FFmpeg; if not, write to the Free Software
     Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
+
+
+-----------------
+
+Videos "Unveil 3D":
+
+Production: Amanda May @ Cinematastic
+Direction and editing: Ben Strunin
+3D tech + compositing: Keiichi Matsuda
+Camera: Rob L. Brown
+Styling: Victoria Sekrier
+Stylist assistant: Christiana Perdiou
+Make-up: Adam De Cruz @ The Book Agency using Ellis Faas
+Make-up assistant: Holleigh Gallon
+Hair: Oliver
+Model: Ruby @ Nevs
+Soundtrack: "Never Again" by Spender
+
+LICENSED AS
+
+https://creativecommons.org/licenses/by/3.0/

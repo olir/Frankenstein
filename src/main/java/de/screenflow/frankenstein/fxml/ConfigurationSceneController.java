@@ -52,7 +52,7 @@ public class ConfigurationSceneController {
 
 	private Configuration configuration;
 	private FileChooser.ExtensionFilter inputFileFilter = new FileChooser.ExtensionFilter("Video Files", "*.mp4",
-			"*.avi", "*.wmv");
+			"*.avi", "*.wmv", "*.mks", "*.mpg", "*.mov");
 
 	@FXML
 	RadioButton rVideoFileInput;
@@ -177,11 +177,11 @@ public class ConfigurationSceneController {
 		configuration.doInput = rVideoFileInput.isSelected();
 
 		if (rTestVideoGenerator.isSelected()) {
-			filters.add(new TestImage(640, 480));
-			// filters.add(new TestImage(1280,720));
+			//filters.add(new TestImage(640, 480));
 			// filters.add(new TestImage(1080, 1920));
 			// filters.add(new TestImage(1024, 768));
 			// filters.add(new LRTestImage(1152, 648));
+			 filters.add(new TestImage(1280,720));
 		}
 
 		if (rAnaglyph.isSelected())
@@ -205,7 +205,7 @@ public class ConfigurationSceneController {
 		// filters.add(new LR2VR(LR2VR.SHRINK_VR_ONLY));
 
 		if (cPostProcessing.isSelected())
-			filters.add(new StereoEffect(-16, 0));
+			filters.add(new StereoEffect(32, 0));
 
 		configuration.doOutput = rVideoFileOutput.isSelected();
 
@@ -265,6 +265,7 @@ public class ConfigurationSceneController {
 	public void rActionTestVideoGenerator() {
 		removeTab(tabVideoFileInput);
 		addTab(tabTestVideoGenerator);
+		configuration.outputVideo = new File (new File(System.getProperty("user.home")), "TestVideo.mp4").getAbsolutePath();
 	}
 
 	@FXML

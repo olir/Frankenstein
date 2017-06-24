@@ -62,7 +62,9 @@ public class TestImage implements VideoFilter {
 	private void drawImage(int xoffset, int yoffset,  int width, int height) {
 		int count = 10;
 		int gridSize = ((height / count) >> 1) << 1;
-
+		while (gridSize>=8)
+			gridSize>>=1;
+		
 		int xmid = xoffset+(width>>1);
 		Imgproc.line(testFrame, new Point(xmid, yoffset), new Point(xmid, yoffset+height-1), white, 3);
 		for (int x=xmid+gridSize; x<xoffset+width; x+=gridSize) {

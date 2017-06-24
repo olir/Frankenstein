@@ -44,6 +44,7 @@ public class Configuration {
 
 	public Configuration(ConfigHelper helper) {
 		String homeDir = System.getProperty("user.home");
+		outputVideo = new File (new File(System.getProperty("user.home")), "TestVideo.mp4").getAbsolutePath();
 		File configFile = new File(homeDir, "frankenstein.ini");
 		if (configFile.canRead()) {
 			try {

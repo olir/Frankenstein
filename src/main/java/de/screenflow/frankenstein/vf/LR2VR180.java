@@ -115,8 +115,8 @@ public class LR2VR180 implements VideoFilter {
 				destStepHeight[i] = (int) (weight[i] * (((double) (smallHeight >> 1)) / (double) STEPS_PER_DIRECTION));
 				hsumDest += destStepHeight[i];
 			}
-			srcStepHeight[STEPS_PER_DIRECTION - 1] += (smallHeight >> 1) - hsumSrc;
-			destStepHeight[STEPS_PER_DIRECTION - 1] += (smallHeight >> 1) - hsumDest;
+//			srcStepHeight[STEPS_PER_DIRECTION - 1] += (smallHeight >> 1) - hsumSrc;
+//			destStepHeight[STEPS_PER_DIRECTION - 1] += (smallHeight >> 1) - hsumDest;
 		}
 
 		return newFrame;
