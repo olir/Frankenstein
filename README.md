@@ -6,6 +6,8 @@ It can convert side-by-side 3D videos to videos for VR display.
 
 ## Screenshots
 ![alt text](doc/config.png)  ![alt text](doc/processing.png)
+<img src="doc/config.png" width="40%"> <img src="doc/processing.png" width="40%">
+
 
 ## Samples
 I have uploaded some samples to: [vimeo](https://vimeo.com/user68089135)
@@ -15,7 +17,7 @@ No release yet. Plattforms: Windows (Developed/Tested on a Windows 10 64bit.)
 
 You can use maven to run it with "mvn clean package exec:exec"
 
-##Issues:
+## Issues:
 - Temporary video output is uncompressed and can get very hugh. You need to have at least 100GB disk space. 
 - Video editing / local filters is under construction
 
