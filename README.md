@@ -5,7 +5,7 @@ It can convert side-by-side 3D videos to videos for VR display.
 [![Build Status](https://travis-ci.org/olir/Frankenstein.png)](https://travis-ci.org/olir/Frankenstein/builds) [![Dependency Status](https://www.versioneye.com/user/projects/594a6802368b0800421af505/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/594a6802368b0800421af505)
 
 ## Screenshots
-<img src="doc/config.png" width="50%"> <img src="doc/processing.png" width="50%">
+<img src="doc/config.png" width="45%"> <img src="doc/processing.png" width="45%">
 
 
 ## Samples
