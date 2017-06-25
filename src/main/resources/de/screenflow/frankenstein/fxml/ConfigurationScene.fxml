@@ -97,7 +97,7 @@
                         <Font size="16.0" />
                      </font>
                   </RadioButton>
-                  <RadioButton fx:id="rDelayLeft" mnemonicParsing="false" onAction="#rActionDelayLeft" text="Delay Left" toggleGroup="$NormalizationGroup">
+                  <RadioButton fx:id="rDelayLeft" mnemonicParsing="false" onAction="#rActionDelayLeft" text="Delay Side" toggleGroup="$NormalizationGroup">
                      <font>
                         <Font size="16.0" />
                      </font>
@@ -260,7 +260,7 @@
                            </children></AnchorPane>
                     </content>
                   </Tab>
-                  <Tab fx:id="tabAnaglyph" closable="false" text="Anaglyph">
+                  <Tab fx:id="tabAnaglyph" closable="false" text="Anaglyph to LR">
                     <content>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
@@ -291,18 +291,47 @@
                            </children></AnchorPane>
                     </content>
                   </Tab>
-                  <Tab fx:id="tabOverUnder" closable="false" text="OverUnder">
+                  <Tab fx:id="tabOverUnder" closable="false" text="OverUnder to LR">
                     <content>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
                               <GridPane hgap="8.0" vgap="8.0">
                                  <children>
-                                    <Label text="Label:" />
-                                    <TextField fx:id="tfPropertyInputFile12" editable="false" GridPane.columnIndex="1">
+                                    <Label text="Resize mode:" GridPane.columnIndex="0" />
+                                    <RadioButton fx:id="rPropertyOUAdjustSize" mnemonicParsing="false" onAction="#rActionrOUAdjustSize" selected="true" text="Adjust size" GridPane.columnIndex="1">
+                                       <toggleGroup>
+                                          <ToggleGroup fx:id="OUResizeModeGroup" />
+                                       </toggleGroup>
+                                    </RadioButton>
+                                    <RadioButton fx:id="rPropertyOUReduceSize" mnemonicParsing="false" onAction="#rActionrOUReduceSize" text="Reduce size" toggleGroup="$OUResizeModeGroup" GridPane.columnIndex="2" />
+                                 </children>
+                                 <columnConstraints>
+                                    <ColumnConstraints fillWidth="false" halignment="LEFT" hgrow="NEVER" minWidth="10.0" prefWidth="120.0" />
+                                    <ColumnConstraints fillWidth="false" halignment="LEFT" hgrow="NEVER" minWidth="10.0" prefWidth="150.0" />
+                                    <ColumnConstraints fillWidth="false" halignment="LEFT" hgrow="NEVER" minWidth="10.0" prefWidth="150.0" />
+                                 </columnConstraints>
+                                 <padding>
+                                    <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
+                                 </padding>
+                                 <rowConstraints>
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                 </rowConstraints>
+                              </GridPane>
+                           </children></AnchorPane>
+                    </content>
+                  </Tab>
+                  <Tab fx:id="tabClone" closable="false" text="Clone to LR">
+                    <content>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <GridPane hgap="8.0" vgap="8.0">
+                                 <children>
+                                    <Label text="no options">
                                        <font>
-                                          <Font size="14.0" />
-                                       </font>
-                                    </TextField>
+                                          <Font name="System Italic" size="18.0" />
+                                       </font></Label>
                                  </children>
                                  <columnConstraints>
                                     <ColumnConstraints fillWidth="false" halignment="LEFT" hgrow="NEVER" minWidth="10.0" prefWidth="100.0" />
@@ -321,23 +350,24 @@
                            </children></AnchorPane>
                     </content>
                   </Tab>
-                  <Tab fx:id="tabClone" closable="false" text="Clone">
+                  <Tab fx:id="tabDelay" closable="false" text="Delay Side">
                     <content>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
                               <GridPane hgap="8.0" vgap="8.0">
                                  <children>
-                                    <Label text="Label:" />
-                                    <TextField fx:id="tfPropertyInputFile13" editable="false" GridPane.columnIndex="1">
-                                       <font>
-                                          <Font size="14.0" />
-                                       </font>
-                                    </TextField>
+                                    <Label text="Side to delay:" GridPane.columnIndex="0" />
+                                    <RadioButton fx:id="rDelayLeft" mnemonicParsing="false" onAction="#rActionrDelayLeft" selected="true" text="left" GridPane.columnIndex="1">
+                                       <toggleGroup>
+                                          <ToggleGroup fx:id="DelaySideGroup" />
+                                       </toggleGroup>
+                                    </RadioButton>
+                                    <RadioButton fx:id="rDelayRight" mnemonicParsing="false" onAction="#rActionrDelayRight" text="right" toggleGroup="$DelaySideGroup" GridPane.columnIndex="2" />
                                  </children>
                                  <columnConstraints>
-                                    <ColumnConstraints fillWidth="false" halignment="LEFT" hgrow="NEVER" minWidth="10.0" prefWidth="100.0" />
-                                    <ColumnConstraints halignment="LEFT" hgrow="ALWAYS" minWidth="10.0" prefWidth="750.0" />
-                                    <ColumnConstraints fillWidth="false" halignment="LEFT" hgrow="NEVER" minWidth="10.0" prefWidth="100.0" />
+                                    <ColumnConstraints fillWidth="false" halignment="LEFT" hgrow="NEVER" minWidth="10.0" prefWidth="120.0" />
+                                    <ColumnConstraints fillWidth="false" halignment="LEFT" hgrow="NEVER" minWidth="10.0" prefWidth="150.0" />
+                                    <ColumnConstraints fillWidth="false" halignment="LEFT" hgrow="NEVER" minWidth="10.0" prefWidth="150.0" />
                                  </columnConstraints>
                                  <padding>
                                     <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
@@ -351,19 +381,11 @@
                            </children></AnchorPane>
                     </content>
                   </Tab>
-                  <Tab fx:id="tabDelay" closable="false" text="Delay">
+                  <Tab fx:id="tabSwap" closable="false" text="Swap LR">
                     <content>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
                               <GridPane hgap="8.0" vgap="8.0">
-                                 <children>
-                                    <Label text="Label:" />
-                                    <TextField fx:id="tfPropertyInputFile14" editable="false" GridPane.columnIndex="1">
-                                       <font>
-                                          <Font size="14.0" />
-                                       </font>
-                                    </TextField>
-                                 </children>
                                  <columnConstraints>
                                     <ColumnConstraints fillWidth="false" halignment="LEFT" hgrow="NEVER" minWidth="10.0" prefWidth="100.0" />
                                     <ColumnConstraints halignment="LEFT" hgrow="ALWAYS" minWidth="10.0" prefWidth="750.0" />
@@ -377,57 +399,39 @@
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                     <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                                  </rowConstraints>
+                                 <children>
+                                    <Label text="no options">
+                                       <font>
+                                          <Font name="System Italic" size="18.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
                               </GridPane>
                            </children></AnchorPane>
                     </content>
                   </Tab>
-                  <Tab fx:id="tabSwap" closable="false" text="Swap">
+                  <Tab fx:id="tabVRConverter" closable="false" text="VR 180°">
                     <content>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                            <children>
                               <GridPane hgap="8.0" vgap="8.0">
                                  <children>
-                                    <Label text="Label:" />
-                                    <TextField fx:id="tfPropertyInputFile15" editable="false" GridPane.columnIndex="1">
-                                       <font>
-                                          <Font size="14.0" />
-                                       </font>
-                                    </TextField>
+                                    <Label text="Shrink factor:" GridPane.columnIndex="0" />
+                                    <Slider fx:id="sliderVRShrink" majorTickUnit="10.0" min="40.0" minorTickCount="1" snapToTicks="true" value="80.0" GridPane.columnIndex="2" />
+                                    <Label fx:id="lVRShrinkDisplay" alignment="CENTER_RIGHT" contentDisplay="RIGHT" text="80%" textAlignment="RIGHT" GridPane.columnIndex="3" />
+                                    <Label text="Mode:" GridPane.rowIndex="1" />
+                                    <RadioButton fx:id="vrModeFromSBS" mnemonicParsing="false" onAction="#rActionVRModeFromSBS" text="SBS to 180°VR" GridPane.columnIndex="2" GridPane.rowIndex="1">
+										<toggleGroup>
+                                          <ToggleGroup fx:id="VRModeGroup" />
+                                    	</toggleGroup>                                    
+                                    </RadioButton>
+                                    <RadioButton fx:id="vrModeFromVR" mnemonicParsing="false" onAction="#rActionVRModeFromVR" text="Just Shrink" toggleGroup="$VRModeGroup" GridPane.columnIndex="3" GridPane.rowIndex="1" />
                                  </children>
                                  <columnConstraints>
-                                    <ColumnConstraints fillWidth="false" halignment="LEFT" hgrow="NEVER" minWidth="10.0" prefWidth="100.0" />
-                                    <ColumnConstraints halignment="LEFT" hgrow="ALWAYS" minWidth="10.0" prefWidth="750.0" />
-                                    <ColumnConstraints fillWidth="false" halignment="LEFT" hgrow="NEVER" minWidth="10.0" prefWidth="100.0" />
-                                 </columnConstraints>
-                                 <padding>
-                                    <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
-                                 </padding>
-                                 <rowConstraints>
-                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                                 </rowConstraints>
-                              </GridPane>
-                           </children></AnchorPane>
-                    </content>
-                  </Tab>
-                  <Tab fx:id="tabVRConverter" closable="false" text="VR Converter">
-                    <content>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                           <children>
-                              <GridPane hgap="8.0" vgap="8.0">
-                                 <children>
-                                    <Label text="Label:" />
-                                    <TextField fx:id="tfPropertyInputFile16" editable="false" GridPane.columnIndex="1">
-                                       <font>
-                                          <Font size="14.0" />
-                                       </font>
-                                    </TextField>
-                                 </children>
-                                 <columnConstraints>
-                                    <ColumnConstraints fillWidth="false" halignment="LEFT" hgrow="NEVER" minWidth="10.0" prefWidth="100.0" />
-                                    <ColumnConstraints halignment="LEFT" hgrow="ALWAYS" minWidth="10.0" prefWidth="750.0" />
-                                    <ColumnConstraints fillWidth="false" halignment="LEFT" hgrow="NEVER" minWidth="10.0" prefWidth="100.0" />
+                                    <ColumnConstraints fillWidth="false" halignment="LEFT" hgrow="NEVER" minWidth="10.0" prefWidth="120.0" />
+                                    <ColumnConstraints halignment="LEFT" hgrow="ALWAYS" />
+                                    <ColumnConstraints halignment="LEFT" hgrow="ALWAYS" minWidth="10.0" prefWidth="170.0" />
+                                    <ColumnConstraints fillWidth="false" halignment="LEFT" hgrow="NEVER" minWidth="10.0" prefWidth="170.0" />
                                  </columnConstraints>
                                  <padding>
                                     <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
@@ -477,17 +481,18 @@
                            <children>
                               <GridPane hgap="8.0" vgap="8.0">
                                  <children>
-                                    <Label text="Label:" />
-                                    <TextField fx:id="tfPropertyInputFile18" editable="false" GridPane.columnIndex="1">
-                                       <font>
-                                          <Font size="14.0" />
-                                       </font>
-                                    </TextField>
+                                    <FlowPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1">
+                                       <children>
+                                          <Label text="farer" />
+                                          <Slider fx:id="sliderStereoPerspective" blockIncrement="2.0" disable="true" majorTickUnit="2.0" max="32.0" maxWidth="200.0" min="-32.0" minWidth="200.0" minorTickCount="1" prefWidth="200.0" snapToTicks="true" />
+                                          <Label text="closer" />
+                                       </children>
+                                    </FlowPane>
+                                    <ToggleButton fx:id="stereoEffectFilterEnabled" mnemonicParsing="false" text="3D Effect" onAction="#tbActionStereoEffectFilterEnabled" />
                                  </children>
                                  <columnConstraints>
                                     <ColumnConstraints fillWidth="false" halignment="LEFT" hgrow="NEVER" minWidth="10.0" prefWidth="100.0" />
                                     <ColumnConstraints halignment="LEFT" hgrow="ALWAYS" minWidth="10.0" prefWidth="750.0" />
-                                    <ColumnConstraints fillWidth="false" halignment="LEFT" hgrow="NEVER" minWidth="10.0" prefWidth="100.0" />
                                  </columnConstraints>
                                  <padding>
                                     <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />

@@ -21,8 +21,10 @@ import org.opencv.core.Rect;
 public class LDelay implements VideoFilter {
 
 	private Mat newFrame = null, frameBuffer;
+	private final boolean delayLeft;
 
-	public LDelay() {
+	public LDelay(boolean delayLeft) {
+		this.delayLeft = delayLeft;
 	}
 
 	@Override
@@ -31,30 +33,43 @@ public class LDelay implements VideoFilter {
 
 		frameBuffer = sourceFrame.clone();
 
-		// Take over right side to left side in buffer
-		Rect roi = new Rect(0, 0, sourceFrame.cols() >> 1, sourceFrame.rows());
-		sourceFrame.submat(new Rect(sourceFrame.cols() >> 1, 0, sourceFrame.cols() >> 1, sourceFrame.rows()))
-				.copyTo(new Mat(frameBuffer, roi));
-		
+		if (delayLeft) {
+			// Take over right side to left side in buffer
+			Rect roi = new Rect(0, 0, sourceFrame.cols() >> 1, sourceFrame.rows());
+			sourceFrame.submat(new Rect(sourceFrame.cols() >> 1, 0, sourceFrame.cols() >> 1, sourceFrame.rows()))
+					.copyTo(new Mat(frameBuffer, roi));
+		} else {
+			// Take over left side to right side in buffer
+			Rect roi = new Rect(sourceFrame.cols() >> 1, 0, sourceFrame.cols() >> 1, sourceFrame.rows());
+			sourceFrame.submat(new Rect(0, 0, sourceFrame.cols() >> 1, sourceFrame.rows()))
+					.copyTo(new Mat(frameBuffer, roi));
+		}
 		return newFrame;
 	}
 
 	@Override
 	public Mat process(Mat sourceFrame, int frameId) {
 
-		// Take over left side from Buffer 
-		Rect roi = new Rect(0, 0, sourceFrame.cols() >> 1, sourceFrame.rows());
-		frameBuffer.submat(new Rect(0, 0, sourceFrame.cols() >> 1, sourceFrame.rows()))
-				.copyTo(new Mat(newFrame, roi));
+		int x1 = 0;
+		int x2 = sourceFrame.cols() >> 1;
+		if (!delayLeft) {
+			x1 = x2;
+			x2 = 0;
+		}
+			
+		// Take over left side from Buffer
+		Rect roi = new Rect(x1, 0, sourceFrame.cols() >> 1, sourceFrame.rows());
+		frameBuffer.submat(new Rect(x1, 0, sourceFrame.cols() >> 1, sourceFrame.rows())).copyTo(new Mat(newFrame, roi));
 
 		// Copy Left Side from Source to Buffer
-		roi = new Rect(0, 0, sourceFrame.cols() >> 1, sourceFrame.rows());
-		sourceFrame.submat(new Rect(0, 0, sourceFrame.cols() >> 1, sourceFrame.rows()))
+		     roi = new Rect(x1, 0, sourceFrame.cols() >> 1, sourceFrame.rows());
+		sourceFrame.submat(new Rect(x1, 0, sourceFrame.cols() >> 1, sourceFrame.rows()))
 				.copyTo(new Mat(frameBuffer, roi));
-		
+
 		// Take over right side unchanged
-		roi = new Rect(sourceFrame.cols() >> 1, 0, sourceFrame.cols() >> 1, sourceFrame.rows());
-		sourceFrame.submat(new Rect(sourceFrame.cols() >> 1, 0, sourceFrame.cols() >> 1, sourceFrame.rows())).copyTo(new Mat(newFrame, roi));
+		roi = new Rect(x2, 0, sourceFrame.cols() >> 1, sourceFrame.rows());
+		sourceFrame.submat(new Rect(x2, 0, sourceFrame.cols() >> 1, sourceFrame.rows()))
+				.copyTo(new Mat(newFrame, roi));
 
 		return newFrame;
 	}

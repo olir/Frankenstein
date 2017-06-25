@@ -33,7 +33,7 @@ public class StereoEffect implements VideoFilter {
 	 */
 //	private final int depthAmplifier;
 
-	public StereoEffect(int perspective, int depthAmplifier) {
+	public StereoEffect(int perspective /*, int depthAmplifier*/) {
 		this.perspective = (perspective >> 1) << 1;
 //		this.depthAmplifier = depthAmplifier;
 	}

@@ -48,6 +48,16 @@ public class Configuration {
 
 	public boolean anaglyphKeepWidth = true;
 
+	public boolean delayLeft = true;
+
+	public boolean ouAdjustSize = false;
+
+	public boolean vrModeShrinkOnly;
+
+	public float vrModeShrinkFactor = 0.8f;
+
+	public int perspective = 0;
+
 	public Configuration(ConfigHelper helper) {
 		String homeDir = System.getProperty("user.home");
 		outputVideo = new File(new File(System.getProperty("user.home")), "TestVideo.mp4").getAbsolutePath();

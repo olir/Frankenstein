@@ -25,7 +25,7 @@ public class LR2VR180 implements VideoFilter {
 
 	private Mat newFrame = null;
 
-	private float factor = 0.80f;
+	private final float factor; // = 0.80f;
 	private float vrVerticalSpan;
 
 	private int borderW;
@@ -48,8 +48,13 @@ public class LR2VR180 implements VideoFilter {
 
 	boolean coneCorrection = true;
 
-	public LR2VR180(float convert3DMode) {
-		this.convert3DMode = convert3DMode;
+	public LR2VR180(boolean modeShrinkOnly, float vrModeShrinkFactor) {
+		if (modeShrinkOnly)
+			this.convert3DMode = SHRINK_VR_ONLY;
+		else
+			this.convert3DMode = PAD_3D_TO_VR;
+		
+		factor = vrModeShrinkFactor;
 	}
 
 	@Override

@@ -43,6 +43,9 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Slider;
+import javafx.scene.control.Label;
+import javafx.scene.control.ToggleButton;
 
 public class ConfigurationSceneController {
 
@@ -75,9 +78,6 @@ public class ConfigurationSceneController {
 
 	@FXML
 	RadioButton rCloneLR;
-
-	@FXML
-	RadioButton rDelayLeft;
 
 	@FXML
 	RadioButton r3DConverter;
@@ -151,6 +151,34 @@ public class ConfigurationSceneController {
 	@FXML
 	RadioButton rPropertyAnaglyphDoubleWidth;
 
+	@FXML
+	RadioButton rPropertyOUReduceSize;
+
+	@FXML
+	RadioButton rPropertyOUAdjustSize;
+
+	@FXML
+	RadioButton rDelayLeft;
+
+	@FXML
+	RadioButton rDelayRight;
+
+	@FXML
+	Slider sliderVRShrink;
+
+	@FXML
+	Label lVRShrinkDisplay;
+
+	@FXML
+	RadioButton vrModeFromSBS;
+
+	@FXML
+	RadioButton vrModeFromVR;
+
+	@FXML ToggleButton stereoEffectFilterEnabled;
+
+	@FXML Slider sliderStereoPerspective;
+
 	/**
 	 * Initialize method, automatically called by @{link FXMLLoader}
 	 */
@@ -202,6 +230,34 @@ public class ConfigurationSceneController {
 					((StringProperty) observable).setValue(oldValue);
 			}
 		});
+		
+		if (configuration.ouAdjustSize)
+			rPropertyOUAdjustSize.setSelected(true);
+		else
+			rPropertyOUReduceSize.setSelected(true);
+		
+		if (configuration.delayLeft)
+			rDelayLeft.setSelected(true);
+		else
+			rDelayRight.setSelected(true);
+
+		sliderVRShrink.setValue(configuration.vrModeShrinkFactor*100.0);
+		sliderVRShrink.valueProperty().addListener((observable, oldvalue, newvalue) -> {
+			int newFactor = newvalue.intValue();
+			configuration.vrModeShrinkFactor = ((float) newFactor) / 100.0f;
+			lVRShrinkDisplay.setText(String.valueOf(newFactor)+'%');
+		});
+		
+		if (configuration.vrModeShrinkOnly)
+			vrModeFromVR.setSelected(true);
+		else
+			vrModeFromSBS.setSelected(true);
+		
+		sliderStereoPerspective.setValue(configuration.perspective);
+		sliderStereoPerspective.valueProperty().addListener((observable, oldvalue, newvalue) -> {
+			int newPerspective = newvalue.intValue();
+			configuration.perspective = newPerspective;
+		});
 	}
 
 	public void configure(Main main, Stage stage) {
@@ -226,11 +282,10 @@ public class ConfigurationSceneController {
 					configuration.anaglyphKeepWidth ? Anaglyph2LR.KEEP_WIDTH : Anaglyph2LR.DOUBLE_WIDTH));
 
 		if (rOverUnder.isSelected())
-			filters.add(new OU2LR(OU2LR.REDUCE_SIZE));
-		// filters.add(new OU2LR(OU2LR.ADJUST_SIZE));
+			filters.add(new OU2LR(configuration.ouAdjustSize ? OU2LR.ADJUST_SIZE : OU2LR.REDUCE_SIZE));
 
 		if (rDelayLeft.isSelected())
-			filters.add(new LDelay());
+			filters.add(new LDelay(configuration.delayLeft));
 
 		if (rCloneLR.isSelected())
 			filters.add(new CloneLR());
@@ -239,11 +294,13 @@ public class ConfigurationSceneController {
 			filters.add(new RL2LR());
 
 		if (rVRConverter.isSelected())
-			filters.add(new LR2VR180(LR2VR180.PAD_3D_TO_VR));
-		// filters.add(new LR2VR(LR2VR.SHRINK_VR_ONLY));
+			filters.add(new LR2VR180(configuration.vrModeShrinkOnly, configuration.vrModeShrinkFactor));
 
-		if (cPostProcessing.isSelected())
-			filters.add(new StereoEffect(32, 0));
+		if (cPostProcessing.isSelected()) {
+			if (stereoEffectFilterEnabled.isSelected()) {
+				filters.add(new StereoEffect(configuration.perspective));
+			}
+		}
 
 		configuration.doOutput = rVideoFileOutput.isSelected();
 
@@ -443,6 +500,40 @@ public class ConfigurationSceneController {
 	@FXML
 	public void rActionAnaglyphDoubleWidth() {
 		configuration.anaglyphKeepWidth = false;
+	}
+
+	@FXML
+	public void rActionrDelayLeft() {
+		configuration.delayLeft = true;
+	}
+
+	@FXML
+	public void rActionrDelayRight() {
+		configuration.delayLeft = false;
+	}
+
+	@FXML
+	public void rActionrOUReduceSize() {
+		configuration.ouAdjustSize = false;
+	}
+
+	@FXML
+	public void rActionrOUAdjustSize() {
+		configuration.ouAdjustSize = true;
+	}
+
+	@FXML
+	public void rActionVRModeFromSBS() {
+		configuration.vrModeShrinkOnly = false;
+	}
+
+	@FXML
+	public void rActionVRModeFromVR() {
+		configuration.vrModeShrinkOnly = true;
+	}
+
+	@FXML public void tbActionStereoEffectFilterEnabled() {
+		sliderStereoPerspective.setDisable(!stereoEffectFilterEnabled.isSelected());
 	}
 
 }
