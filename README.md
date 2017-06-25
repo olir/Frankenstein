@@ -15,8 +15,7 @@ You can use maven to run it with "mvn clean package exec:exec"
 
 ##Issues:
 - Temporary video output is uncompressed and can get very hugh. You need to have at least 100GB disk space. 
-- Configuration of filters is under construction
-- Video editing is under construction
+- Video editing / local filters is under construction
 
 # Pre-Requisites
 - [FFmpeg 3.1.1+](https://java.com) installed. Select path at first startup (is stored in frankenstein.ini at user-home)
