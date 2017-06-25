@@ -451,8 +451,8 @@
                            <children>
                               <GridPane hgap="8.0" vgap="8.0">
                                  <children>
-                                    <Label text="Label:" />
-                                    <TextField fx:id="tfPropertyInputFile17" editable="false" GridPane.columnIndex="1">
+                                    <Label text="Output File:" />
+                                    <TextField fx:id="tfPropertyOutputFile" editable="false" GridPane.columnIndex="1">
                                        <font>
                                           <Font size="14.0" />
                                        </font>

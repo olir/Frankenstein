@@ -179,6 +179,8 @@ public class ConfigurationSceneController {
 
 	@FXML Slider sliderStereoPerspective;
 
+	@FXML TextField tfPropertyOutputFile;
+
 	/**
 	 * Initialize method, automatically called by @{link FXMLLoader}
 	 */
@@ -360,6 +362,7 @@ public class ConfigurationSceneController {
 			configuration.inputVideo = file.getAbsolutePath();
 			configuration.outputVideo = configuration.inputVideo.substring(0, configuration.inputVideo.lastIndexOf('.'))
 					+ "_edit" + ".mp4";
+			tfPropertyOutputFile.setText(configuration.outputVideo);
 			main.setDocumentInTitle(file.getName());
 			if (rCloneLR.isSelected())
 				rNoNormalization.setSelected(true);
@@ -368,6 +371,7 @@ public class ConfigurationSceneController {
 			tfPropertyInputFile.setText(file.getAbsolutePath());
 			return file;
 		} else
+			tfPropertyOutputFile.setText(configuration.outputVideo);
 			return null;
 	}
 
