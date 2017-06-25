@@ -29,6 +29,9 @@ import de.screenflow.frankenstein.vf.RL2LR;
 import de.screenflow.frankenstein.vf.StereoEffect;
 import de.screenflow.frankenstein.vf.TestImage;
 import de.screenflow.frankenstein.vf.VideoFilter;
+import javafx.beans.property.StringProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -136,6 +139,18 @@ public class ConfigurationSceneController {
 	@FXML
 	TextField tfPropertyInputFile;
 
+	@FXML
+	TextField tfPropertyTestScreenHeight;
+
+	@FXML
+	TextField tfPropertyTestScreenWidth;
+
+	@FXML
+	RadioButton rPropertyAnaglyphKeepWidth;
+
+	@FXML
+	RadioButton rPropertyAnaglyphDoubleWidth;
+
 	/**
 	 * Initialize method, automatically called by @{link FXMLLoader}
 	 */
@@ -165,6 +180,28 @@ public class ConfigurationSceneController {
 		rNoVR.setSelected(true);
 		rVideoFileOutput.setSelected(true);
 
+		tfPropertyTestScreenWidth.setText(String.valueOf(configuration.testScreenWidth));
+		tfPropertyTestScreenHeight.setText(String.valueOf(configuration.testScreenHeight));
+		if (configuration.anaglyphKeepWidth)
+			rPropertyAnaglyphKeepWidth.setSelected(true);
+		else
+			rPropertyAnaglyphDoubleWidth.setSelected(true);
+
+		tfPropertyTestScreenWidth.textProperty().addListener(new ChangeListener<String>() {
+			@Override
+			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+				if (!tfActionChangeTestScreenWidth(oldValue, newValue))
+					((StringProperty) observable).setValue(oldValue);
+
+			}
+		});
+		tfPropertyTestScreenHeight.textProperty().addListener(new ChangeListener<String>() {
+			@Override
+			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+				if (!tfActionChangeTestScreenHeight(oldValue, newValue))
+					((StringProperty) observable).setValue(oldValue);
+			}
+		});
 	}
 
 	public void configure(Main main, Stage stage) {
@@ -181,15 +218,12 @@ public class ConfigurationSceneController {
 		configuration.doInput = rVideoFileInput.isSelected();
 
 		if (rTestVideoGenerator.isSelected()) {
-			// filters.add(new TestImage(640, 480));
-			// filters.add(new TestImage(1080, 1920));
-			// filters.add(new TestImage(1024, 768));
-			// filters.add(new LRTestImage(1152, 648));
-			filters.add(new TestImage(1280, 720));
+			filters.add(new TestImage(configuration.testScreenWidth, configuration.testScreenHeight));
 		}
 
 		if (rAnaglyph.isSelected())
-			filters.add(new Anaglyph2LR(Anaglyph2LR.KEEP_WIDTH));
+			filters.add(new Anaglyph2LR(
+					configuration.anaglyphKeepWidth ? Anaglyph2LR.KEEP_WIDTH : Anaglyph2LR.DOUBLE_WIDTH));
 
 		if (rOverUnder.isSelected())
 			filters.add(new OU2LR(OU2LR.REDUCE_SIZE));
@@ -376,6 +410,39 @@ public class ConfigurationSceneController {
 			if (!rCloneLR.isSelected())
 				rCloneLR.setSelected(true);
 		}
+	}
+
+	// @FXML
+	public boolean tfActionChangeTestScreenWidth(String oldValue, String newValue) {
+
+		try {
+			int newWidth = Integer.parseInt(newValue);
+			configuration.testScreenWidth = newWidth;
+			return true;
+		} catch (NumberFormatException e) {
+			return false;
+		}
+	}
+
+	// @FXML
+	public boolean tfActionChangeTestScreenHeight(String oldValue, String newValue) {
+		try {
+			int newHeight = Integer.parseInt(newValue);
+			configuration.testScreenHeight = newHeight;
+			return true;
+		} catch (NumberFormatException e) {
+			return false;
+		}
+	}
+
+	@FXML
+	public void rActionAnaglyphKeepWidth() {
+		configuration.anaglyphKeepWidth = true;
+	}
+
+	@FXML
+	public void rActionAnaglyphDoubleWidth() {
+		configuration.anaglyphKeepWidth = false;
 	}
 
 }

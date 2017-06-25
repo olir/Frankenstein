@@ -20,17 +20,13 @@ import java.util.Locale;
 import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 
-import org.opencv.core.Core;
-
 import de.screenflow.frankenstein.Configuration;
 import de.screenflow.frankenstein.MovieProcessor;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 public class Main extends Application {
@@ -56,11 +52,13 @@ public class Main extends Application {
 
 			// https://github.com/openpnp/opencv
 			try {
-				Class.forName("nu.pattern.OpenCV").getMethod("loadShared", null).invoke(null, null);
+				Class.forName("nu.pattern.OpenCV").getMethod("loadShared", (Class<?>[]) null).invoke((Object[]) null,
+						(Object[]) null);
 				// nu.pattern.OpenCV.loadShared();
 				// nu.pattern.OpenCV.loadLocal();
 			} catch (ClassNotFoundException e) {
-				System.out.println("Warning: nu.pattern.OpenCV not found."); // eclipse environment
+				System.out.println("Warning: nu.pattern.OpenCV not found."); // eclipse
+																				// environment
 			}
 			System.loadLibrary(org.opencv.core.Core.NATIVE_LIBRARY_NAME);
 

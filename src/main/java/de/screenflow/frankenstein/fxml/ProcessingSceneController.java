@@ -73,7 +73,7 @@ public class ProcessingSceneController implements ProcessingListener {
 
 	private Main main;
 
-	private Stage stage;
+//	private Stage stage;
 
 	private Range clipBoardRange = null;
 
@@ -214,7 +214,7 @@ public class ProcessingSceneController implements ProcessingListener {
 		GraphicsContext gc = editCanvas.getGraphicsContext2D();
 
 		// Time in seconds at position
-		double t = (position - 1) / fps;
+//		double t = (position - 1) / fps;
 		// Total time in seconds
 		double tt = (frames - 1) / fps;
 
@@ -365,7 +365,7 @@ public class ProcessingSceneController implements ProcessingListener {
 
 	public void configure(Main main, Stage stage) {
 		this.main = main;
-		this.stage = stage;
+//		this.stage = stage;
 	}
 
 	public void initProcessing(ConfigurationSceneController cController, Configuration configuration) {

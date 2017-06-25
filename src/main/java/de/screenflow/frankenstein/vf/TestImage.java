@@ -18,7 +18,6 @@ package de.screenflow.frankenstein.vf;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
-import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
@@ -30,10 +29,10 @@ public class TestImage implements VideoFilter {
 
 	private int smallWidth;
 	private int smallHeight;
-	
-	final Scalar white = new Scalar(255,255,255);
-	final Scalar red = new Scalar(0,0,255);
-	
+
+	final Scalar white = new Scalar(255, 255, 255);
+	final Scalar red = new Scalar(0, 0, 255);
+
 	public TestImage(int width, int height) {
 		this.smallWidth = width;
 		this.smallHeight = height;
@@ -45,45 +44,47 @@ public class TestImage implements VideoFilter {
 		newFrame = sourceFrame.clone();
 		Imgproc.resize(sourceFrame, testFrame, new Size((double) smallWidth, (double) smallHeight));
 		Imgproc.resize(sourceFrame, newFrame, new Size((double) smallWidth, (double) smallHeight));
-		
-		testFrame.setTo(new Scalar(0,0,0));
-		drawImage(0,0,smallWidth,smallHeight);
-		
+
+		testFrame.setTo(new Scalar(0, 0, 0));
+		drawImage(0, 0, smallWidth, smallHeight);
+
 		return testFrame;
 	}
 
 	@Override
 	public Mat process(Mat sourceFrame, int frameId) {
 		testFrame.copyTo(newFrame);
-		Imgproc.putText(newFrame, "Frame #"+frameId, new Point(10, smallHeight-10), Core.FONT_HERSHEY_PLAIN, 3.0, red, 2);
+		Imgproc.putText(newFrame, "Frame #" + frameId, new Point(10, smallHeight - 10), Core.FONT_HERSHEY_PLAIN, 3.0,
+				red, 2);
 		return newFrame;
 	}
 
-	private void drawImage(int xoffset, int yoffset,  int width, int height) {
+	private void drawImage(int xoffset, int yoffset, int width, int height) {
 		int count = 10;
 		int gridSize = ((height / count) >> 1) << 1;
-		while (gridSize>=8)
-			gridSize>>=1;
-		
-		int xmid = xoffset+(width>>1);
-		Imgproc.line(testFrame, new Point(xmid, yoffset), new Point(xmid, yoffset+height-1), white, 3);
-		for (int x=xmid+gridSize; x<xoffset+width; x+=gridSize) {
-			Imgproc.line(testFrame, new Point(x, yoffset), new Point(x, yoffset+height-1), white, 1);
+		while (gridSize >= 8)
+			gridSize >>= 1;
+
+		int xmid = xoffset + (width >> 1);
+		Imgproc.line(testFrame, new Point(xmid, yoffset), new Point(xmid, yoffset + height - 1), white, 3);
+		for (int x = xmid + gridSize; x < xoffset + width; x += gridSize) {
+			Imgproc.line(testFrame, new Point(x, yoffset), new Point(x, yoffset + height - 1), white, 1);
 		}
-		for (int x=xmid-gridSize; x>xoffset; x-=gridSize) {
-			Imgproc.line(testFrame, new Point(x, yoffset), new Point(x, yoffset+height-1), white, 1);
+		for (int x = xmid - gridSize; x > xoffset; x -= gridSize) {
+			Imgproc.line(testFrame, new Point(x, yoffset), new Point(x, yoffset + height - 1), white, 1);
 		}
 
-		int ymid = yoffset+(height>>1);
-		Imgproc.line(testFrame, new Point(xoffset, ymid), new Point(xoffset+width-1, ymid), white, 3);
-		for (int y=ymid+gridSize; y<yoffset+height; y+=gridSize) {
-			Imgproc.line(testFrame, new Point(xoffset, y), new Point(xoffset+width-1, y), white, 1);
+		int ymid = yoffset + (height >> 1);
+		Imgproc.line(testFrame, new Point(xoffset, ymid), new Point(xoffset + width - 1, ymid), white, 3);
+		for (int y = ymid + gridSize; y < yoffset + height; y += gridSize) {
+			Imgproc.line(testFrame, new Point(xoffset, y), new Point(xoffset + width - 1, y), white, 1);
 		}
-		for (int y=ymid-gridSize; y>yoffset; y-=gridSize) {
-			Imgproc.line(testFrame, new Point(xoffset, y), new Point(xoffset+width-1, y), white, 1);
+		for (int y = ymid - gridSize; y > yoffset; y -= gridSize) {
+			Imgproc.line(testFrame, new Point(xoffset, y), new Point(xoffset + width - 1, y), white, 1);
 		}
 
-		Imgproc.putText(testFrame, ""+width+" x "+height, new Point(xmid - gridSize*1.33, ymid - gridSize*0.25), Core.FONT_HERSHEY_PLAIN, 4.0, red, 3);
+		Imgproc.putText(testFrame, "" + width + " x " + height,
+				new Point(xmid - gridSize * 1.33, ymid - gridSize * 0.25), Core.FONT_HERSHEY_PLAIN, 4.0, red, 3);
 	}
 
 	public int getWidth() {

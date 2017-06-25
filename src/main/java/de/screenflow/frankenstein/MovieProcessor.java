@@ -20,16 +20,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.lang.ProcessBuilder.Redirect;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.FileSystems;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Scanner;
-import java.util.regex.Pattern;
-import java.util.stream.Stream;
 
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
@@ -51,7 +42,7 @@ public class MovieProcessor {
 	private VideoWriter outputVideo;
 	private File tempVideoFile = null;
 	private File tempAudioFile = null;
-	private File tempMetadataFile = null;
+	// private File tempMetadataFile = null;
 	private int fourcc;
 
 	private Mat frame = new Mat();
@@ -106,7 +97,7 @@ public class MovieProcessor {
 			// temporarily
 			if (configuration.doOutput && configuration.doInput) {
 				if (!new Task(ffmpeg.getAbsolutePath() + " -y -i \"" + configuration.inputVideo + "\""
-//						+ " -f ffmetadata " + tempMetadataFile.getAbsolutePath()
+				// + " -f ffmetadata " + tempMetadataFile.getAbsolutePath()
 						+ " -vn -ar 44100 -ac 2 -ab 192k -f mp3 -r 21 " + tempAudioFile.getAbsolutePath(), l,
 						"Splitting Audio").run())
 					return false;
@@ -252,7 +243,8 @@ public class MovieProcessor {
 				tempVideoFile = new File(new File(configuration.outputVideo).getParentFile(), tempFile.getName());
 				tempFile.deleteOnExit();
 				tempAudioFile = File.createTempFile("sound", ".mp3");
-				tempMetadataFile = File.createTempFile("metadata", ".properties");
+				// tempMetadataFile = File.createTempFile("metadata",
+				// ".properties");
 			} catch (IOException e) {
 				e.printStackTrace();
 				return false;
@@ -352,8 +344,8 @@ public class MovieProcessor {
 
 		private String[] args;
 		private String command;
-		private boolean shutdown = false;
-		private File log;
+		// private boolean shutdown = false;
+		// private File log;
 		private ProcessingListener l;
 		private final String taskMessage;
 
@@ -379,15 +371,15 @@ public class MovieProcessor {
 				new Thread(new LogHandler(is, l)).start();
 				p.waitFor();
 				// log.deleteOnExit();
-				shutdown = true;
+				// shutdown = true;
 				return true;
 			} catch (IOException e) {
 				e.printStackTrace();
-				shutdown = true;
+				// shutdown = true;
 				return false;
 			} catch (InterruptedException e) {
 				e.printStackTrace();
-				shutdown = true;
+				// shutdown = true;
 				return false;
 			}
 		}
@@ -405,8 +397,6 @@ public class MovieProcessor {
 				InputStreamReader isr = new InputStreamReader(is);
 				BufferedReader br = new BufferedReader(isr);
 				String line;
-				String pattern = "time=";
-				Pattern p = Pattern.compile(pattern);
 				try {
 					while ((line = br.readLine()) != null) {
 						int s = line.indexOf("time=");

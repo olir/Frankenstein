@@ -40,11 +40,17 @@ public class Configuration {
 
 	public String inputVideo = null;
 	public String outputVideo = null;
+
 	public int limitOutputWidth = 2880;
+
+	public int testScreenWidth = 1280;
+	public int testScreenHeight = 768;
+
+	public boolean anaglyphKeepWidth = true;
 
 	public Configuration(ConfigHelper helper) {
 		String homeDir = System.getProperty("user.home");
-		outputVideo = new File (new File(System.getProperty("user.home")), "TestVideo.mp4").getAbsolutePath();
+		outputVideo = new File(new File(System.getProperty("user.home")), "TestVideo.mp4").getAbsolutePath();
 		File configFile = new File(homeDir, "frankenstein.ini");
 		if (configFile.canRead()) {
 			try {
@@ -58,7 +64,7 @@ public class Configuration {
 
 		if (getFFmpegPath() == null) {
 			File dir = null;
-			while (dir==null) { // merciless inquisition
+			while (dir == null) { // merciless inquisition
 				dir = helper.getFFmpegPath();
 			}
 			iniProperties.setProperty("ffmpegpath", dir.getAbsolutePath());
@@ -76,7 +82,7 @@ public class Configuration {
 		}
 	}
 
-	public VideoFilter findFilter(Class c) {
+	public VideoFilter findFilter(Class<?> c) {
 		for (VideoFilter f : filters) {
 			if (f.getClass() == c)
 				return f;
