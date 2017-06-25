@@ -39,6 +39,7 @@ import javafx.scene.control.TabPane;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.scene.control.TextField;
 
 public class ConfigurationSceneController {
 
@@ -132,6 +133,9 @@ public class ConfigurationSceneController {
 	@FXML
 	Tab tabPostProcessing;
 
+	@FXML
+	TextField tfPropertyInputFile;
+
 	/**
 	 * Initialize method, automatically called by @{link FXMLLoader}
 	 */
@@ -177,11 +181,11 @@ public class ConfigurationSceneController {
 		configuration.doInput = rVideoFileInput.isSelected();
 
 		if (rTestVideoGenerator.isSelected()) {
-			//filters.add(new TestImage(640, 480));
+			// filters.add(new TestImage(640, 480));
 			// filters.add(new TestImage(1080, 1920));
 			// filters.add(new TestImage(1024, 768));
 			// filters.add(new LRTestImage(1152, 648));
-			 filters.add(new TestImage(1280,720));
+			filters.add(new TestImage(1280, 720));
 		}
 
 		if (rAnaglyph.isSelected())
@@ -231,6 +235,22 @@ public class ConfigurationSceneController {
 	@FXML
 	public void rActionVideoFileInput() {
 
+		if (configuration.inputVideo == null) {
+			File file = chooseInput();
+			if (file == null) {
+				main.setDocumentInTitle(null);
+				rTestVideoGenerator.setSelected(true);
+				if (!rCloneLR.isSelected())
+					rCloneLR.setSelected(true);
+			}
+		} else {
+			main.setDocumentInTitle(new File(configuration.inputVideo).getName());
+			addTab(tabVideoFileInput);
+			removeTab(tabTestVideoGenerator);
+		}
+	}
+
+	private File chooseInput() {
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Video Input File");
 		fileChooser.getExtensionFilters().add(inputFileFilter);
@@ -244,7 +264,8 @@ public class ConfigurationSceneController {
 		} else
 			fileChooser.setInitialDirectory(new File("."));
 		File file = fileChooser.showOpenDialog(stage);
-		if (file != null && file.exists()) {
+
+		if (file != null && file.exists() && !file.isDirectory()) {
 			configuration.inputVideo = file.getAbsolutePath();
 			configuration.outputVideo = configuration.inputVideo.substring(0, configuration.inputVideo.lastIndexOf('.'))
 					+ "_edit" + ".mp4";
@@ -253,19 +274,19 @@ public class ConfigurationSceneController {
 				rNoNormalization.setSelected(true);
 			addTab(tabVideoFileInput);
 			removeTab(tabTestVideoGenerator);
-		} else {
-			main.setDocumentInTitle(null);
-			rTestVideoGenerator.setSelected(true);
-			if (!rCloneLR.isSelected())
-				rCloneLR.setSelected(true);
-		}
+			tfPropertyInputFile.setText(file.getAbsolutePath());
+			return file;
+		} else
+			return null;
 	}
 
 	@FXML
 	public void rActionTestVideoGenerator() {
 		removeTab(tabVideoFileInput);
 		addTab(tabTestVideoGenerator);
-		configuration.outputVideo = new File (new File(System.getProperty("user.home")), "TestVideo.mp4").getAbsolutePath();
+		configuration.outputVideo = new File(new File(System.getProperty("user.home")), "TestVideo.mp4")
+				.getAbsolutePath();
+		main.setDocumentInTitle("TestVideo.mp4");
 	}
 
 	@FXML
@@ -344,6 +365,17 @@ public class ConfigurationSceneController {
 	@FXML
 	public void rActionVideoFileOutput() {
 		addTab(tabVideoFileOutput);
+	}
+
+	@FXML
+	public void btnActionChangeInputFile() {
+		File file = chooseInput();
+		if (file == null) {
+			main.setDocumentInTitle(null);
+			rTestVideoGenerator.setSelected(true);
+			if (!rCloneLR.isSelected())
+				rCloneLR.setSelected(true);
+		}
 	}
 
 }

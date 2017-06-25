@@ -51,6 +51,7 @@ public class MovieProcessor {
 	private VideoWriter outputVideo;
 	private File tempVideoFile = null;
 	private File tempAudioFile = null;
+	private File tempMetadataFile = null;
 	private int fourcc;
 
 	private Mat frame = new Mat();
@@ -101,10 +102,13 @@ public class MovieProcessor {
 	public boolean process(ProcessingListener l) {
 		try {
 
-			// 1. Detach Audio from orginal video and store temporarily
+			// 1. Detach Audio and Metadata from orginal video and store
+			// temporarily
 			if (configuration.doOutput && configuration.doInput) {
-				if (!new Task(ffmpeg.getAbsolutePath() + " -y -i \"" + configuration.inputVideo
-						+ "\" -vn -ar 44100 -ac 2 -ab 192k -f mp3 -r 21 " + tempAudioFile.getAbsolutePath(), l, "Splitting Audio").run())
+				if (!new Task(ffmpeg.getAbsolutePath() + " -y -i \"" + configuration.inputVideo + "\""
+//						+ " -f ffmetadata " + tempMetadataFile.getAbsolutePath()
+						+ " -vn -ar 44100 -ac 2 -ab 192k -f mp3 -r 21 " + tempAudioFile.getAbsolutePath(), l,
+						"Splitting Audio").run())
 					return false;
 			}
 
@@ -194,7 +198,7 @@ public class MovieProcessor {
 			movie = new VideoCapture(configuration.inputVideo);
 
 			if (!movie.isOpened()) {
-				System.err.println("Input Movie Opening Error for "+configuration.inputVideo);
+				System.err.println("Input Movie Opening Error for " + configuration.inputVideo);
 				return false;
 			} else {
 				movie.read(frame);
@@ -248,6 +252,7 @@ public class MovieProcessor {
 				tempVideoFile = new File(new File(configuration.outputVideo).getParentFile(), tempFile.getName());
 				tempFile.deleteOnExit();
 				tempAudioFile = File.createTempFile("sound", ".mp3");
+				tempMetadataFile = File.createTempFile("metadata", ".properties");
 			} catch (IOException e) {
 				e.printStackTrace();
 				return false;
@@ -405,9 +410,9 @@ public class MovieProcessor {
 				try {
 					while ((line = br.readLine()) != null) {
 						int s = line.indexOf("time=");
-						if (s>=0) {
+						if (s >= 0) {
 							int e = line.indexOf(' ', s);
-							progress(line.substring(s+5, e));
+							progress(line.substring(s + 5, e));
 						}
 					}
 				} catch (IOException e) {

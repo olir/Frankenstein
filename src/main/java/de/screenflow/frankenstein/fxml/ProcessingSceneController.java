@@ -160,6 +160,8 @@ public class ProcessingSceneController implements ProcessingListener {
 			if (!processingRunning) {
 				int p = newvalue.intValue();
 				if (p != position && p <= frames) {
+					if (markPosition!=-1)
+						btnOneFrame.setDisable(p!=markPosition);
 					int oldposition = position;
 					position = p;
 					updateDuration();
@@ -193,6 +195,17 @@ public class ProcessingSceneController implements ProcessingListener {
 		Platform.runLater(() -> {
 			// this.currentFrame.fitWidthProperty().bind(currentFrame.getScene().widthProperty());
 			this.currentFrame.setPreserveRatio(true);
+			
+			startButton.setDisable(true);
+			btnMark.setDisable(true);
+			btnOneFrame.setDisable(true);
+			btnClear.setDisable(true);
+			btnCopy.setDisable(true);
+			btnPaste.setDisable(true);
+			btnListAdd.setDisable(true);
+			btnListFilter.setDisable(true);
+			btnListDelete.setDisable(true);
+			
 		});
 
 	}
@@ -368,7 +381,7 @@ public class ProcessingSceneController implements ProcessingListener {
 			Platform.runLater(() -> {
 				drawEditCanvas();
 				startButton.setDisable(false);
-				btnMark.setDisable(true);
+				btnMark.setDisable(false);
 				btnOneFrame.setDisable(true);
 				btnClear.setDisable(true);
 				btnCopy.setDisable(true);
@@ -390,6 +403,10 @@ public class ProcessingSceneController implements ProcessingListener {
 		Runnable r = new Runnable() {
 			public void run() {
 
+				btnMark.setDisable(true);
+				btnOneFrame.setDisable(true);
+				btnClear.setDisable(true);
+				
 				long seconds = System.currentTimeMillis() / 1000;
 
 				if (processor.process(ProcessingSceneController.this)) {
@@ -419,6 +436,7 @@ public class ProcessingSceneController implements ProcessingListener {
 			this.slider.setValue(1);
 			this.currentFrameIndex.setText("1");
 			this.currentTime.setText("" + time(0));
+			btnMark.setDisable(false);
 		});
 
 	}
@@ -558,7 +576,6 @@ public class ProcessingSceneController implements ProcessingListener {
 			startButton.setDisable(false);
 			configureButton.setDisable(false);
 			btnMark.setDisable(false);
-			btnOneFrame.setDisable(false);
 		});
 	}
 
@@ -581,8 +598,9 @@ public class ProcessingSceneController implements ProcessingListener {
 	public void createMark() {
 		markPosition = position;
 		Platform.runLater(() -> {
+			btnMark.setDisable(false);
+			btnOneFrame.setDisable(false);
 			btnClear.setDisable(false);
-			btnMark.setDisable(true);
 			btnCopy.setDisable(false);
 			btnListAdd.setDisable(false);
 			drawEditCanvas();
@@ -596,8 +614,9 @@ public class ProcessingSceneController implements ProcessingListener {
 		markPosition = -1;
 		clipBoardRange = null;
 		Platform.runLater(() -> {
-			btnClear.setDisable(true);
 			btnMark.setDisable(false);
+			btnOneFrame.setDisable(true);
+			btnClear.setDisable(true);
 			btnCopy.setDisable(true);
 			btnPaste.setDisable(true);
 			btnListAdd.setDisable(true);
@@ -722,6 +741,8 @@ public class ProcessingSceneController implements ProcessingListener {
 		currentTime.setText(time(((double) position - 1) / fps));
 		this.slider.setValue(position);
 		drawEditCanvas();
+		if (markPosition!=-1)
+			btnOneFrame.setDisable(position!=markPosition);
 	}
 
 	@FXML
@@ -738,6 +759,8 @@ public class ProcessingSceneController implements ProcessingListener {
 		currentTime.setText(time(((double) position - 1) / fps));
 		this.slider.setValue(position);
 		drawEditCanvas();
+		if (markPosition!=-1)
+			btnOneFrame.setDisable(position!=markPosition);
 	}
 
 }

@@ -169,7 +169,18 @@
                         </GridPane>
                      </children>
                   </GridPane>
-                  <ListView fx:id="listViewFilter" maxHeight="132.0" maxWidth="300.0" minHeight="160.0" GridPane.columnIndex="2" />
+                  <BorderPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="2">
+                     <center>
+                        <ListView fx:id="listViewFilter" maxHeight="132.0" maxWidth="310.0" minHeight="200.0" BorderPane.alignment="TOP_LEFT" />
+                     </center>
+                     <top>
+                        <Label text="Local Filter List:" BorderPane.alignment="BOTTOM_LEFT">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Label>
+                     </top>
+                  </BorderPane>
                </children>
             </GridPane>
             <HBox alignment="CENTER" fillHeight="false" maxHeight="64.0" maxWidth="1000.0" spacing="16.0">

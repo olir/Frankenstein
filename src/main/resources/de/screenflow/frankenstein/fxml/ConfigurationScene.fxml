@@ -102,7 +102,7 @@
                         <Font size="16.0" />
                      </font>
                   </RadioButton>
-                  <RadioButton fx:id="r3DConverter" disable="true" mnemonicParsing="false" text="Left/Right 3D Converter" toggleGroup="$NormalizationGroup">
+                  <RadioButton fx:id="r3DConverter" disable="true" mnemonicParsing="false" text="2D to 3D" toggleGroup="$NormalizationGroup">
                      <font>
                         <Font size="16.0" />
                      </font></RadioButton>
@@ -144,7 +144,7 @@
                         <Font size="16.0" />
                      </font>
                   </RadioButton>
-                  <RadioButton fx:id="rVRConverter" mnemonicParsing="false" onAction="#rActionVRConverter" text="VR Converter" toggleGroup="$VirtualRealityGroup">
+                  <RadioButton fx:id="rVRConverter" mnemonicParsing="false" onAction="#rActionVRConverter" text="VR 180° Converter" toggleGroup="$VirtualRealityGroup">
                      <font>
                         <Font size="16.0" />
                      </font></RadioButton>
@@ -157,7 +157,7 @@
                         <Font name="System Bold" size="16.0" />
                      </font>
                   </Label>
-                  <RadioButton fx:id="rNoOutput" mnemonicParsing="false" onAction="#rActionNoOutput"  text="None">
+                  <RadioButton fx:id="rNoOutput" mnemonicParsing="false" onAction="#rActionNoOutput" text="None">
                      <toggleGroup>
                         <ToggleGroup fx:id="OutputGroup" />
                      </toggleGroup>
@@ -185,7 +185,38 @@
                <tabs>
                   <Tab fx:id="tabVideoFileInput" closable="false" text="Video File Input">
                     <content>
-                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <GridPane hgap="8.0" vgap="8.0">
+                                <columnConstraints>
+                                  <ColumnConstraints fillWidth="false" halignment="LEFT" hgrow="NEVER" minWidth="10.0" prefWidth="100.0" />
+                                  <ColumnConstraints halignment="LEFT" hgrow="ALWAYS" minWidth="10.0" prefWidth="750.0" />
+                                    <ColumnConstraints fillWidth="false" halignment="LEFT" hgrow="NEVER" minWidth="10.0" prefWidth="100.0" />
+                                </columnConstraints>
+                                <rowConstraints>
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                </rowConstraints>
+                                 <children>
+                                    <Label text="Input File:" />
+                                    <Button onAction="#btnActionChangeInputFile" mnemonicParsing="false" text="..." GridPane.columnIndex="2">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Button>
+                                    <TextField fx:id="tfPropertyInputFile" editable="false" GridPane.columnIndex="1">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </TextField>
+                                 </children>
+                                 <padding>
+                                    <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
+                                 </padding>
+                              </GridPane>
+                           </children>
+                        </AnchorPane>
                     </content>
                   </Tab>
                   <Tab fx:id="tabTestVideoGenerator" closable="false" text="Test Video Generator">
