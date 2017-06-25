@@ -9,11 +9,11 @@ It appears there on a virtual 160-inch curved 3D display.
 [![Build Status](https://travis-ci.org/olir/Frankenstein.png)](https://travis-ci.org/olir/Frankenstein/builds) [![Dependency Status](https://www.versioneye.com/user/projects/594a6802368b0800421af505/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/594a6802368b0800421af505)
 
 ## Screenshots
-<img src="doc/config.png" width="45%"> <img src="doc/processing.png" width="45%">
+<img src="doc/config.png" width="45%"> <img src="doc/processing.png" width="45%" />
 
 
 ## Samples
-I have uploaded some samples to: [vimeo](https://vimeo.com/user68089135)
+I have uploaded some samples to vimeo: <a href="https://vimeo.com/user68089135"><img src="doc/vimeo.png"/></a>
 
 ## Status
 No release yet. Plattforms: Windows (Developed/Tested on a Windows 10 64bit.)
