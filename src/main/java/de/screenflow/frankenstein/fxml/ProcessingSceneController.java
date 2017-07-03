@@ -445,7 +445,7 @@ public class ProcessingSceneController implements ProcessingListener {
 		Platform.runLater(() -> {
 			this.slider.setMax(frames);
 
-			this.maxFrameIndex.setText("" + (int) frames);
+			this.maxFrameIndex.setText("/ " + (int) frames);
 			this.maxTime.setText("/ " + time(((double) (frames - 1)) / fps));
 		});
 	}

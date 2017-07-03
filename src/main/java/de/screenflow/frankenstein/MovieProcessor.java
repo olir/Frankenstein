@@ -42,7 +42,7 @@ public class MovieProcessor {
 	private VideoWriter outputVideo;
 	private File tempVideoFile = null;
 	private File tempAudioFile = null;
-	// private File tempMetadataFile = null;
+	private File tempMetadataFile = null;
 	private int fourcc;
 
 	private Mat frame = new Mat();
@@ -97,7 +97,7 @@ public class MovieProcessor {
 			// temporarily
 			if (configuration.doOutput && configuration.doInput) {
 				if (!new Task(ffmpeg.getAbsolutePath() + " -y -i \"" + configuration.inputVideo + "\""
-				// + " -f ffmetadata " + tempMetadataFile.getAbsolutePath()
+				 + " -f ffmetadata " + tempMetadataFile.getAbsolutePath()
 						+ " -vn -ar 44100 -ac 2 -ab 192k -f mp3 -r 21 " + tempAudioFile.getAbsolutePath(), l,
 						"Splitting Audio").run())
 					return false;
@@ -162,8 +162,10 @@ public class MovieProcessor {
 			if (configuration.doOutput) {
 				new File(configuration.outputVideo).delete();
 				if (configuration.doInput) {
-					if (!new Task(ffmpeg.getAbsolutePath() + " -i " + tempVideoFile.getAbsolutePath() + " -i "
-							+ tempAudioFile.getAbsolutePath() + " -c:a aac -c:v libx264  -q 17 \""
+					if (!new Task(ffmpeg.getAbsolutePath() + " -i " + tempVideoFile.getAbsolutePath() +
+							" -i " + tempAudioFile.getAbsolutePath() +
+							" -i " + tempMetadataFile.getAbsolutePath() + " -map_metadata 2" +
+							" -c:a aac -c:v libx264  -q 17 \""
 							+ configuration.outputVideo + '"', l, "Processing Output").run())
 						return false;
 				} else {
@@ -243,8 +245,7 @@ public class MovieProcessor {
 				tempVideoFile = new File(new File(configuration.outputVideo).getParentFile(), tempFile.getName());
 				tempFile.deleteOnExit();
 				tempAudioFile = File.createTempFile("sound", ".mp3");
-				// tempMetadataFile = File.createTempFile("metadata",
-				// ".properties");
+				tempMetadataFile = File.createTempFile("metadata", ".properties");
 			} catch (IOException e) {
 				e.printStackTrace();
 				return false;
@@ -294,6 +295,7 @@ public class MovieProcessor {
 
 		tempVideoFile.delete();
 		tempAudioFile.delete();
+		tempMetadataFile.delete();
 	}
 
 	public void seek(final ProcessingListener l, int frameId) {
