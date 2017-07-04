@@ -13,13 +13,15 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.screenflow.frankenstein.vf;
+package de.screenflow.frankenstein.vf.global;
 
 import org.opencv.core.Mat;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
+
+import de.screenflow.frankenstein.vf.VideoFilter;
 
 public class LR2VR180 implements VideoFilter {
 

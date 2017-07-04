@@ -53,7 +53,7 @@
                      <font>
                         <Font size="16.0" />
                      </font></RadioButton>
-                  <RadioButton disable="true" text="Slides" toggleGroup="$InputGroup">
+                  <RadioButton fx:id="rSlideshowGenerator" onAction="#rActionSlideshowGenerator" text="Slideshow" toggleGroup="$InputGroup">
                      <font>
                         <Font size="16.0" />
                      </font>
@@ -260,6 +260,41 @@
                            </children></AnchorPane>
                     </content>
                   </Tab>
+                  <Tab fx:id="tabSlideshow" closable="false" text="Slideshow">
+                    <content>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <GridPane hgap="8.0" vgap="8.0">
+                                 <columnConstraints>
+                                    <ColumnConstraints fillWidth="false" halignment="LEFT" hgrow="NEVER" minWidth="10.0" prefWidth="100.0" />
+                                    <ColumnConstraints halignment="LEFT" hgrow="ALWAYS" minWidth="10.0" prefWidth="750.0" />
+                                    <ColumnConstraints fillWidth="false" halignment="LEFT" hgrow="NEVER" minWidth="10.0" prefWidth="100.0" />
+                                 </columnConstraints>
+                                 <padding>
+                                    <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
+                                 </padding>
+                                 <rowConstraints>
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                 </rowConstraints>
+                                 <children>
+                                    <Label text="Slides Dir:" />
+                                    <Button mnemonicParsing="false" onAction="#btnActionChangeInputDir" text="..." GridPane.columnIndex="2">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Button>
+                                    <TextField fx:id="tfPropertyInputDir" editable="false" GridPane.columnIndex="1">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </TextField>
+                                 </children>
+                              </GridPane>
+                           </children></AnchorPane>
+                    </content>
+                  </Tab>
                   <Tab fx:id="tabAnaglyph" closable="false" text="Anaglyph to LR">
                     <content>
                       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
@@ -423,7 +458,7 @@
                                     <RadioButton fx:id="vrModeFromSBS" mnemonicParsing="false" onAction="#rActionVRModeFromSBS" text="SBS to 180°VR" GridPane.columnIndex="2" GridPane.rowIndex="1">
 										<toggleGroup>
                                           <ToggleGroup fx:id="VRModeGroup" />
-                                    	</toggleGroup>                                    
+                                    	</toggleGroup>
                                     </RadioButton>
                                     <RadioButton fx:id="vrModeFromVR" mnemonicParsing="false" onAction="#rActionVRModeFromVR" text="Just Shrink" toggleGroup="$VRModeGroup" GridPane.columnIndex="3" GridPane.rowIndex="1" />
                                  </children>

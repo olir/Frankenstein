@@ -13,46 +13,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.screenflow.frankenstein.vf;
+package de.screenflow.frankenstein.vf.global;
 
 import org.opencv.core.Mat;
-import org.opencv.core.Size;
-import org.opencv.imgproc.Imgproc;
+import org.opencv.core.Rect;
 
-public class OutputSizeLimiter implements VideoFilter {
+import de.screenflow.frankenstein.vf.VideoFilter;
+
+public class RL2LR implements VideoFilter {
 
 	private Mat newFrame = null;
 
-	private int newWidth;
-	private int newHeight;
-
-	int maximumWidth;
-
-	public OutputSizeLimiter(int maximumWidth) {
-		this.maximumWidth = maximumWidth;
+	public RL2LR() {
 	}
 
 	@Override
 	public Mat configure(Mat sourceFrame) {
-		if (sourceFrame.cols() <= maximumWidth || maximumWidth < 1)
-			return sourceFrame;
-
-		newWidth = maximumWidth;
-		newHeight = (int) ((float) maximumWidth * (((float) sourceFrame.rows()) / (float) sourceFrame.cols()));
-
 		newFrame = sourceFrame.clone();
-		Imgproc.resize(sourceFrame, newFrame, new Size(newWidth, newHeight));
-
 		return newFrame;
 	}
 
 	@Override
 	public Mat process(Mat sourceFrame, int frameId) {
 
-		if (newFrame == null)
-			return sourceFrame;
+		Rect roi = new Rect(0, 0, sourceFrame.cols() >> 1, sourceFrame.rows());
+		sourceFrame.submat(new Rect(sourceFrame.cols() >> 1, 0, sourceFrame.cols() >> 1, sourceFrame.rows()))
+				.copyTo(new Mat(newFrame, roi));
 
-		Imgproc.resize(sourceFrame, newFrame, new Size(newWidth, newHeight), 0, 0, Imgproc.INTER_AREA);
+		roi = new Rect(sourceFrame.cols() >> 1, 0, sourceFrame.cols() >> 1, sourceFrame.rows());
+		sourceFrame.submat(new Rect(0, 0, sourceFrame.cols() >> 1, sourceFrame.rows())).copyTo(new Mat(newFrame, roi));
 
 		return newFrame;
 	}

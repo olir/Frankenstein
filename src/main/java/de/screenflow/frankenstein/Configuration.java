@@ -25,6 +25,7 @@ import java.util.List;
 import java.util.Properties;
 
 import de.screenflow.frankenstein.vf.VideoFilter;
+import de.screenflow.frankenstein.vf.VideoSource;
 
 /**
  * Data class
@@ -35,11 +36,14 @@ public class Configuration {
 
 	public final List<VideoFilter> filters = new ArrayList<VideoFilter>();
 
+	public VideoSource source;
+
 	public boolean doInput = true;
 	public boolean doOutput = true;
 
 	public String inputVideo = null;
 	public String outputVideo = null;
+	public String inputDir = null;
 
 	public int limitOutputWidth = 2880;
 
@@ -57,6 +61,7 @@ public class Configuration {
 	public float vrModeShrinkFactor = 0.8f;
 
 	public int perspective = 0;
+
 
 	public Configuration(ConfigHelper helper) {
 		String homeDir = System.getProperty("user.home");

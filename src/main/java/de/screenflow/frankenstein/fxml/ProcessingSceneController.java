@@ -65,7 +65,7 @@ public class ProcessingSceneController implements ProcessingListener {
 	private int seekPos;
 
 	private double fps;
-	private double frames;
+	private int frames;
 
 	private FilterElement selectedFilter;
 
@@ -195,7 +195,7 @@ public class ProcessingSceneController implements ProcessingListener {
 		Platform.runLater(() -> {
 			// this.currentFrame.fitWidthProperty().bind(currentFrame.getScene().widthProperty());
 			this.currentFrame.setPreserveRatio(true);
-			
+
 			startButton.setDisable(true);
 			btnMark.setDisable(true);
 			btnOneFrame.setDisable(true);
@@ -205,7 +205,7 @@ public class ProcessingSceneController implements ProcessingListener {
 			btnListAdd.setDisable(true);
 			btnListFilter.setDisable(true);
 			btnListDelete.setDisable(true);
-			
+
 		});
 
 	}
@@ -406,7 +406,7 @@ public class ProcessingSceneController implements ProcessingListener {
 				btnMark.setDisable(true);
 				btnOneFrame.setDisable(true);
 				btnClear.setDisable(true);
-				
+
 				long seconds = System.currentTimeMillis() / 1000;
 
 				if (processor.process(ProcessingSceneController.this)) {
@@ -425,7 +425,7 @@ public class ProcessingSceneController implements ProcessingListener {
 	}
 
 	@Override
-	public void videoStarted(double frames, double fps) {
+	public void videoStarted(int frames, double fps) {
 		this.fps = fps;
 		this.frames = frames;
 

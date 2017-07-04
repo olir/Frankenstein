@@ -13,11 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.screenflow.frankenstein.vf;
+package de.screenflow.frankenstein.vf.global;
 
 import org.opencv.core.Mat;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
+
+import de.screenflow.frankenstein.vf.VideoFilter;
 
 public class StereoEffect implements VideoFilter {
 

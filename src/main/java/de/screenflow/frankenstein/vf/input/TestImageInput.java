@@ -1,28 +1,32 @@
 /*
  * Copyright 2017 Oliver Rode, https://github.com/olir/Frankenstein
- *  
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.screenflow.frankenstein.vf;
+package de.screenflow.frankenstein.vf.input;
 
 import org.opencv.core.Core;
+import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 
-public class TestImage implements VideoFilter {
+import de.screenflow.frankenstein.vf.VideoFilter;
+import de.screenflow.frankenstein.vf.VideoSource;
+
+public class TestImageInput implements VideoFilter, VideoSource {
 
 	private Mat newFrame = null;
 	private Mat testFrame = null;
@@ -33,7 +37,7 @@ public class TestImage implements VideoFilter {
 	final Scalar white = new Scalar(255, 255, 255);
 	final Scalar red = new Scalar(0, 0, 255);
 
-	public TestImage(int width, int height) {
+	public TestImageInput(int width, int height) {
 		this.smallWidth = width;
 		this.smallHeight = height;
 	}
@@ -87,19 +91,60 @@ public class TestImage implements VideoFilter {
 				new Point(xmid - gridSize * 1.33, ymid - gridSize * 0.25), Core.FONT_HERSHEY_PLAIN, 4.0, red, 3);
 	}
 
-	public int getWidth() {
-		return smallWidth;
-	}
-
 	public void setWidth(int smallWidth) {
 		this.smallWidth = smallWidth;
 	}
 
+	public void setHeight(int smallHeight) {
+		this.smallHeight = smallHeight;
+	}
+
+	@Override
+	public int getFrames() {
+		return 1000;
+	}
+
+	@Override
+	public double getFps() {
+		return 20;
+	}
+
+	@Override
+	public int getWidth() {
+		return smallWidth;
+	}
+
+	@Override
 	public int getHeight() {
 		return smallHeight;
 	}
 
-	public void setHeight(int smallHeight) {
-		this.smallHeight = smallHeight;
+	@Override
+	public void open() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void close() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void reopen() {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public Mat retrieve(Mat frame) {
+		return frame = Mat.zeros(getWidth(),getHeight(), CvType.CV_8UC3);
+	}
+
+	@Override
+	public boolean grab() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }

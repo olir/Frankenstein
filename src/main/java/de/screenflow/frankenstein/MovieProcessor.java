@@ -29,8 +29,8 @@ import org.opencv.videoio.VideoCapture;
 import org.opencv.videoio.VideoWriter;
 import org.opencv.videoio.Videoio;
 
-import de.screenflow.frankenstein.vf.TestImage;
 import de.screenflow.frankenstein.vf.VideoFilter;
+import de.screenflow.frankenstein.vf.input.TestImageInput;
 
 public class MovieProcessor {
 
@@ -38,7 +38,7 @@ public class MovieProcessor {
 	private final List<VideoFilter> filters;
 	private final Configuration configuration;
 
-	private VideoCapture movie = null;
+	// private final VideoCapture movie = null;
 	private VideoWriter outputVideo;
 	private File tempVideoFile = null;
 	private File tempAudioFile = null;
@@ -76,13 +76,8 @@ public class MovieProcessor {
 		// TODO: Currently Windows only
 		ffmpeg = new File(ffmpegPath, "\\bin\\ffmpeg.exe");
 
-		if (configuration.doInput) {
-			if (l != null)
-				l.videoStarted(movie.get(Videoio.CAP_PROP_FRAME_COUNT), movie.get(Videoio.CAP_PROP_FPS));
-		} else {
-			if (l != null)
-				l.videoStarted(1000, 20);
-		}
+		if (l != null)
+			l.videoStarted(configuration.source.getFrames(), configuration.source.getFps());
 
 		currentPos = 1;
 
@@ -97,7 +92,7 @@ public class MovieProcessor {
 			// temporarily
 			if (configuration.doOutput && configuration.doInput) {
 				if (!new Task(ffmpeg.getAbsolutePath() + " -y -i \"" + configuration.inputVideo + "\""
-				 + " -f ffmetadata " + tempMetadataFile.getAbsolutePath()
+						+ " -f ffmetadata " + tempMetadataFile.getAbsolutePath()
 						+ " -vn -ar 44100 -ac 2 -ab 192k -f mp3 -r 21 " + tempAudioFile.getAbsolutePath(), l,
 						"Splitting Audio").run())
 					return false;
@@ -108,15 +103,12 @@ public class MovieProcessor {
 			Mat newFrame = null;
 
 			int i = 0;
-			while (!stopped && (configuration.doInput || i < 1000)) {
+			while (!stopped && i < configuration.source.getFrames()) {
 				if (i > 0) {
-					if (configuration.doInput)
-						movie.read(frame);
-					else
-						frame = Mat.zeros((int) movie_w, (int) movie_h, CvType.CV_8UC3);
-
+					configuration.source.grab();
+					frame = configuration.source.retrieve(frame);
 				}
-				if (!frame.empty()) {
+				if (frame != null && !frame.empty()) {
 					currentPos = ++i;
 
 					if (l != null)
@@ -152,9 +144,6 @@ public class MovieProcessor {
 			if (configuration.doOutput) {
 				outputVideo.release();
 			}
-			if (configuration.doInput) {
-				movie.release();
-			}
 			if (stopped) {
 				return false;
 			}
@@ -162,11 +151,10 @@ public class MovieProcessor {
 			if (configuration.doOutput) {
 				new File(configuration.outputVideo).delete();
 				if (configuration.doInput) {
-					if (!new Task(ffmpeg.getAbsolutePath() + " -i " + tempVideoFile.getAbsolutePath() +
-							" -i " + tempAudioFile.getAbsolutePath() +
-							" -i " + tempMetadataFile.getAbsolutePath() + " -map_metadata 2" +
-							" -c:a aac -c:v libx264  -q 17 \""
-							+ configuration.outputVideo + '"', l, "Processing Output").run())
+					if (!new Task(ffmpeg.getAbsolutePath() + " -i " + tempVideoFile.getAbsolutePath() + " -i "
+							+ tempAudioFile.getAbsolutePath() + " -i " + tempMetadataFile.getAbsolutePath()
+							+ " -map_metadata 2" + " -c:a aac -c:v libx264  -q 17 \"" + configuration.outputVideo + '"',
+							l, "Processing Output").run())
 						return false;
 				} else {
 					if (!new Task(ffmpeg.getAbsolutePath() + " -i " + tempVideoFile.getAbsolutePath()
@@ -186,40 +174,24 @@ public class MovieProcessor {
 	}
 
 	public boolean openInput() {
-		if (configuration.doInput) {
+		configuration.source.open();
 
-			movie = new VideoCapture(configuration.inputVideo);
+		configuration.source.grab();
+		configuration.source.retrieve(frame);
 
-			if (!movie.isOpened()) {
-				System.err.println("Input Movie Opening Error for " + configuration.inputVideo);
-				return false;
-			} else {
-				movie.read(frame);
+		movie_fps = configuration.source.getFps();
+		movie_frameCount = configuration.source.getFrames();
+		movie_w = configuration.source.getWidth();
+		movie_h = configuration.source.getHeight();
 
-				// get meta data
-				movie_fps = movie.get(Videoio.CAP_PROP_FPS);
-				movie_frameCount = movie.get(Videoio.CAP_PROP_FRAME_COUNT);
-				movie_h = movie.get(Videoio.CAP_PROP_FRAME_HEIGHT);
-				movie_w = movie.get(Videoio.CAP_PROP_FRAME_WIDTH);
-				System.out.println("Dimensions: " + movie_w + "x" + movie_h);
-				System.out.println("fps: " + movie_fps + "  frameCount: " + movie_frameCount);
-			}
-		} else {
-			movie_fps = 20;
-			movie_frameCount = 1000;
-			movie_h = ((TestImage) configuration.findFilter(TestImage.class)).getHeight();
-			movie_w = ((TestImage) configuration.findFilter(TestImage.class)).getWidth();
-			;
-			frame = Mat.zeros((int) movie_w, (int) movie_h, CvType.CV_8UC3);
-		}
+		System.out.println("Dimensions: " + movie_w + "x" + movie_h);
+		System.out.println("fps: " + movie_fps + "  frameCount: " + movie_frameCount);
+
 		return true;
 	}
 
 	public void closeInput() {
-		if (configuration.doInput) {
-			movie.release();
-			movie = null;
-		}
+		configuration.source.close();
 	}
 
 	public boolean openOutput(ProcessingListener l) {
@@ -302,43 +274,39 @@ public class MovieProcessor {
 		if (configuration.doInput && frameId < currentPos) {
 			if (l != null)
 				l.seeking(0);
-			if (movie != null)
-				movie.release();
-			movie = new VideoCapture(configuration.inputVideo);
+
+			configuration.source.reopen();
 			currentPos = 0;
 		}
-		if (configuration.doInput && !movie.isOpened()) {
-			System.err.println("Input Movie Opening Error");
-		} else {
-			if (configuration.doInput) {
-				for (int i = currentPos + 1; i <= frameId; i++) {
-					if (l != null)
-						l.seeking(i);
-					if (!movie.grab()) {
-						if (i <= movie_frameCount && l != null) {
-							l.prematureEnd(i - 2);
-							frameId = i - 1;
-							currentPos = i - 1;
-						}
+		if (configuration.doInput) {
+			for (int i = currentPos + 1; i <= frameId; i++) {
+				if (l != null)
+					l.seeking(i);
+				if (!configuration.source.grab()) {
+					if (i <= movie_frameCount && l != null) {
+						l.prematureEnd(i - 2);
+						frameId = i - 1;
+						currentPos = i - 1;
 					}
 				}
-				if (l != null)
-					l.seeking(frameId);
-				movie.retrieve(frame);
-				currentPos = frameId;
 			}
-			if (!frame.empty()) {
-				Mat newFrame = frame;
-				for (VideoFilter filter : filters) {
-					newFrame = filter.process(newFrame, frameId);
-				}
-				if (l != null)
-					l.nextFrameProcessed(newFrame, frameId);
-			} else {
-				if (frameId <= movie_frameCount && l != null)
-					l.prematureEnd(frameId - 1);
-			}
+			if (l != null)
+				l.seeking(frameId);
+			configuration.source.retrieve(frame);
+			currentPos = frameId;
 		}
+		if (!frame.empty()) {
+			Mat newFrame = frame;
+			for (VideoFilter filter : filters) {
+				newFrame = filter.process(newFrame, frameId);
+			}
+			if (l != null)
+				l.nextFrameProcessed(newFrame, frameId);
+		} else {
+			if (frameId <= movie_frameCount && l != null)
+				l.prematureEnd(frameId - 1);
+		}
+
 		l.seekDone(frameId);
 	}
 
