@@ -44,6 +44,8 @@ public class TestImageInput implements VideoFilter, VideoSource {
 
 	@Override
 	public Mat configure(Mat sourceFrame) {
+		System.out.println("configure "+ smallWidth + " x " + smallHeight);
+		System.out.println("          "+ sourceFrame.cols() + " x " + sourceFrame.rows());
 		testFrame = sourceFrame.clone();
 		newFrame = sourceFrame.clone();
 		Imgproc.resize(sourceFrame, testFrame, new Size((double) smallWidth, (double) smallHeight));
@@ -139,12 +141,12 @@ public class TestImageInput implements VideoFilter, VideoSource {
 
 	@Override
 	public Mat retrieve(Mat frame) {
-		return frame = Mat.zeros(getWidth(),getHeight(), CvType.CV_8UC3);
+		System.out.println("retrieve "+ smallWidth + " x " + smallHeight);
+		return Mat.zeros(getWidth(),getHeight(), CvType.CV_8UC3);
 	}
 
 	@Override
 	public boolean grab() {
-		// TODO Auto-generated method stub
-		return false;
+		return true;
 	}
 }

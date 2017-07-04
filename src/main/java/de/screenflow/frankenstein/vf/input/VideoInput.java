@@ -50,7 +50,8 @@ public class VideoInput implements VideoSource {
 
 	@Override
 	public void close() {
-		movie.release();
+		if (movie!=null)
+			movie.release();
 		movie = null;
 	}
 

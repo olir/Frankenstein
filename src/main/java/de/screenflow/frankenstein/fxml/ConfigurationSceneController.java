@@ -422,7 +422,7 @@ public class ConfigurationSceneController {
 	private File chooseSlideshowInputDir() {
 		DirectoryChooser dirChooser = new DirectoryChooser();
 		dirChooser.setTitle("Slides Directory");
-		if (configuration.inputVideo != null) {
+		if (configuration.inputDir != null) {
 			File f = new File(configuration.inputDir);
 			if (!f.isDirectory())
 				f = f.getParentFile();

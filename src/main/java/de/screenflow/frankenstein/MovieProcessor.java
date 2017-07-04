@@ -177,7 +177,7 @@ public class MovieProcessor {
 		configuration.source.open();
 
 		configuration.source.grab();
-		configuration.source.retrieve(frame);
+		frame = configuration.source.retrieve(frame);
 
 		movie_fps = configuration.source.getFps();
 		movie_frameCount = configuration.source.getFrames();
