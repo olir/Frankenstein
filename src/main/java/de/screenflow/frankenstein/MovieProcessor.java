@@ -66,7 +66,7 @@ public class MovieProcessor {
 	public void init(ProcessingListener l) {
 		currentPos = 1;
 
-		if (!openInput()) {
+		if (!openInput(l)) {
 			if (l != null)
 				l.prematureEnd(1);
 			return;
@@ -80,9 +80,6 @@ public class MovieProcessor {
 			l.videoStarted(configuration.source.getFrames(), configuration.source.getFps());
 
 		currentPos = 1;
-
-		if (l != null)
-			l.nextFrameLoaded(frame, currentPos);
 	}
 
 	public boolean process(ProcessingListener l) {
@@ -104,16 +101,10 @@ public class MovieProcessor {
 
 			int i = 0;
 			while (!stopped && i < configuration.source.getFrames()) {
-				if (i > 0) {
-					configuration.source.grab();
-					frame = configuration.source.retrieve(frame);
-				}
+				i++;
+				currentPos = configuration.source.seek(i, l);
+				frame = configuration.source.getFrame();
 				if (frame != null && !frame.empty()) {
-					currentPos = ++i;
-
-					if (l != null)
-						l.nextFrameLoaded(frame, i);
-
 					if (!filters.isEmpty()) {
 						newFrame = frame;
 						for (VideoFilter filter : filters) {
@@ -128,7 +119,7 @@ public class MovieProcessor {
 					}
 
 					if (l != null)
-						l.nextFrameProcessed(newFrame, i);
+						l.nextFrameProcessed(newFrame, currentPos);
 
 					if ((i % 1000) == 0) {
 						System.out.print("+"); // break;
@@ -173,16 +164,15 @@ public class MovieProcessor {
 		stopped = true;
 	}
 
-	public boolean openInput() {
-		configuration.source.open();
-
-		configuration.source.grab();
-		frame = configuration.source.retrieve(frame);
+	public boolean openInput(ProcessingListener l) {
+		configuration.source.open(l);
 
 		movie_fps = configuration.source.getFps();
 		movie_frameCount = configuration.source.getFrames();
 		movie_w = configuration.source.getWidth();
 		movie_h = configuration.source.getHeight();
+
+		frame = configuration.source.getFrame();
 
 		System.out.println("Dimensions: " + movie_w + "x" + movie_h);
 		System.out.println("fps: " + movie_fps + "  frameCount: " + movie_frameCount);
@@ -243,13 +233,11 @@ public class MovieProcessor {
 				newFrame = filter.configure(newFrame);
 			}
 		}
-		if (l != null)
-			l.nextFrameProcessed(newFrame, 1);
 
 		if (configuration.doOutput) {
 			outputVideo.open(tempVideoFile.getAbsolutePath(), fourcc, movie_fps,
-					new Size(newFrame.cols(), newFrame.rows()), true);
-			System.err.println("newsize=" + new Size(newFrame.cols(), newFrame.rows()));
+					new Size(movie_w, movie_h), true);
+			System.err.println("newsize=" + new Size(movie_w, movie_h));
 
 			if (!outputVideo.isOpened()) {
 				System.err.println("Could not open the output video for write.");
@@ -275,33 +263,18 @@ public class MovieProcessor {
 			if (l != null)
 				l.seeking(0);
 
-			configuration.source.reopen();
 			currentPos = 0;
+			configuration.source.reopen(l);
 		}
-		if (configuration.doInput) {
-			for (int i = currentPos + 1; i <= frameId; i++) {
-				if (l != null)
-					l.seeking(i);
-				if (!configuration.source.grab()) {
-					if (i <= movie_frameCount && l != null) {
-						l.prematureEnd(i - 2);
-						frameId = i - 1;
-						currentPos = i - 1;
-					}
-				}
-			}
-			if (l != null)
-				l.seeking(frameId);
-			configuration.source.retrieve(frame);
-			currentPos = frameId;
-		}
-		if (!frame.empty()) {
+		currentPos = configuration.source.seek(frameId, l);
+		frame = configuration.source.getFrame();
+		if (frame != null && !frame.empty()) {
 			Mat newFrame = frame;
 			for (VideoFilter filter : filters) {
 				newFrame = filter.process(newFrame, frameId);
-			}
+			}			
 			if (l != null)
-				l.nextFrameProcessed(newFrame, frameId);
+				l.nextFrameProcessed(newFrame, currentPos);
 		} else {
 			if (frameId <= movie_frameCount && l != null)
 				l.prematureEnd(frameId - 1);

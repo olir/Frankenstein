@@ -24,6 +24,7 @@ import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 
+import de.screenflow.frankenstein.ProcessingListener;
 import de.screenflow.frankenstein.vf.VideoFilter;
 import de.screenflow.frankenstein.vf.VideoSource;
 
@@ -122,7 +123,7 @@ public class SlideShowInput implements VideoFilter, VideoSource {
 	}
 
 	@Override
-	public void open() {
+	public void open(ProcessingListener l) {
 		// TODO Auto-generated method stub
 
 	}
@@ -134,20 +135,22 @@ public class SlideShowInput implements VideoFilter, VideoSource {
 	}
 
 	@Override
-	public void reopen() {
-		// TODO Auto-generated method stub
-
+	public void reopen(ProcessingListener l) {
+		close();
+		open(l);
 	}
 
+	
 	@Override
-	public Mat retrieve(Mat frame) {
+	public Mat getFrame() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public boolean grab() {
+	public int seek(int pos, ProcessingListener l) {
 		// TODO Auto-generated method stub
-		return false;
+		return pos;
+		
 	}
 }

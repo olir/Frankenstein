@@ -501,11 +501,11 @@ public class ProcessingSceneController implements ProcessingListener {
 
 	@Override
 	public void nextFrameProcessed(Mat frame, int frameId) {
-		Image imageToShow = SwingFXUtils.toFXImage(matToBufferedImage(frame), null);
 		Platform.runLater(() -> {
 			this.currentFrameIndex.setText("" + frameId);
 			this.currentTime.setText("" + time((frameId - 1) / fps));
 
+			Image imageToShow = SwingFXUtils.toFXImage(matToBufferedImage(frame), null);
 			currentFrame.imageProperty().set(imageToShow);
 			if (!seeking)
 				this.slider.setValue(frameId);

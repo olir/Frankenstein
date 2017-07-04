@@ -15,16 +15,22 @@
  */
 package de.screenflow.frankenstein.vf.input;
 
-import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.videoio.VideoCapture;
 import org.opencv.videoio.Videoio;
 
+import de.screenflow.frankenstein.ProcessingListener;
 import de.screenflow.frankenstein.vf.VideoSource;
 
 public class VideoInput implements VideoSource {
 	private VideoCapture movie = null;
 	private final String videofile;
+	private Mat currentFrame;
+	private int currentPos;
+	private int frames;
+	private double fps;
+	private int width;
+	private int height;
 
 	public VideoInput(String videofile) {
 		this.videofile = videofile;
@@ -32,55 +38,87 @@ public class VideoInput implements VideoSource {
 
 	@Override
 	public int getFrames() {
-		return (int) movie.get(Videoio.CAP_PROP_FRAME_COUNT);
+		return frames;
 	}
 
 	@Override
 	public double getFps() {
-		return movie.get(Videoio.CAP_PROP_FPS);
+		return fps;
 	}
 
 	@Override
-	public void open() {
+	public void open(ProcessingListener l) {
 		movie = new VideoCapture(videofile);
 		if (!movie.isOpened()) {
 			throw new RuntimeException("Input Movie Opening Error for " + videofile);
 		}
+		currentFrame = new Mat();
+		currentPos = 0;
+		grab();
+		currentFrame = retrieve(currentFrame, l);
+		frames = (int) movie.get(Videoio.CAP_PROP_FRAME_COUNT);
+		fps = movie.get(Videoio.CAP_PROP_FPS);
+		width = (int) movie.get(Videoio.CAP_PROP_FRAME_WIDTH);
+		height = (int) movie.get(Videoio.CAP_PROP_FRAME_HEIGHT);
 	}
 
 	@Override
 	public void close() {
-		if (movie!=null)
+		if (movie != null)
 			movie.release();
 		movie = null;
 	}
 
 	@Override
-	public void reopen() {
+	public void reopen(ProcessingListener l) {
 		close();
-		open();
+		open(l);
 	}
 
-	@Override
-	public Mat retrieve(Mat frame) {
-		movie.retrieve(frame); // ignore boolean
-		return frame;
+	private Mat retrieve(Mat frame, ProcessingListener l) {
+		movie.retrieve(currentFrame); // ignore boolean
+		return currentFrame;
 	}
 
-	@Override
-	public boolean grab() {
+	private boolean grab() {
+		currentPos++;
 		return movie.grab();
 	}
 
 	@Override
 	public int getWidth() {
-		return (int)movie.get(Videoio.CAP_PROP_FRAME_WIDTH);
+		return width;
 	}
 
 	@Override
 	public int getHeight() {
-		return (int)movie.get(Videoio.CAP_PROP_FRAME_HEIGHT);
+		return height;
 	}
 
+	@Override
+	public Mat getFrame() {
+		return currentFrame;
+	}
+
+	@Override
+	public int seek(int pos, ProcessingListener l) {
+		if (pos < currentPos) {
+			reopen(l);
+		}
+		if (pos > currentPos) {
+			for (int i = currentPos + 1; i <= pos; i++) {
+				if (l != null)
+					l.seeking(i);
+				if (!grab()) {
+					if (i <= frames && l != null) {
+						l.prematureEnd(i - 2);
+						currentPos = i - 1;
+					}
+				}
+			}
+			currentFrame = retrieve(currentFrame, l);
+		}
+		return currentPos;
+	}
 
 }

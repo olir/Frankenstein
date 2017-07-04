@@ -23,11 +23,13 @@ import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 
+import de.screenflow.frankenstein.ProcessingListener;
 import de.screenflow.frankenstein.vf.VideoFilter;
 import de.screenflow.frankenstein.vf.VideoSource;
 
 public class TestImageInput implements VideoFilter, VideoSource {
 
+	private Mat initFrame;
 	private Mat newFrame = null;
 	private Mat testFrame = null;
 
@@ -44,15 +46,15 @@ public class TestImageInput implements VideoFilter, VideoSource {
 
 	@Override
 	public Mat configure(Mat sourceFrame) {
-		System.out.println("configure "+ smallWidth + " x " + smallHeight);
-		System.out.println("          "+ sourceFrame.cols() + " x " + sourceFrame.rows());
+		System.out.println("configure " + smallWidth + " x " + smallHeight);
+		System.out.println("          " + sourceFrame.cols() + " x " + sourceFrame.rows());
 		testFrame = sourceFrame.clone();
 		newFrame = sourceFrame.clone();
 		Imgproc.resize(sourceFrame, testFrame, new Size((double) smallWidth, (double) smallHeight));
 		Imgproc.resize(sourceFrame, newFrame, new Size((double) smallWidth, (double) smallHeight));
 
 		testFrame.setTo(new Scalar(0, 0, 0));
-		drawImage(0, 0, smallWidth, smallHeight);
+		drawTestImage(0, 0, smallWidth, smallHeight);
 
 		return testFrame;
 	}
@@ -60,12 +62,13 @@ public class TestImageInput implements VideoFilter, VideoSource {
 	@Override
 	public Mat process(Mat sourceFrame, int frameId) {
 		testFrame.copyTo(newFrame);
+		System.out.println("process Frame #" + frameId);
 		Imgproc.putText(newFrame, "Frame #" + frameId, new Point(10, smallHeight - 10), Core.FONT_HERSHEY_PLAIN, 3.0,
 				red, 2);
 		return newFrame;
 	}
 
-	private void drawImage(int xoffset, int yoffset, int width, int height) {
+	private void drawTestImage(int xoffset, int yoffset, int width, int height) {
 		int count = 10;
 		int gridSize = ((height / count) >> 1) << 1;
 		while (gridSize >= 8)
@@ -88,6 +91,9 @@ public class TestImageInput implements VideoFilter, VideoSource {
 		for (int y = ymid - gridSize; y > yoffset; y -= gridSize) {
 			Imgproc.line(testFrame, new Point(xoffset, y), new Point(xoffset + width - 1, y), white, 1);
 		}
+
+		Imgproc.line(testFrame, new Point(xoffset, yoffset), new Point(xoffset + width - 1, yoffset + height - 1),
+				red, 1);
 
 		Imgproc.putText(testFrame, "" + width + " x " + height,
 				new Point(xmid - gridSize * 1.33, ymid - gridSize * 0.25), Core.FONT_HERSHEY_PLAIN, 4.0, red, 3);
@@ -122,31 +128,29 @@ public class TestImageInput implements VideoFilter, VideoSource {
 	}
 
 	@Override
-	public void open() {
-		// TODO Auto-generated method stub
-
+	public void open(ProcessingListener l) {
+		initFrame = Mat.zeros(getWidth(), getHeight(), CvType.CV_8UC3);
 	}
 
 	@Override
 	public void close() {
-		// TODO Auto-generated method stub
+		initFrame = null;
 
 	}
 
 	@Override
-	public void reopen() {
-		// TODO Auto-generated method stub
-
+	public void reopen(ProcessingListener l) {
+		open(l);
+		close();
 	}
 
 	@Override
-	public Mat retrieve(Mat frame) {
-		System.out.println("retrieve "+ smallWidth + " x " + smallHeight);
-		return Mat.zeros(getWidth(),getHeight(), CvType.CV_8UC3);
+	public Mat getFrame() {
+		return initFrame;
 	}
 
 	@Override
-	public boolean grab() {
-		return true;
+	public int seek(int pos, ProcessingListener l) {
+		return pos;
 	}
 }
