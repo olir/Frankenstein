@@ -16,8 +16,12 @@
 package de.screenflow.frankenstein.vf.input;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import org.opencv.core.Core;
+import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
 import org.opencv.core.Scalar;
@@ -32,6 +36,7 @@ public class SlideShowInput implements VideoFilter, VideoSource {
 
 	private final File slidesDir;
 
+	private Mat initFrame;
 	private Mat newFrame = null;
 	private Mat testFrame = null;
 
@@ -41,19 +46,23 @@ public class SlideShowInput implements VideoFilter, VideoSource {
 	final Scalar white = new Scalar(255, 255, 255);
 	final Scalar red = new Scalar(0, 0, 255);
 
+	final List<Slide> slides = new ArrayList<Slide>();
+
 	public SlideShowInput(String slidesDir) {
 		this.slidesDir = new File(slidesDir);
 	}
 
 	@Override
 	public Mat configure(Mat sourceFrame) {
+		System.out.println("configure " + smallWidth + " x " + smallHeight);
+		System.out.println("          " + sourceFrame.cols() + " x " + sourceFrame.rows());
 		testFrame = sourceFrame.clone();
 		newFrame = sourceFrame.clone();
 		Imgproc.resize(sourceFrame, testFrame, new Size((double) smallWidth, (double) smallHeight));
 		Imgproc.resize(sourceFrame, newFrame, new Size((double) smallWidth, (double) smallHeight));
 
 		testFrame.setTo(new Scalar(0, 0, 0));
-		drawImage(0, 0, smallWidth, smallHeight);
+		drawTestImage(0, 0, smallWidth, smallHeight);
 
 		return testFrame;
 	}
@@ -61,12 +70,13 @@ public class SlideShowInput implements VideoFilter, VideoSource {
 	@Override
 	public Mat process(Mat sourceFrame, int frameId) {
 		testFrame.copyTo(newFrame);
+		System.out.println("process Frame #" + frameId);
 		Imgproc.putText(newFrame, "Frame #" + frameId, new Point(10, smallHeight - 10), Core.FONT_HERSHEY_PLAIN, 3.0,
 				red, 2);
 		return newFrame;
 	}
 
-	private void drawImage(int xoffset, int yoffset, int width, int height) {
+	private void drawTestImage(int xoffset, int yoffset, int width, int height) {
 		int count = 10;
 		int gridSize = ((height / count) >> 1) << 1;
 		while (gridSize >= 8)
@@ -90,20 +100,15 @@ public class SlideShowInput implements VideoFilter, VideoSource {
 			Imgproc.line(testFrame, new Point(xoffset, y), new Point(xoffset + width - 1, y), white, 1);
 		}
 
+		Imgproc.line(testFrame, new Point(xoffset, yoffset), new Point(xoffset + width - 1, yoffset + height - 1), red,
+				1);
+
 		Imgproc.putText(testFrame, "" + width + " x " + height,
 				new Point(xmid - gridSize * 1.33, ymid - gridSize * 0.25), Core.FONT_HERSHEY_PLAIN, 4.0, red, 3);
 	}
 
-	public int getWidth() {
-		return smallWidth;
-	}
-
 	public void setWidth(int smallWidth) {
 		this.smallWidth = smallWidth;
-	}
-
-	public int getHeight() {
-		return smallHeight;
 	}
 
 	public void setHeight(int smallHeight) {
@@ -112,45 +117,106 @@ public class SlideShowInput implements VideoFilter, VideoSource {
 
 	@Override
 	public int getFrames() {
-		// TODO Auto-generated method stub
-		return 0;
+		return 1000;
 	}
 
 	@Override
 	public double getFps() {
-		// TODO Auto-generated method stub
-		return 10;
+		return 20;
+	}
+
+	@Override
+	public int getWidth() {
+		return smallWidth;
+	}
+
+	@Override
+	public int getHeight() {
+		return smallHeight;
 	}
 
 	@Override
 	public void open(ProcessingListener l) {
-		// TODO Auto-generated method stub
+		initFrame = Mat.zeros(getHeight(), getWidth(), CvType.CV_8UC3);
 
+		File[] files = slidesDir.listFiles();
+		Arrays.sort(files);
+
+		slides.clear();
+		File prevFile = null;
+		Slide prevSlide = null;
+		for (File file : files) {
+			if (prevSlide != null && prevFile != null && match(file, prevSlide.getFiles()[0], 3)) {
+				File[] prevFiles = prevSlide.getFiles();
+				if (prevFiles.length > 1)
+					throw new Error("Ambigious File Filter");
+				slides.remove(prevSlide);
+				File[] newFiles = { prevFiles[0], file };
+				Slide s = new Slide(newFiles);
+				slides.add(s);
+				prevFile = null;
+				prevSlide = s;
+			} else {
+				File[] f = { file };
+				Slide s = new Slide(f);
+				slides.add(s);
+				prevFile = file;
+				prevSlide = s;
+			}
+		}
+	}
+
+	private boolean match(File f1, File f2, int indexChars) {
+		return match(nameWithoutSuffix(f1), nameWithoutSuffix(f2), indexChars);
+	}
+
+	private String nameWithoutSuffix(File f) {
+		String n = f.getName();
+		int p = n.lastIndexOf('.');
+		if (p < 0)
+			return n;
+		else
+			return n.substring(0, p);
+	}
+
+	private boolean match(String n1, String n2, int indexChars) {
+		if (n1.length() != n2.length())
+			return false;
+		return (n1.substring(0, n1.length() - indexChars).equals(n2.substring(0, n2.length() - indexChars)));
 	}
 
 	@Override
 	public void close() {
-		// TODO Auto-generated method stub
+		initFrame = null;
 
 	}
 
 	@Override
 	public void reopen(ProcessingListener l) {
-		close();
 		open(l);
+		close();
 	}
 
-	
 	@Override
 	public Mat getFrame() {
-		// TODO Auto-generated method stub
-		return null;
+		return initFrame;
 	}
 
 	@Override
 	public int seek(int pos, ProcessingListener l) {
-		// TODO Auto-generated method stub
 		return pos;
-		
 	}
+
+	class Slide {
+		private final File[] files;
+
+		public Slide(File[] files) {
+			this.files = files;
+		}
+
+		public File[] getFiles() {
+			return files;
+		}
+	}
+
 }
