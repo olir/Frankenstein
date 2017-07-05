@@ -41,9 +41,8 @@ public class Configuration {
 	public boolean doInput = true;
 	public boolean doOutput = true;
 
-	public String inputVideo = null;
+	private String inputVideo = null;
 	public String outputVideo = null;
-	public String inputDir = null;
 
 	public int limitOutputWidth = 2880;
 
@@ -62,11 +61,13 @@ public class Configuration {
 
 	public int perspective = 0;
 
-
+	private final File configFile;
+	
 	public Configuration(ConfigHelper helper) {
 		String homeDir = System.getProperty("user.home");
 		outputVideo = new File(new File(System.getProperty("user.home")), "TestVideo.mp4").getAbsolutePath();
-		File configFile = new File(homeDir, "frankenstein.ini");
+		configFile = new File(homeDir, "frankenstein.ini");
+		
 		if (configFile.canRead()) {
 			try {
 
@@ -84,19 +85,23 @@ public class Configuration {
 			}
 			iniProperties.setProperty("ffmpegpath", dir.getAbsolutePath());
 
-			// save properties to project root folder
-			try {
-				iniProperties.store(new FileOutputStream(configFile), null);
-			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+			savePreferences();
 		}
 	}
 
+	public void savePreferences() {
+		// save properties to project root folder
+		try {
+			iniProperties.store(new FileOutputStream(configFile), null);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 	public VideoFilter findFilter(Class<?> c) {
 		for (VideoFilter f : filters) {
 			if (f.getClass() == c)
@@ -109,6 +114,29 @@ public class Configuration {
 		return iniProperties.getProperty("ffmpegpath");
 	}
 
+	public String getInputDir() {
+		return iniProperties.getProperty("inputdirslides");
+	}
+
+	public void setInputDir(String inputdir) {
+		iniProperties.setProperty("inputdirslides", inputdir);
+		savePreferences();
+	}
+
+	public String getInputVideo() {
+		return inputVideo;
+	}
+
+	public void setInputVideo(String inputVideo) {
+		this.inputVideo = inputVideo;
+		iniProperties.setProperty("inputvideopath", new File(inputVideo).getParent());
+		savePreferences();
+	}
+
+	public String getInputVideoPath() {
+		return iniProperties.getProperty("inputvideopath");
+	}
+	
 	public interface ConfigHelper {
 		public File getFFmpegPath();
 	}

@@ -227,6 +227,8 @@ public class ConfigurationSceneController {
 		rNoVR.setSelected(true);
 		rVideoFileOutput.setSelected(true);
 
+		tfPropertyInputDir.setText(configuration.getInputDir());
+		
 		tfPropertyTestScreenWidth.setText(String.valueOf(configuration.testScreenWidth));
 		tfPropertyTestScreenHeight.setText(String.valueOf(configuration.testScreenHeight));
 		if (configuration.anaglyphKeepWidth)
@@ -292,10 +294,10 @@ public class ConfigurationSceneController {
 
 		configuration.doInput = false;
 		if (rVideoFileInput.isSelected()) {
-			configuration.source = new VideoInput(configuration.inputVideo);
+			configuration.source = new VideoInput(configuration.getInputVideo());
 			configuration.doInput = true;
 		} else if (rSlideshowGenerator.isSelected()) {
-			configuration.source = new SlideShowInput(configuration.inputDir);
+			configuration.source = new SlideShowInput(configuration.getInputDir());
 			filters.add((VideoFilter) configuration.source);
 		} else if (rTestVideoGenerator.isSelected()) {
 			configuration.source = new TestImageInput(configuration.testScreenWidth, configuration.testScreenHeight);
@@ -353,7 +355,7 @@ public class ConfigurationSceneController {
 	@FXML
 	public void rActionVideoFileInput() {
 
-		if (configuration.inputVideo == null) {
+		if (configuration.getInputVideo() == null) {
 			File file = chooseInputVideo();
 			if (file == null) {
 				main.setDocumentInTitle(null);
@@ -362,7 +364,7 @@ public class ConfigurationSceneController {
 					rCloneLR.setSelected(true);
 			}
 		} else {
-			main.setDocumentInTitle(new File(configuration.inputVideo).getName());
+			main.setDocumentInTitle(new File(configuration.getInputVideo()).getName());
 			addTab(tabVideoFileInput);
 			removeTab(tabSlideshow);
 			removeTab(tabTestVideoGenerator);
@@ -373,20 +375,28 @@ public class ConfigurationSceneController {
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Video Input File");
 		fileChooser.getExtensionFilters().add(inputFileFilter);
-		if (configuration.inputVideo != null) {
-			File f = new File(configuration.inputVideo);
+		String lastVideoDir = configuration.getInputVideoPath();
+		
+		if (configuration.getInputVideo() != null) {
+			File f = new File(configuration.getInputVideo());
 			if (!f.isDirectory())
 				f = f.getParentFile();
 			if (f == null || !f.isDirectory())
 				f = new File(".");
 			fileChooser.setInitialDirectory(f);
-		} else
+		}
+		else
+		if (lastVideoDir!=null)
+			fileChooser.setInitialDirectory(new File(lastVideoDir));
+		else
 			fileChooser.setInitialDirectory(new File("."));
+		
+		
 		File file = fileChooser.showOpenDialog(stage);
 
 		if (file != null && file.exists() && !file.isDirectory()) {
-			configuration.inputVideo = file.getAbsolutePath();
-			configuration.outputVideo = configuration.inputVideo.substring(0, configuration.inputVideo.lastIndexOf('.'))
+			configuration.setInputVideo(file.getAbsolutePath());
+			configuration.outputVideo = configuration.getInputVideo().substring(0, configuration.getInputVideo().lastIndexOf('.'))
 					+ "_edit" + ".mp4";
 			tfPropertyOutputFile.setText(configuration.outputVideo);
 			main.setDocumentInTitle(file.getName());
@@ -406,7 +416,7 @@ public class ConfigurationSceneController {
 	@FXML
 	public void rActionSlideshowGenerator() {
 
-		if (configuration.inputDir == null) {
+		if (configuration.getInputDir() == null) {
 			File file = chooseSlideshowInputDir();
 			if (file == null) {
 				main.setDocumentInTitle(null);
@@ -418,7 +428,7 @@ public class ConfigurationSceneController {
 				rNoNormalization.setSelected(true);
 			}
 		} else {
-			main.setDocumentInTitle(new File(configuration.inputDir).getName());
+			main.setDocumentInTitle(new File(configuration.getInputDir()).getName());
 			addTab(tabSlideshow);
 			removeTab(tabVideoFileInput);
 			removeTab(tabTestVideoGenerator);
@@ -429,8 +439,11 @@ public class ConfigurationSceneController {
 	private File chooseSlideshowInputDir() {
 		DirectoryChooser dirChooser = new DirectoryChooser();
 		dirChooser.setTitle("Slides Directory");
-		if (configuration.inputDir != null) {
-			File f = new File(configuration.inputDir);
+		String lastSlideDir = configuration.getInputDir();
+		if (lastSlideDir!=null)
+			dirChooser.setInitialDirectory(new File(lastSlideDir));
+		if (configuration.getInputDir() != null) {
+			File f = new File(configuration.getInputDir());
 			if (!f.isDirectory())
 				f = f.getParentFile();
 			if (f == null || !f.isDirectory())
@@ -441,8 +454,8 @@ public class ConfigurationSceneController {
 		File dir = dirChooser.showDialog(stage);
 
 		if (dir != null && dir.exists() && dir.isDirectory()) {
-			configuration.inputDir = dir.getAbsolutePath();
-			configuration.outputVideo = configuration.inputDir + ".mp4";
+			configuration.setInputDir(dir.getAbsolutePath());
+			configuration.outputVideo = configuration.getInputDir() + ".mp4";
 			tfPropertyOutputFile.setText(configuration.outputVideo);
 			main.setDocumentInTitle(dir.getName());
 			addTab(tabSlideshow);

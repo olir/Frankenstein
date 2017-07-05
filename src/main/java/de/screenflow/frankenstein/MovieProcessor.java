@@ -115,7 +115,7 @@ public class MovieProcessor {
 			// 1. Detach Audio and Metadata from orginal video and store
 			// temporarily
 			if (configuration.doOutput && configuration.doInput) {
-				if (!new Task(ffmpeg.getAbsolutePath() + " -y -i \"" + configuration.inputVideo + "\""
+				if (!new Task(ffmpeg.getAbsolutePath() + " -y -i \"" + configuration.getInputVideo() + "\""
 						+ " -f ffmetadata " + tempMetadataFile.getAbsolutePath()
 						+ " -vn -ar 44100 -ac 2 -ab 192k -f mp3 -r 21 " + tempAudioFile.getAbsolutePath(), l,
 						"Splitting Audio").run())
