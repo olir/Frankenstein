@@ -414,11 +414,15 @@ public class ConfigurationSceneController {
 				if (!rCloneLR.isSelected())
 					rCloneLR.setSelected(true);
 			}
+			else {
+				rNoNormalization.setSelected(true);
+			}
 		} else {
 			main.setDocumentInTitle(new File(configuration.inputDir).getName());
 			addTab(tabSlideshow);
 			removeTab(tabVideoFileInput);
 			removeTab(tabTestVideoGenerator);
+			rNoNormalization.setSelected(true);
 		}
 	}
 

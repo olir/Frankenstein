@@ -421,6 +421,9 @@ public class ProcessingSceneController implements ProcessingListener {
 
 					System.out.println("Done in " + seconds + "s.");
 				}
+				else {
+					taskError("Task failed");
+				}
 
 				Platform.runLater(() -> {
 					processingRunning = false;

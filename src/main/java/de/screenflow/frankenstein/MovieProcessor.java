@@ -71,6 +71,32 @@ public class MovieProcessor {
 				l.prematureEnd(1);
 			return;
 		}
+
+		frame = configuration.source.getFrame();
+		if (frame != null && !frame.empty()) {
+			Mat newFrame = frame;
+			if (!filters.isEmpty()) {
+				for (VideoFilter filter : filters) {
+					newFrame = filter.configure(newFrame);
+				}
+			}
+
+			for (VideoFilter filter : filters) {
+				// System.out.println("MovieProcessor process
+				// "+filter.getClass().getName());
+				newFrame = filter.process(newFrame, 1);
+			}
+			if (l != null)
+				l.nextFrameProcessed(newFrame, currentPos);
+
+			movie_w = newFrame.cols();
+			movie_h = newFrame.rows();
+		} else {
+			if (l != null)
+				l.prematureEnd(1);
+			return;
+		}
+
 		openOutput(l);
 
 		// TODO: Currently Windows only
@@ -84,6 +110,7 @@ public class MovieProcessor {
 
 	public boolean process(ProcessingListener l) {
 		try {
+			System.out.print("doOutput=" + configuration.doOutput);
 
 			// 1. Detach Audio and Metadata from orginal video and store
 			// temporarily
@@ -108,7 +135,8 @@ public class MovieProcessor {
 					if (!filters.isEmpty()) {
 						newFrame = frame;
 						for (VideoFilter filter : filters) {
-//							System.out.println("MovieProcessor process "+filter.getClass().getName());
+							// System.out.println("MovieProcessor process
+							// "+filter.getClass().getName());
 							newFrame = filter.process(newFrame, i);
 						}
 					} else {
@@ -116,16 +144,17 @@ public class MovieProcessor {
 					}
 
 					if (configuration.doOutput) {
+//						System.out.println("outputVideo.write size=" + new Size(newFrame.cols(), newFrame.rows()));
 						outputVideo.write(newFrame);
+						if ((i % 1000) == 0) {
+							System.out.print("+"); // break;
+						} else if ((i % 100) == 0)
+							System.out.print(".");
 					}
 
 					if (l != null)
 						l.nextFrameProcessed(newFrame, currentPos);
 
-					if ((i % 1000) == 0) {
-						System.out.print("+"); // break;
-					} else if ((i % 100) == 0)
-						System.out.print(".");
 				} else {
 					if (currentPos < movie_frameCount && l != null)
 						l.prematureEnd(currentPos);
@@ -153,6 +182,13 @@ public class MovieProcessor {
 							+ " -c:v libx264  -q 17 " + configuration.outputVideo, l, "Processing Output").run())
 						return false;
 				}
+				if (!new File(configuration.outputVideo).exists()) {
+					System.err.println("Missing output.");
+					return false;
+				}
+				tempVideoFile.delete();
+				tempAudioFile.delete();
+				tempMetadataFile.delete();
 			}
 		} finally {
 			closeInput();
@@ -228,17 +264,9 @@ public class MovieProcessor {
 	// Windows - bad Video quality
 
 	public boolean configureOutput(ProcessingListener l) {
-		Mat newFrame = frame;
-		if (!filters.isEmpty()) {
-			for (VideoFilter filter : filters) {
-				newFrame = filter.configure(newFrame);
-			}
-		}
-
 		if (configuration.doOutput) {
-			outputVideo.open(tempVideoFile.getAbsolutePath(), fourcc, movie_fps,
-					new Size(movie_w, movie_h), true);
-			System.err.println("newsize=" + new Size(movie_w, movie_h));
+			outputVideo.open(tempVideoFile.getAbsolutePath(), fourcc, movie_fps, new Size(movie_w, movie_h), true);
+			System.out.println("ConfigureOutput size=" + new Size(movie_w, movie_h) + " fps=" + movie_fps);
 
 			if (!outputVideo.isOpened()) {
 				System.err.println("Could not open the output video for write.");
@@ -253,10 +281,6 @@ public class MovieProcessor {
 			return;
 
 		outputVideo = null;
-
-		tempVideoFile.delete();
-		tempAudioFile.delete();
-		tempMetadataFile.delete();
 	}
 
 	public void seek(final ProcessingListener l, int frameId) {
@@ -272,7 +296,8 @@ public class MovieProcessor {
 		if (frame != null && !frame.empty()) {
 			Mat newFrame = frame;
 			for (VideoFilter filter : filters) {
-//				System.out.println("MovieProcessor process "+filter.getClass().getName());
+				// System.out.println("MovieProcessor process
+				// "+filter.getClass().getName());
 				newFrame = filter.process(newFrame, frameId);
 			}
 			if (l != null)
@@ -342,9 +367,10 @@ public class MovieProcessor {
 				InputStreamReader isr = new InputStreamReader(is);
 				BufferedReader br = new BufferedReader(isr);
 				String line = null;
-				int s= 0, e = 0;
+				int s = 0, e = 0;
 				try {
 					while ((line = br.readLine()) != null) {
+						// System.out.println("> "+line);
 						s = line.indexOf("time=");
 						if (s >= 0) {
 							e = line.indexOf(' ', s);
@@ -355,9 +381,10 @@ public class MovieProcessor {
 					ex.printStackTrace();
 				} catch (Exception ex) {
 					// Ignore
-//					System.err.println("substring: "+line.substring(s + 5, e));
-					System.err.println("line: "+line);
-//					ex.printStackTrace();
+					// System.err.println("substring: "+line.substring(s + 5,
+					// e));
+					System.err.println("line: " + line);
+					// ex.printStackTrace();
 				}
 				progress(null);
 			}
