@@ -97,7 +97,7 @@
                         <Font size="16.0" />
                      </font>
                   </RadioButton>
-                  <RadioButton fx:id="rDelayLeft" mnemonicParsing="false" onAction="#rActionDelayLeft" text="Delay Side" toggleGroup="$NormalizationGroup">
+                  <RadioButton fx:id="rDelay" mnemonicParsing="false" onAction="#rActionDelay" text="Delay Side" toggleGroup="$NormalizationGroup">
                      <font>
                         <Font size="16.0" />
                      </font>

@@ -73,7 +73,7 @@ public class ProcessingSceneController implements ProcessingListener {
 
 	private Main main;
 
-//	private Stage stage;
+	// private Stage stage;
 
 	private Range clipBoardRange = null;
 
@@ -157,11 +157,12 @@ public class ProcessingSceneController implements ProcessingListener {
 		slider.setMinorTickCount(0);
 		slider.setSnapToTicks(true);
 		slider.valueProperty().addListener((observable, oldvalue, newvalue) -> {
+			System.out.println("Slider " + oldvalue + " -> " + newvalue);
 			if (!processingRunning) {
 				int p = newvalue.intValue();
 				if (p != position && p <= frames) {
-					if (markPosition!=-1)
-						btnOneFrame.setDisable(p!=markPosition);
+					if (markPosition != -1)
+						btnOneFrame.setDisable(p != markPosition);
 					int oldposition = position;
 					position = p;
 					updateDuration();
@@ -214,7 +215,7 @@ public class ProcessingSceneController implements ProcessingListener {
 		GraphicsContext gc = editCanvas.getGraphicsContext2D();
 
 		// Time in seconds at position
-//		double t = (position - 1) / fps;
+		// double t = (position - 1) / fps;
 		// Total time in seconds
 		double tt = (frames - 1) / fps;
 
@@ -365,7 +366,7 @@ public class ProcessingSceneController implements ProcessingListener {
 
 	public void configure(Main main, Stage stage) {
 		this.main = main;
-//		this.stage = stage;
+		// this.stage = stage;
 	}
 
 	public void initProcessing(ConfigurationSceneController cController, Configuration configuration) {
@@ -403,9 +404,14 @@ public class ProcessingSceneController implements ProcessingListener {
 		Runnable r = new Runnable() {
 			public void run() {
 
-				btnMark.setDisable(true);
-				btnOneFrame.setDisable(true);
-				btnClear.setDisable(true);
+				Platform.runLater(() -> {
+					btnMark.setDisable(true);
+					btnOneFrame.setDisable(true);
+					btnClear.setDisable(true);
+
+					slider.setValue(1);
+					slider.setDisable(true);
+				});
 
 				long seconds = System.currentTimeMillis() / 1000;
 
@@ -416,9 +422,12 @@ public class ProcessingSceneController implements ProcessingListener {
 					System.out.println("Done in " + seconds + "s.");
 				}
 
-				processingRunning = false;
-				taskMessage = "";
-				processingDone();
+				Platform.runLater(() -> {
+					processingRunning = false;
+					taskMessage = "";
+					processingDone();
+					slider.setDisable(false);
+				});
 			}
 		};
 		new Thread(r).start();
@@ -502,13 +511,12 @@ public class ProcessingSceneController implements ProcessingListener {
 	@Override
 	public void nextFrameProcessed(Mat frame, int frameId) {
 		Platform.runLater(() -> {
+			// System.out.println("nextFrameProcessed "+frameId);
 			this.currentFrameIndex.setText("" + frameId);
 			this.currentTime.setText("" + time((frameId - 1) / fps));
 
 			Image imageToShow = SwingFXUtils.toFXImage(matToBufferedImage(frame), null);
 			currentFrame.imageProperty().set(imageToShow);
-			if (!seeking)
-				this.slider.setValue(frameId);
 			if (processingRunning) {
 				position = frameId;
 				drawEditCanvas();
@@ -547,7 +555,7 @@ public class ProcessingSceneController implements ProcessingListener {
 
 	@Override
 	public void seekDone(int frameId) {
-		System.out.println("Seeking done for #" + frameId);
+		System.out.println("Seeking done for #" + frameId + "(pos=" + position + ")");
 		Platform.runLater(() -> {
 			drawEditCanvas();
 		});
@@ -741,8 +749,8 @@ public class ProcessingSceneController implements ProcessingListener {
 		currentTime.setText(time(((double) position - 1) / fps));
 		this.slider.setValue(position);
 		drawEditCanvas();
-		if (markPosition!=-1)
-			btnOneFrame.setDisable(position!=markPosition);
+		if (markPosition != -1)
+			btnOneFrame.setDisable(position != markPosition);
 	}
 
 	@FXML
@@ -759,8 +767,8 @@ public class ProcessingSceneController implements ProcessingListener {
 		currentTime.setText(time(((double) position - 1) / fps));
 		this.slider.setValue(position);
 		drawEditCanvas();
-		if (markPosition!=-1)
-			btnOneFrame.setDisable(position!=markPosition);
+		if (markPosition != -1)
+			btnOneFrame.setDisable(position != markPosition);
 	}
 
 }

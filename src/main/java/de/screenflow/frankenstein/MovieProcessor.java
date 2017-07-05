@@ -108,6 +108,7 @@ public class MovieProcessor {
 					if (!filters.isEmpty()) {
 						newFrame = frame;
 						for (VideoFilter filter : filters) {
+//							System.out.println("MovieProcessor process "+filter.getClass().getName());
 							newFrame = filter.process(newFrame, i);
 						}
 					} else {
@@ -271,8 +272,9 @@ public class MovieProcessor {
 		if (frame != null && !frame.empty()) {
 			Mat newFrame = frame;
 			for (VideoFilter filter : filters) {
+//				System.out.println("MovieProcessor process "+filter.getClass().getName());
 				newFrame = filter.process(newFrame, frameId);
-			}			
+			}
 			if (l != null)
 				l.nextFrameProcessed(newFrame, currentPos);
 		} else {
@@ -339,17 +341,23 @@ public class MovieProcessor {
 			public void run() {
 				InputStreamReader isr = new InputStreamReader(is);
 				BufferedReader br = new BufferedReader(isr);
-				String line;
+				String line = null;
+				int s= 0, e = 0;
 				try {
 					while ((line = br.readLine()) != null) {
-						int s = line.indexOf("time=");
+						s = line.indexOf("time=");
 						if (s >= 0) {
-							int e = line.indexOf(' ', s);
+							e = line.indexOf(' ', s);
 							progress(line.substring(s + 5, e));
 						}
 					}
-				} catch (IOException e) {
-					e.printStackTrace();
+				} catch (IOException ex) {
+					ex.printStackTrace();
+				} catch (Exception ex) {
+					// Ignore
+//					System.err.println("substring: "+line.substring(s + 5, e));
+					System.err.println("line: "+line);
+//					ex.printStackTrace();
 				}
 				progress(null);
 			}

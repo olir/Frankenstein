@@ -141,8 +141,8 @@ public class ConfigurationSceneController {
 	@FXML
 	TextField tfPropertyInputFile;
 
-	@FXML TextField tfPropertyInputDir;
-
+	@FXML
+	TextField tfPropertyInputDir;
 
 	@FXML
 	TextField tfPropertyTestScreenHeight;
@@ -180,15 +180,22 @@ public class ConfigurationSceneController {
 	@FXML
 	RadioButton vrModeFromVR;
 
-	@FXML ToggleButton stereoEffectFilterEnabled;
+	@FXML
+	ToggleButton stereoEffectFilterEnabled;
 
-	@FXML Slider sliderStereoPerspective;
+	@FXML
+	Slider sliderStereoPerspective;
 
-	@FXML TextField tfPropertyOutputFile;
+	@FXML
+	TextField tfPropertyOutputFile;
 
-	@FXML RadioButton rSlideshowGenerator;
+	@FXML
+	RadioButton rSlideshowGenerator;
 
-	@FXML Tab tabSlideshow;
+	@FXML
+	Tab tabSlideshow;
+
+	@FXML RadioButton rDelay;
 
 	/**
 	 * Initialize method, automatically called by @{link FXMLLoader}
@@ -253,11 +260,11 @@ public class ConfigurationSceneController {
 		else
 			rDelayRight.setSelected(true);
 
-		sliderVRShrink.setValue(configuration.vrModeShrinkFactor*100.0);
+		sliderVRShrink.setValue(configuration.vrModeShrinkFactor * 100.0);
 		sliderVRShrink.valueProperty().addListener((observable, oldvalue, newvalue) -> {
 			int newFactor = newvalue.intValue();
 			configuration.vrModeShrinkFactor = ((float) newFactor) / 100.0f;
-			lVRShrinkDisplay.setText(String.valueOf(newFactor)+'%');
+			lVRShrinkDisplay.setText(String.valueOf(newFactor) + '%');
 		});
 
 		if (configuration.vrModeShrinkOnly)
@@ -287,20 +294,15 @@ public class ConfigurationSceneController {
 		if (rVideoFileInput.isSelected()) {
 			configuration.source = new VideoInput(configuration.inputVideo);
 			configuration.doInput = true;
-		}
-		else
-		if (rSlideshowGenerator.isSelected()) {
+		} else if (rSlideshowGenerator.isSelected()) {
 			configuration.source = new SlideShowInput(configuration.inputDir);
-			filters.add((VideoFilter)configuration.source);
-		}
-		else if (rTestVideoGenerator.isSelected()) {
+			filters.add((VideoFilter) configuration.source);
+		} else if (rTestVideoGenerator.isSelected()) {
 			configuration.source = new TestImageInput(configuration.testScreenWidth, configuration.testScreenHeight);
-			filters.add((VideoFilter)configuration.source);
-		}
-		else {
+			filters.add((VideoFilter) configuration.source);
+		} else {
 			throw new Error("No Input Method.");
 		}
-
 
 		if (rAnaglyph.isSelected())
 			filters.add(new Anaglyph2LR(
@@ -309,7 +311,7 @@ public class ConfigurationSceneController {
 		if (rOverUnder.isSelected())
 			filters.add(new OU2LR(configuration.ouAdjustSize ? OU2LR.ADJUST_SIZE : OU2LR.REDUCE_SIZE));
 
-		if (rDelayLeft.isSelected())
+		if (rDelay.isSelected())
 			filters.add(new LDelay(configuration.delayLeft));
 
 		if (rCloneLR.isSelected())
@@ -401,7 +403,8 @@ public class ConfigurationSceneController {
 		}
 	}
 
-	@FXML public void rActionSlideshowGenerator() {
+	@FXML
+	public void rActionSlideshowGenerator() {
 
 		if (configuration.inputDir == null) {
 			File file = chooseSlideshowInputDir();
@@ -448,7 +451,6 @@ public class ConfigurationSceneController {
 		}
 	}
 
-
 	@FXML
 	public void rActionTestVideoGenerator() {
 		removeTab(tabVideoFileInput);
@@ -492,7 +494,7 @@ public class ConfigurationSceneController {
 	}
 
 	@FXML
-	public void rActionDelayLeft() {
+	public void rActionDelay() {
 		removeTab(tabAnaglyph);
 		removeTab(tabOverUnder);
 		removeTab(tabClone);
@@ -551,7 +553,8 @@ public class ConfigurationSceneController {
 		addTab(tabTestVideoGenerator);
 	}
 
-	@FXML public void btnActionChangeInputDir() {
+	@FXML
+	public void btnActionChangeInputDir() {
 		File dir = chooseSlideshowInputDir();
 		if (dir == null) {
 			main.setDocumentInTitle(null);
@@ -627,7 +630,8 @@ public class ConfigurationSceneController {
 		configuration.vrModeShrinkOnly = true;
 	}
 
-	@FXML public void tbActionStereoEffectFilterEnabled() {
+	@FXML
+	public void tbActionStereoEffectFilterEnabled() {
 		sliderStereoPerspective.setDisable(!stereoEffectFilterEnabled.isSelected());
 	}
 

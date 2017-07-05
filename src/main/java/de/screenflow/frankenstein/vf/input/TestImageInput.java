@@ -129,7 +129,7 @@ public class TestImageInput implements VideoFilter, VideoSource {
 
 	@Override
 	public void open(ProcessingListener l) {
-		initFrame = Mat.zeros(getWidth(), getHeight(), CvType.CV_8UC3);
+		initFrame = Mat.zeros(getHeight(), getWidth(), CvType.CV_8UC3);
 	}
 
 	@Override
