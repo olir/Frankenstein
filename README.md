@@ -35,7 +35,7 @@ You can use maven to run it with "mvn clean package exec:exec"
 Frankenstein VR is an experimental video converter with some video filters/features:
 - Virtual Reality side-by-side converter (projection, padding, shrinking)
 - Anaglyph (e.g. red/blue) to grayscale side-by-side converter
-- 3D Slideshow (SBS Video from 3D image pairs)
+- 3D Slideshow (SBS Video from 3D image pairs; see [samples](tree/master/doc/slides) )
 - Over/Under to Left/Right (side-by-side) converter
 - Left/Right side swapper
 - Test Image (good for calibrating configurations on a VR display)
