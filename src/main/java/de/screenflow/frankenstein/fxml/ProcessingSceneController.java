@@ -157,7 +157,7 @@ public class ProcessingSceneController implements ProcessingListener {
 		slider.setMinorTickCount(0);
 		slider.setSnapToTicks(true);
 		slider.valueProperty().addListener((observable, oldvalue, newvalue) -> {
-			System.out.println("Slider " + oldvalue + " -> " + newvalue);
+			System.out.println("Slider " + oldvalue + " -> " + newvalue + " seeking="+seeking);
 			if (!processingRunning) {
 				int p = newvalue.intValue();
 				if (p != position && p <= frames) {
@@ -420,8 +420,7 @@ public class ProcessingSceneController implements ProcessingListener {
 					seconds = System.currentTimeMillis() / 1000 - seconds;
 
 					System.out.println("Done in " + seconds + "s.");
-				}
-				else {
+				} else {
 					taskError("Task failed");
 				}
 
@@ -518,13 +517,14 @@ public class ProcessingSceneController implements ProcessingListener {
 			this.currentFrameIndex.setText("" + frameId);
 			this.currentTime.setText("" + time((frameId - 1) / fps));
 
-			Image imageToShow = SwingFXUtils.toFXImage(matToBufferedImage(frame), null);
-			currentFrame.imageProperty().set(imageToShow);
-			if (processingRunning) {
-				position = frameId;
-				drawEditCanvas();
+			if (frame.cols() > 0) {
+				Image imageToShow = SwingFXUtils.toFXImage(matToBufferedImage(frame), null);
+				currentFrame.imageProperty().set(imageToShow);
+				if (processingRunning) {
+					position = frameId;
+					drawEditCanvas();
+				}
 			}
-
 		});
 	}
 
@@ -754,6 +754,16 @@ public class ProcessingSceneController implements ProcessingListener {
 		drawEditCanvas();
 		if (markPosition != -1)
 			btnOneFrame.setDisable(position != markPosition);
+		
+		seeking = true;
+		System.out.println("Seek for #" + position);		
+		Runnable r = new Runnable() {
+			public void run() {
+				seekPos = -1;
+				processor.seek(ProcessingSceneController.this, position);
+			}
+		};
+		new Thread(r).start();		
 	}
 
 	@FXML
@@ -772,6 +782,16 @@ public class ProcessingSceneController implements ProcessingListener {
 		drawEditCanvas();
 		if (markPosition != -1)
 			btnOneFrame.setDisable(position != markPosition);
+		
+		seeking = true;
+		System.out.println("Seek for #" + position);		
+		Runnable r = new Runnable() {
+			public void run() {
+				seekPos = -1;
+				processor.seek(ProcessingSceneController.this, position);
+			}
+		};
+		new Thread(r).start();		
 	}
 
 }
