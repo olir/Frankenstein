@@ -57,8 +57,6 @@ public class MovieProcessor {
 
 	private File ffmpeg;
 
-	private SectionedProperties sectionedProperties = new SectionedProperties();
-
 	public MovieProcessor(Configuration configuration) {
 		this.ffmpegPath = configuration.getFFmpegPath();
 		this.configuration = configuration;
@@ -124,9 +122,10 @@ public class MovieProcessor {
 						l, "Splitting Audio").run())
 					return false;
 
-				sectionedProperties.clear();
-				sectionedProperties.load(tempMetadataFile);
-				System.out.print("Meta Data:\n" + sectionedProperties);
+				configuration.metadata.clear();
+				configuration.metadata.load(tempMetadataFile);
+				System.out
+						.print("Meta Data:\n===================\n" + configuration.metadata + "===================\n");
 
 			} else {
 				// Create silent mp3
@@ -194,9 +193,9 @@ public class MovieProcessor {
 							l, "Processing Output").run())
 						return false;
 				} else {
-					if (!new Task(ffmpeg.getAbsolutePath() + " -y -i " + tempVideoFile.getAbsolutePath()+ " -i "
-							+ tempAudioFile.getAbsolutePath() 
-							+ " -c:a aac -c:v libx264  -q 17 " + configuration.outputVideo, l, "Processing Output").run())
+					if (!new Task(ffmpeg.getAbsolutePath() + " -y -i " + tempVideoFile.getAbsolutePath() + " -i "
+							+ tempAudioFile.getAbsolutePath() + " -c:a aac -c:v libx264  -q 17 "
+							+ configuration.outputVideo, l, "Processing Output").run())
 						return false;
 				}
 				if (!new File(configuration.outputVideo).exists()) {
@@ -387,7 +386,7 @@ public class MovieProcessor {
 				int s = 0, e = 0;
 				try {
 					while ((line = br.readLine()) != null) {
-//						System.out.println("> "+line);
+						// System.out.println("> "+line);
 						s = line.indexOf("time=");
 						if (s >= 0) {
 							e = line.indexOf(' ', s);
@@ -409,7 +408,7 @@ public class MovieProcessor {
 			private void progress(String time) {
 				if (l != null)
 					l.taskUpdate(time, taskMessage);
-//				System.out.println("progress "+time);
+				// System.out.println("progress "+time);
 			}
 		}
 

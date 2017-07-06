@@ -62,6 +62,8 @@ public class Configuration {
 	public int perspective = 0;
 
 	private final File configFile;
+
+	public SectionedProperties metadata = new SectionedProperties();
 	
 	public Configuration(ConfigHelper helper) {
 		String homeDir = System.getProperty("user.home");
