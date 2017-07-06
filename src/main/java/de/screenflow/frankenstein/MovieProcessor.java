@@ -57,6 +57,8 @@ public class MovieProcessor {
 
 	private File ffmpeg;
 
+	private SectionedProperties sectionedProperties = new SectionedProperties();
+
 	public MovieProcessor(Configuration configuration) {
 		this.ffmpegPath = configuration.getFFmpegPath();
 		this.configuration = configuration;
@@ -115,10 +117,22 @@ public class MovieProcessor {
 			// 1. Detach Audio and Metadata from orginal video and store
 			// temporarily
 			if (configuration.doOutput && configuration.doInput) {
-				if (!new Task(ffmpeg.getAbsolutePath() + " -y -i \"" + configuration.getInputVideo() + "\""
-						+ " -f ffmetadata " + tempMetadataFile.getAbsolutePath()
-						+ " -vn -ar 44100 -ac 2 -ab 192k -f mp3 -r 21 " + tempAudioFile.getAbsolutePath(), l,
-						"Splitting Audio").run())
+				if (!new Task(
+						ffmpeg.getAbsolutePath() + " -y -i \"" + configuration.getInputVideo() + "\""
+								+ " -f ffmetadata " + tempMetadataFile.getAbsolutePath()
+								+ " -vn -ar 44100 -ac 2 -ab 192k -f mp3 -r 21 " + tempAudioFile.getAbsolutePath(),
+						l, "Splitting Audio").run())
+					return false;
+
+				sectionedProperties.clear();
+				sectionedProperties.load(tempMetadataFile);
+				System.out.print("Meta Data:\n" + sectionedProperties);
+
+			} else {
+				// Create silent mp3
+				if (!new Task(ffmpeg.getAbsolutePath() + " -y -f lavfi -i anullsrc=r=44100:cl=mono -t "
+						+ (movie_frameCount / movie_fps) + " -q:a 9 -acodec libmp3lame "
+						+ tempAudioFile.getAbsolutePath(), l, "Creating Silent Audio Audio").run())
 					return false;
 			}
 
@@ -144,7 +158,9 @@ public class MovieProcessor {
 					}
 
 					if (configuration.doOutput) {
-//						System.out.println("outputVideo.write size=" + new Size(newFrame.cols(), newFrame.rows()));
+						if (movie_w != newFrame.cols() || movie_h != newFrame.rows())
+							System.out.println("Warning: outputVideo.write changed size:"
+									+ new Size(newFrame.cols(), newFrame.rows()));
 						outputVideo.write(newFrame);
 						if ((i % 1000) == 0) {
 							System.out.print("+"); // break;
@@ -172,14 +188,15 @@ public class MovieProcessor {
 			if (configuration.doOutput) {
 				new File(configuration.outputVideo).delete();
 				if (configuration.doInput) {
-					if (!new Task(ffmpeg.getAbsolutePath() + " -i " + tempVideoFile.getAbsolutePath() + " -i "
+					if (!new Task(ffmpeg.getAbsolutePath() + " -y -i " + tempVideoFile.getAbsolutePath() + " -i "
 							+ tempAudioFile.getAbsolutePath() + " -i " + tempMetadataFile.getAbsolutePath()
 							+ " -map_metadata 2" + " -c:a aac -c:v libx264  -q 17 \"" + configuration.outputVideo + '"',
 							l, "Processing Output").run())
 						return false;
 				} else {
-					if (!new Task(ffmpeg.getAbsolutePath() + " -i " + tempVideoFile.getAbsolutePath()
-							+ " -c:v libx264  -q 17 " + configuration.outputVideo, l, "Processing Output").run())
+					if (!new Task(ffmpeg.getAbsolutePath() + " -y -i " + tempVideoFile.getAbsolutePath()+ " -i "
+							+ tempAudioFile.getAbsolutePath() 
+							+ " -c:a aac -c:v libx264  -q 17 " + configuration.outputVideo, l, "Processing Output").run())
 						return false;
 				}
 				if (!new File(configuration.outputVideo).exists()) {
@@ -211,8 +228,8 @@ public class MovieProcessor {
 
 		frame = configuration.source.getFrame();
 
-		System.out.println("Dimensions: " + movie_w + "x" + movie_h);
-		System.out.println("fps: " + movie_fps + "  frameCount: " + movie_frameCount);
+		System.out.println("Dimensions: " + (int) movie_w + " x " + (int) movie_h);
+		System.out.println("fps: " + movie_fps + "  frameCount: " + (int) movie_frameCount);
 
 		return true;
 	}
@@ -370,7 +387,7 @@ public class MovieProcessor {
 				int s = 0, e = 0;
 				try {
 					while ((line = br.readLine()) != null) {
-						// System.out.println("> "+line);
+//						System.out.println("> "+line);
 						s = line.indexOf("time=");
 						if (s >= 0) {
 							e = line.indexOf(' ', s);
@@ -384,7 +401,7 @@ public class MovieProcessor {
 					// System.err.println("substring: "+line.substring(s + 5,
 					// e));
 					System.err.println("line: " + line);
-					// ex.printStackTrace();
+					ex.printStackTrace();
 				}
 				progress(null);
 			}
@@ -392,6 +409,7 @@ public class MovieProcessor {
 			private void progress(String time) {
 				if (l != null)
 					l.taskUpdate(time, taskMessage);
+//				System.out.println("progress "+time);
 			}
 		}
 

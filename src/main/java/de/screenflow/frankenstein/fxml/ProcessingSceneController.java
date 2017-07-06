@@ -157,7 +157,7 @@ public class ProcessingSceneController implements ProcessingListener {
 		slider.setMinorTickCount(0);
 		slider.setSnapToTicks(true);
 		slider.valueProperty().addListener((observable, oldvalue, newvalue) -> {
-			System.out.println("Slider " + oldvalue + " -> " + newvalue + " seeking="+seeking);
+//			System.out.println("Slider " + oldvalue + " -> " + newvalue + " seeking="+seeking);
 			if (!processingRunning) {
 				int p = newvalue.intValue();
 				if (p != position && p <= frames) {
@@ -168,7 +168,7 @@ public class ProcessingSceneController implements ProcessingListener {
 					updateDuration();
 					if (!seeking) {
 						seeking = true;
-						System.out.println("Seek for #" + position + " from #" + oldposition);
+//						System.out.println("Seek for #" + position + " from #" + oldposition);
 						Runnable r = new Runnable() {
 							public void run() {
 								seekPos = -1;
@@ -206,7 +206,8 @@ public class ProcessingSceneController implements ProcessingListener {
 			btnListAdd.setDisable(true);
 			btnListFilter.setDisable(true);
 			btnListDelete.setDisable(true);
-
+			currentTime.setDisable(true);
+			currentFrameIndex.setDisable(true);
 		});
 
 	}
@@ -390,6 +391,8 @@ public class ProcessingSceneController implements ProcessingListener {
 				btnListAdd.setDisable(true);
 				btnListFilter.setDisable(true);
 				btnListDelete.setDisable(true);
+				currentTime.setDisable(false);
+				currentFrameIndex.setDisable(false);
 			});
 		} catch (CvException e) {
 			taskError(e.toString());
@@ -411,6 +414,8 @@ public class ProcessingSceneController implements ProcessingListener {
 
 					slider.setValue(1);
 					slider.setDisable(true);
+					currentTime.setDisable(true);
+					currentFrameIndex.setDisable(true);
 				});
 
 				long seconds = System.currentTimeMillis() / 1000;
@@ -428,7 +433,10 @@ public class ProcessingSceneController implements ProcessingListener {
 					processingRunning = false;
 					taskMessage = "";
 					processingDone();
+					slider.setValue(slider.getMax());
 					slider.setDisable(false);
+					currentTime.setDisable(false);
+					currentFrameIndex.setDisable(false);
 				});
 			}
 		};
@@ -448,6 +456,8 @@ public class ProcessingSceneController implements ProcessingListener {
 			this.currentFrameIndex.setText("1");
 			this.currentTime.setText("" + time(0));
 			btnMark.setDisable(false);
+			currentTime.setDisable(false);
+			currentFrameIndex.setDisable(false);
 		});
 
 	}
@@ -558,7 +568,7 @@ public class ProcessingSceneController implements ProcessingListener {
 
 	@Override
 	public void seekDone(int frameId) {
-		System.out.println("Seeking done for #" + frameId + "(pos=" + position + ")");
+//		System.out.println("Seeking done for #" + frameId + "(pos=" + position + ")");
 		Platform.runLater(() -> {
 			drawEditCanvas();
 		});
@@ -567,7 +577,7 @@ public class ProcessingSceneController implements ProcessingListener {
 			if (frameId == position) {
 				seeking = false;
 			} else {
-				System.out.println("Re-Seek for #" + position + " from #" + seekPos);
+//				System.out.println("Re-Seek for #" + position + " from #" + seekPos);
 				Runnable r = new Runnable() {
 					public void run() {
 						processor.seek(ProcessingSceneController.this, position);
