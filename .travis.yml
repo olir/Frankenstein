@@ -15,3 +15,6 @@ ignore:
   - "doc/"
   - "*.md"
   - "*.txt"
+
+ install: true
+   
