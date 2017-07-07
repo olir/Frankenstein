@@ -11,9 +11,9 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
-		<jnlp.URL>http://localhost/</jnlp.URL>
+		<jnlp.URL>http://localhost/jnlp</jnlp.URL>
 		<mainClass>de.screenflow.frankenstein.fxml.Main</mainClass>
-		<jks.keystore>../keystore</jks.keystore>
+		<jks.keystore>${project.basedir}/src/main/jnlp/dummy-keystore</jks.keystore>
 		<jks.keypass>pass01</jks.keypass>
 		<jks.storePass>pass01</jks.storePass>
 		<jks.alias>webstart</jks.alias>
