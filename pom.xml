@@ -11,7 +11,7 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
-		<jnlp.URL>http://localhost/jnlp</jnlp.URL>
+		<jnlp.URL>https://github.com/olir/Frankenstein/releases/download/0.0.1/jnlp</jnlp.URL>
 		<mainClass>de.screenflow.frankenstein.fxml.Main</mainClass>
 		<jks.keystore>${project.basedir}/src/main/jnlp/dummy-keystore</jks.keystore>
 		<jks.keypass>pass01</jks.keypass>
@@ -23,6 +23,7 @@
 	<groupId>de.screenflow</groupId>
 	<artifactId>frankenstein</artifactId>
 	<version>0.0.1</version>
+	
 
 	<prerequisites>
 		<maven>3.2.5</maven>
