@@ -70,23 +70,27 @@ public class SlideShowInput implements VideoFilter, VideoSource {
 	public Mat process(Mat sourceFrame, int frameId) {
 		int sid = (frameId - 1) / (fps * fpSlide);
 
-		Slide s = slides.get(sid);
-		File[] f = s.getFiles();
+		if (sid < slides.size()) {
+			Slide s = slides.get(sid);
+			File[] f = s.getFiles();
 
-		Mat img = Imgcodecs.imread(f[0].getAbsolutePath(), Imgcodecs.CV_LOAD_IMAGE_COLOR);
-		img.convertTo(img, CvType.CV_8UC3);
-		Imgproc.resize(img, tmpFrame, new Size((double) smallWidth, (double) smallHeight));
-		Rect roi = new Rect(0, 0, smallWidth, smallHeight);
-		tmpFrame.copyTo(new Mat(newFrame, roi));
-
-		if (mode3D && f.length > 1) {
-			img = Imgcodecs.imread(f[1].getAbsolutePath(), Imgcodecs.CV_LOAD_IMAGE_COLOR);
+			Mat img = Imgcodecs.imread(f[0].getAbsolutePath(), Imgcodecs.CV_LOAD_IMAGE_COLOR);
 			img.convertTo(img, CvType.CV_8UC3);
 			Imgproc.resize(img, tmpFrame, new Size((double) smallWidth, (double) smallHeight));
-		}		
-		roi = new Rect(smallWidth, 0, smallWidth, smallHeight);
-		tmpFrame.copyTo(new Mat(newFrame, roi));
+			Rect roi = new Rect(0, 0, smallWidth, smallHeight);
+			tmpFrame.copyTo(new Mat(newFrame, roi));
 
+			if (mode3D && f.length > 1) {
+				img = Imgcodecs.imread(f[1].getAbsolutePath(), Imgcodecs.CV_LOAD_IMAGE_COLOR);
+				img.convertTo(img, CvType.CV_8UC3);
+				Imgproc.resize(img, tmpFrame, new Size((double) smallWidth, (double) smallHeight));
+			}
+			roi = new Rect(smallWidth, 0, smallWidth, smallHeight);
+			tmpFrame.copyTo(new Mat(newFrame, roi));
+		}
+		else
+			newFrame.setTo(new Scalar(0,0,0,0));
+		
 		return newFrame;
 	}
 
@@ -158,14 +162,14 @@ public class SlideShowInput implements VideoFilter, VideoSource {
 
 	private boolean acceptFile(File file) {
 		if (file.isDirectory())
-				return false;
-		
+			return false;
+
 		String n = file.getName();
 		int i = n.lastIndexOf('.');
-		if (i<1)
+		if (i < 1)
 			return false;
-		
-		String s = n.substring(i+1);
+
+		String s = n.substring(i + 1);
 		if (s.equalsIgnoreCase("jpg"))
 			return true;
 		if (s.equalsIgnoreCase("png"))

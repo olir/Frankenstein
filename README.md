@@ -56,3 +56,12 @@ FFMPEG build contains H264 encoder based on the OpenH264 library, that should be
   See https://github.com/cisco/openh264/releases for details and OpenH264 license.
   Downloaded binary file can be placed into global system path (System32 or SysWOW64) or near application binaries (bin/).
   You can also specify location of binary file via OPENH264_LIBRARY_PATH environment variable.
+
+### Start via Java Webstart (Windows only)
+- Install the pre-requistes above
+- Go to Setup of security level within the Java Control Panel (Help: https://java.com/en/download/help/jcp_security.xml)
+  You have to add the following path as site exception: https://github.com/olir/Frankenstein/releases/download/
+- Download & Open [JNLP](https://github.com/olir/Frankenstein/releases/download/0.0.1/launch.jnlp)
+- Accept Warnings and Execute
+(In work... need to fix some provileges to write files)
+
