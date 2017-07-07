@@ -16,9 +16,10 @@ It appears there on a virtual 160-inch curved 3D display.
 I have uploaded some samples to vimeo: <a href="https://vimeo.com/user68089135"><img src="doc/vimeo.png"/></a>
 
 ## Status
-No release yet. Plattforms: Windows (Developed/Tested on a Windows 10 64bit.)
+Pre-release existing. Plattforms: Windows only (Developed/Tested on a Windows 10 64bit.)
 
-You can use maven to run it with "mvn clean package exec:exec"
+1. You can execute releases with Java Webstart  
+2. You can also use maven to run it with "mvn clean package exec:exec"
 
 ## Issues:
 - Temporary video output is uncompressed and can get very hugh. You need to have at least 100GB disk space. 
@@ -58,10 +59,13 @@ FFMPEG build contains H264 encoder based on the OpenH264 library, that should be
   You can also specify location of binary file via OPENH264_LIBRARY_PATH environment variable.
 
 ### Start via Java Webstart (Windows only)
-- Install the pre-requistes above
+(Under construction... need to fix some provileges to write files)
+1. Install the pre-requistes above
 - Go to Setup of security level within the Java Control Panel (Help: https://java.com/en/download/help/jcp_security.xml)
   You have to add the following path as site exception: https://github.com/olir/Frankenstein/releases/download/
-- Download & Open [JNLP](https://github.com/olir/Frankenstein/releases/download/0.0.1/launch.jnlp)
-- Accept Warnings and Execute
-(In work... need to fix some provileges to write files)
+2. Download & Open:
+  - [Pre-Release 0.0.1](https://github.com/olir/Frankenstein/releases/download/0.0.1/launch.jnlp)
+3. Accept Warnings and Execute
+
+
 
