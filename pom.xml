@@ -4,18 +4,19 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<!-- Version Dependency Chaining -->
+	<!-- Create keystore with: keytool -genkey -alias webstart -keyalg RSA -keystore ../keystore -keysize 2048   -->
 	<properties>
 		<lbt4j.version>0.0.2</lbt4j.version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
-		<jnlp.URL></jnlp.URL>
+		<jnlp.URL>http://localhost/</jnlp.URL>
 		<mainClass>de.screenflow.frankenstein.fxml.Main</mainClass>
-		<!-- <jks.keystore></jks.keystore> -->
-		<!-- <jks.keypass></jks.keypass> -->
-		<!-- <jks.storePass></jks.storePass> -->
-		<!-- <jks.alias></jks.alias> -->
+		<jks.keystore>../keystore</jks.keystore>
+		<jks.keypass>pass01</jks.keypass>
+		<jks.storePass>pass01</jks.storePass>
+		<jks.alias>webstart</jks.alias>
 	</properties>
 
 	<!-- Maven Coordinates -->
@@ -162,8 +163,10 @@
 			<plugin>
 			    <groupId>org.apache.maven.plugins</groupId>
 			    <artifactId>maven-jar-plugin</artifactId>
+				<version>3.0.2</version>
 			    <executions>
 				<execution>
+					<id>default-jar</id>
 				    <phase>compile</phase>
 				    <goals>
 					<goal>jar</goal>
@@ -227,28 +230,7 @@
 					</execution>
 				</executions>
 			</plugin>        
-			<!--
-			<plugin>
-			    <groupId>org.apache.maven.plugins</groupId>
-			    <artifactId>maven-war-plugin</artifactId>
-
-			    <configuration>
-				<webResources>
-				    <resource>
-					<directory>
-					    ${project.basedir}/java-core-samples-lib/
-					</directory>
-					<includes>
-					    <include>**/*.jar</include>
-					</includes>
-					<targetPath>WEB-INF/lib</targetPath>
-				    </resource>
-				</webResources>
-			    </configuration>
-			</plugin>
-			-->
 			
-			<!--
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>webstart-maven-plugin</artifactId>
@@ -256,7 +238,7 @@
 				<executions>
 					<execution>
 						<id>package</id>
-						<phase>package</phase>
+						<phase>install</phase>
 						<goals>
 							<goal>jnlp</goal>
 						</goals>
@@ -265,7 +247,7 @@
 							<jnlp>
 								<mainClass>${mainClass}</mainClass>
 							</jnlp>
-							<pack200>true</pack200>
+							<pack200><enabled>true</enabled></pack200>
 							<sign>
 								<keystore>${jks.keystore}</keystore>
 								<keypass>${jks.keypass}</keypass>
@@ -278,7 +260,7 @@
 					</execution>
 				</executions>
 			</plugin>
-			-->
+			
 		</plugins>
 	</build>
 
