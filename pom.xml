@@ -179,6 +179,7 @@
 				</execution>
 			    </executions>
 			</plugin>
+			
 			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
 				<executions>
@@ -208,6 +209,7 @@
 					</archive>
 				</configuration>
 			</plugin>
+			
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>exec-maven-plugin</artifactId>
@@ -233,7 +235,7 @@
 			
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>webstart-maven-plugin</artifactId>
+				<artifactId>webstart-maven-plugin</artifactId> 
 				<version>1.0-beta-7</version>
 				<executions>
 					<execution>
