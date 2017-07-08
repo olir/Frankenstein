@@ -64,12 +64,12 @@ public class Configuration {
 	private final File configFile;
 
 	public SectionedProperties metadata = new SectionedProperties();
-	
+
 	public Configuration(ConfigHelper helper) {
 		String homeDir = System.getProperty("user.home");
 		outputVideo = new File(new File(System.getProperty("user.home")), "TestVideo.mp4").getAbsolutePath();
 		configFile = new File(homeDir, "frankenstein.ini");
-		
+
 		if (configFile.canRead()) {
 			try {
 
@@ -89,6 +89,27 @@ public class Configuration {
 
 			savePreferences();
 		}
+
+		String tdp = getTempPath();
+		File tdf = tdp != null ? new File(tdp) : null;
+		File tf = null;
+		try {
+			tf = File.createTempFile("Frankenstein", "tmp", tdf);
+			tdf = tf.getParentFile();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		while (tf==null || !tf.canWrite()) { // merciless inquisition
+			tdf = helper.getTempPath();
+			try {
+				tf = File.createTempFile("Frankenstein", "tmp", tdf);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		iniProperties.setProperty("temppath", tdf.getAbsolutePath());
+
+		savePreferences();
 	}
 
 	public void savePreferences() {
@@ -103,7 +124,7 @@ public class Configuration {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public VideoFilter findFilter(Class<?> c) {
 		for (VideoFilter f : filters) {
 			if (f.getClass() == c)
@@ -114,6 +135,10 @@ public class Configuration {
 
 	public String getFFmpegPath() {
 		return iniProperties.getProperty("ffmpegpath");
+	}
+
+	public String getTempPath() {
+		return iniProperties.getProperty("temppath");
 	}
 
 	public String getInputDir() {
@@ -138,8 +163,11 @@ public class Configuration {
 	public String getInputVideoPath() {
 		return iniProperties.getProperty("inputvideopath");
 	}
-	
+
 	public interface ConfigHelper {
 		public File getFFmpegPath();
+
+		public File getTempPath();
 	}
+
 }

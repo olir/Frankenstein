@@ -11,8 +11,8 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
-		<manifest.Codebase>https://github.com</manifest.Codebase>
-		<jnlp.URL>${manifest.Codebase}/olir/Frankenstein/releases/download/0.0.1</jnlp.URL>
+		<manifest.Codebase>*</manifest.Codebase>
+		<jnlp.URL>https://github.com/olir/Frankenstein/releases/download/0.0.1</jnlp.URL>
 		<mainClass>de.screenflow.frankenstein.fxml.Main</mainClass>
 		<jks.keystore>${project.basedir}/src/main/jnlp/dummy-keystore</jks.keystore>
 		<jks.keypass>pass01</jks.keypass>
@@ -207,7 +207,7 @@
 						<manifestEntries>
 						  <application-name>Frankenstein VR</application-name>
 						  <permissions>all-permissions</permissions>
-						<!--  <codebase>${jnlp.URL}/</codebase>  -->
+						  <codebase>${manifest.Codebase}</codebase>
 						</manifestEntries>
 					</archive>
 				</configuration>

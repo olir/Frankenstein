@@ -157,18 +157,20 @@ public class ProcessingSceneController implements ProcessingListener {
 		slider.setMinorTickCount(0);
 		slider.setSnapToTicks(true);
 		slider.valueProperty().addListener((observable, oldvalue, newvalue) -> {
-//			System.out.println("Slider " + oldvalue + " -> " + newvalue + " seeking="+seeking);
+			// System.out.println("Slider " + oldvalue + " -> " + newvalue + "
+			// seeking="+seeking);
 			if (!processingRunning) {
 				int p = newvalue.intValue();
 				if (p != position && p <= frames) {
 					if (markPosition != -1)
 						btnOneFrame.setDisable(p != markPosition);
-					int oldposition = position;
+//					int oldposition = position;
 					position = p;
 					updateDuration();
 					if (!seeking) {
 						seeking = true;
-//						System.out.println("Seek for #" + position + " from #" + oldposition);
+						// System.out.println("Seek for #" + position + " from
+						// #" + oldposition);
 						Runnable r = new Runnable() {
 							public void run() {
 								seekPos = -1;
@@ -568,7 +570,8 @@ public class ProcessingSceneController implements ProcessingListener {
 
 	@Override
 	public void seekDone(int frameId) {
-//		System.out.println("Seeking done for #" + frameId + "(pos=" + position + ")");
+		// System.out.println("Seeking done for #" + frameId + "(pos=" +
+		// position + ")");
 		Platform.runLater(() -> {
 			drawEditCanvas();
 		});
@@ -577,7 +580,8 @@ public class ProcessingSceneController implements ProcessingListener {
 			if (frameId == position) {
 				seeking = false;
 			} else {
-//				System.out.println("Re-Seek for #" + position + " from #" + seekPos);
+				// System.out.println("Re-Seek for #" + position + " from #" +
+				// seekPos);
 				Runnable r = new Runnable() {
 					public void run() {
 						processor.seek(ProcessingSceneController.this, position);
@@ -764,16 +768,16 @@ public class ProcessingSceneController implements ProcessingListener {
 		drawEditCanvas();
 		if (markPosition != -1)
 			btnOneFrame.setDisable(position != markPosition);
-		
+
 		seeking = true;
-		System.out.println("Seek for #" + position);		
+		System.out.println("Seek for #" + position);
 		Runnable r = new Runnable() {
 			public void run() {
 				seekPos = -1;
 				processor.seek(ProcessingSceneController.this, position);
 			}
 		};
-		new Thread(r).start();		
+		new Thread(r).start();
 	}
 
 	@FXML
@@ -792,16 +796,16 @@ public class ProcessingSceneController implements ProcessingListener {
 		drawEditCanvas();
 		if (markPosition != -1)
 			btnOneFrame.setDisable(position != markPosition);
-		
+
 		seeking = true;
-		System.out.println("Seek for #" + position);		
+		System.out.println("Seek for #" + position);
 		Runnable r = new Runnable() {
 			public void run() {
 				seekPos = -1;
 				processor.seek(ProcessingSceneController.this, position);
 			}
 		};
-		new Thread(r).start();		
+		new Thread(r).start();
 	}
 
 }

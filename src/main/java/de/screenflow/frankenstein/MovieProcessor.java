@@ -22,19 +22,16 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.List;
 
-import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.Size;
-import org.opencv.videoio.VideoCapture;
 import org.opencv.videoio.VideoWriter;
-import org.opencv.videoio.Videoio;
 
 import de.screenflow.frankenstein.vf.VideoFilter;
-import de.screenflow.frankenstein.vf.input.TestImageInput;
 
 public class MovieProcessor {
 
 	private final String ffmpegPath;
+	private final File tempPath;
 	private final List<VideoFilter> filters;
 	private final Configuration configuration;
 
@@ -59,6 +56,7 @@ public class MovieProcessor {
 
 	public MovieProcessor(Configuration configuration) {
 		this.ffmpegPath = configuration.getFFmpegPath();
+		this.tempPath = new File(configuration.getTempPath());
 		this.configuration = configuration;
 		filters = configuration.filters;
 	}
@@ -256,11 +254,11 @@ public class MovieProcessor {
 			try {
 				// Store temp Video next to output to avoid SSD must be used for
 				// large files.
-				File tempFile = File.createTempFile("video", "." + tempOutputFormat);
+				File tempFile = File.createTempFile("video", "." + tempOutputFormat, tempPath);
 				tempVideoFile = new File(new File(configuration.outputVideo).getParentFile(), tempFile.getName());
 				tempFile.deleteOnExit();
-				tempAudioFile = File.createTempFile("sound", ".mp3");
-				tempMetadataFile = File.createTempFile("metadata", ".properties");
+				tempAudioFile = File.createTempFile("sound", ".mp3", tempPath);
+				tempMetadataFile = File.createTempFile("metadata", ".properties", tempPath);
 			} catch (IOException e) {
 				e.printStackTrace();
 				return false;

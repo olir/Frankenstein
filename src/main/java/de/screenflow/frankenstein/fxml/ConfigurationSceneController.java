@@ -202,9 +202,17 @@ public class ConfigurationSceneController {
 	 */
 	public void initialize() {
 		configuration = new Configuration(new Configuration.ConfigHelper() {
+			@Override
 			public File getFFmpegPath() {
 				DirectoryChooser dirChooser = new DirectoryChooser();
 				dirChooser.setTitle("Select FFmpeg Home Path");
+				return dirChooser.showDialog(stage);
+			}
+
+			@Override
+			public File getTempPath() {
+				DirectoryChooser dirChooser = new DirectoryChooser();
+				dirChooser.setTitle("Select Temp Path");
 				return dirChooser.showDialog(stage);
 			}
 		});
