@@ -4,15 +4,14 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<!-- Version Dependency Chaining -->
-	<!-- Create keystore with: keytool -genkey -alias webstart -keyalg RSA -keystore ../keystore -keysize 2048   -->
 	<properties>
-		<lbt4j.version>0.0.2</lbt4j.version>
+		<version>0.0.1-SNAPSHOT</version>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
 		<manifest.Codebase>*</manifest.Codebase>
-		<jnlp.URL>https://github.com/olir/Frankenstein/releases/download/0.0.1</jnlp.URL>
+		<jnlp.URL>https://github.com/olir/Frankenstein/releases/download/${version}</jnlp.URL>
 		<mainClass>de.screenflow.frankenstein.fxml.Main</mainClass>
 		<jks.keystore>${project.basedir}/src/main/jnlp/dummy-keystore</jks.keystore>
 		<jks.keypass>pass01</jks.keypass>
@@ -23,7 +22,7 @@
 	<!-- Maven Coordinates -->
 	<groupId>de.screenflow</groupId>
 	<artifactId>frankenstein</artifactId>
-	<version>0.0.1</version>
+	<version>${version}</version>
 	
 
 	<prerequisites>
