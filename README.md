@@ -18,11 +18,11 @@ I have uploaded some samples to vimeo: <a href="https://vimeo.com/user68089135">
 ## Status
 Pre-release existing. Plattforms: Windows only (Developed/Tested on a Windows 10 64bit.)
 
-1. You can execute releases with Java Webstart (see section below) 
-2. You can also use maven to run it with "mvn clean package exec:exec"
+1. You can download and execute the jar file from the release (see section below) 
+2. You can execute releases with Java Webstart (see section below) 
+3. You can also use maven to run it with "mvn clean package exec:exec"
 
 ## Issues:
-- Temporary video output is uncompressed and can get very hugh. You need to have at least 100GB disk space. 
 - Video editing / local filters is under construction
 
 # Pre-Requisites
@@ -63,8 +63,8 @@ FFMPEG build contains H264 encoder based on the OpenH264 library, that should be
 1. Install the pre-requistes above
 - Go to Secuity tab within the Java Control Panel (Help: https://java.com/en/download/help/jcp_security.xml)
   You have to add github as site exception: https://github.com/olir/Frankenstein/releases/download/0.0.1/
-2. Download & Open:
-  - [Pre-Release 0.0.1](https://github.com/olir/Frankenstein/releases/download/0.0.1/launch.jnlp)
+2. Download & Open jnlp file from release:
+  - e.g.: [Pre-Release 0.0.1](https://github.com/olir/Frankenstein/releases/download/0.0.1/launch.jnlp)
 3. Accept Warnings and Execute
 
 

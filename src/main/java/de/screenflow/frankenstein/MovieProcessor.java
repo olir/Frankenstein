@@ -237,8 +237,8 @@ public class MovieProcessor {
 
 	public boolean openOutput(ProcessingListener l) {
 		if (configuration.doOutput) {
-			String tempOutputFormat = "mkv"; // format without errors so far
-			boolean compress = false;
+			String tempOutputFormat = "avi"; // format without errors so far
+			boolean compress = true;
 			if (compress)
 				fourcc = VideoWriter.fourcc('M', 'J', 'P', 'G'); // -- Motion
 																	// JPEG
@@ -283,8 +283,8 @@ public class MovieProcessor {
 			System.out.println("ConfigureOutput size=" + new Size(movie_w, movie_h) + " fps=" + movie_fps);
 
 			if (!outputVideo.isOpened()) {
-				System.err.println("Could not open the output video for write.");
-				return false;
+				System.err.println("Warning: VideoWriter - Could not open the output video for write. (MovieProcessor)");
+//				return false;
 			}
 		}
 		return true;

@@ -226,7 +226,7 @@
 						<configuration>
 							<executable>javaw</executable>
 							<!-- ffmpeg dll must be present: -->
-							<workingDirectory>${basedir}/src/main/jnlp/resources</workingDirectory>
+							<workingDirectory>${basedir}/src/main/resources</workingDirectory>
 							<arguments>
 								<argument>-jar</argument>
 								<argument>${basedir}/target/frankenstein.jar</argument>
