@@ -75,13 +75,14 @@ public class MovieProcessor {
 			Mat newFrame = frame;
 			if (!filters.isEmpty()) {
 				for (VideoFilter filter : filters) {
+					System.out.println("MovieProcessor configure " + filter.getClass().getName());
 					newFrame = filter.configure(newFrame);
 				}
 			}
 
+			newFrame = frame;
 			for (VideoFilter filter : filters) {
-				// System.out.println("MovieProcessor process
-				// "+filter.getClass().getName());
+				System.out.println("MovieProcessor process " + filter.getClass().getName());
 				newFrame = filter.process(newFrame, 1);
 			}
 			if (l != null)
@@ -125,7 +126,7 @@ public class MovieProcessor {
 				System.out
 						.print("Meta Data:\n===================\n" + configuration.metadata + "===================\n");
 
-			} else {
+			} else if (configuration.doOutput) {
 				// Create silent mp3
 				if (!new Task(ffmpeg.getAbsolutePath() + " -y -f lavfi -i anullsrc=r=44100:cl=mono -t "
 						+ (movie_frameCount / movie_fps) + " -q:a 9 -acodec libmp3lame "
@@ -138,7 +139,8 @@ public class MovieProcessor {
 			Mat newFrame = null;
 
 			int i = 0;
-			while (!stopped && i < configuration.getSource().getFrames()) {
+			while (!stopped
+					&& (configuration.getSource().getFrames() < 0 || i < configuration.getSource().getFrames())) {
 				i++;
 				currentPos = configuration.getSource().seek(i, l);
 				frame = configuration.getSource().getFrame();
@@ -146,8 +148,7 @@ public class MovieProcessor {
 					if (!filters.isEmpty()) {
 						newFrame = frame;
 						for (VideoFilter filter : filters) {
-							// System.out.println("MovieProcessor process
-							// "+filter.getClass().getName());
+//System.out.println("MovieProcessor process"+filter.getClass().getName());
 							newFrame = filter.process(newFrame, i);
 						}
 					} else {
@@ -216,19 +217,24 @@ public class MovieProcessor {
 	}
 
 	public boolean openInput(ProcessingListener l) {
-		configuration.getSource().open(l);
+		try {
+			configuration.getSource().open(l);
 
-		movie_fps = configuration.getSource().getFps();
-		movie_frameCount = configuration.getSource().getFrames();
-		movie_w = configuration.getSource().getWidth();
-		movie_h = configuration.getSource().getHeight();
+			movie_fps = configuration.getSource().getFps();
+			movie_frameCount = configuration.getSource().getFrames();
+			movie_w = configuration.getSource().getWidth();
+			movie_h = configuration.getSource().getHeight();
 
-		frame = configuration.getSource().getFrame();
+			frame = configuration.getSource().getFrame();
 
-		System.out.println("Dimensions: " + (int) movie_w + " x " + (int) movie_h);
-		System.out.println("fps: " + movie_fps + "  frameCount: " + (int) movie_frameCount);
+			System.out.println("Dimensions: " + (int) movie_w + " x " + (int) movie_h);
+			System.out.println("fps: " + movie_fps + "  frameCount: " + (int) movie_frameCount);
 
-		return true;
+			return true;
+		} catch (Throwable t) {
+			t.printStackTrace();
+			return false;
+		}
 	}
 
 	public void closeInput() {
@@ -283,8 +289,9 @@ public class MovieProcessor {
 			System.out.println("ConfigureOutput size=" + new Size(movie_w, movie_h) + " fps=" + movie_fps);
 
 			if (!outputVideo.isOpened()) {
-				System.err.println("Warning: VideoWriter - Could not open the output video for write. (MovieProcessor)");
-//				return false;
+				System.err
+						.println("Warning: VideoWriter - Could not open the output video for write. (MovieProcessor)");
+				// return false;
 			}
 		}
 		return true;

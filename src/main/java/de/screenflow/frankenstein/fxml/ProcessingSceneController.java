@@ -164,7 +164,7 @@ public class ProcessingSceneController implements ProcessingListener {
 				if (p != position && p <= frames) {
 					if (markPosition != -1)
 						btnOneFrame.setDisable(p != markPosition);
-//					int oldposition = position;
+					// int oldposition = position;
 					position = p;
 					updateDuration();
 					if (!seeking) {
@@ -215,109 +215,112 @@ public class ProcessingSceneController implements ProcessingListener {
 	}
 
 	public void drawEditCanvas() {
-		GraphicsContext gc = editCanvas.getGraphicsContext2D();
+		if (frames > 0) {
 
-		// Time in seconds at position
-		// double t = (position - 1) / fps;
-		// Total time in seconds
-		double tt = (frames - 1) / fps;
+			GraphicsContext gc = editCanvas.getGraphicsContext2D();
 
-		// Background
-		try {
-			gc.setFill(rootBorder.getBackground().getFills().get(0).getFill());
-		} catch (Exception e) {
-			gc.setFill(Color.WHITE);
-		}
-		gc.fillRect(0, 0, editCanvas.getWidth(), editCanvas.getHeight());
+			// Time in seconds at position
+			// double t = (position - 1) / fps;
+			// Total time in seconds
+			double tt = (frames - 1) / fps;
 
-		if (taskErrorMessage != null) {
-			gc.setFill(Color.DARKRED);
-			gc.fillText(taskErrorMessage, 10, 16, 900);
-			return;
-		} else if (processingRunning) {
-			// Task Progress
-			if (taskPosition != -1) {
-				int x = (int) ((editCanvas.getWidth() - 1) * taskPosition / ((double) frames - 1) * fps);
-				// System.out.println("taskPosition "+taskPosition+" "+x);
-				gc.setFill(Color.DARKGREEN);
-				gc.fillRect(0, 0, x, 2);
-				gc.setFill(Color.BLACK);
-				gc.fillText(taskMessage, 10, 16, 900);
+			// Background
+			try {
+				gc.setFill(rootBorder.getBackground().getFills().get(0).getFill());
+			} catch (Exception e) {
+				gc.setFill(Color.WHITE);
+			}
+			gc.fillRect(0, 0, editCanvas.getWidth(), editCanvas.getHeight());
+
+			if (taskErrorMessage != null) {
+				gc.setFill(Color.DARKRED);
+				gc.fillText(taskErrorMessage, 10, 16, 900);
+				return;
+			} else if (processingRunning) {
+				// Task Progress
+				if (taskPosition != -1) {
+					int x = (int) ((editCanvas.getWidth() - 1) * taskPosition / ((double) frames - 1) * fps);
+					// System.out.println("taskPosition "+taskPosition+" "+x);
+					gc.setFill(Color.DARKGREEN);
+					gc.fillRect(0, 0, x, 2);
+					gc.setFill(Color.BLACK);
+					gc.fillText(taskMessage, 10, 16, 900);
+				} else {
+					// Video Progress
+					int x = (int) ((editCanvas.getWidth() - 1) * (position - 1) / (frames - 1));
+					gc.setFill(Color.DARKOLIVEGREEN);
+					gc.fillRect(0, 0, x, 2);
+					gc.setFill(Color.BLACK);
+					gc.fillText("Processing Video", 10, 16, 900);
+				}
 			} else {
-				// Video Progress
-				int x = (int) ((editCanvas.getWidth() - 1) * (position - 1) / (frames - 1));
+				// Cuttings
+				gc.setFill(Color.CADETBLUE);
+				gc.fillRect(0, 3, editCanvas.getWidth(), 6);
+			}
+			if (seeking && seekPos > 0) {
+				// Seek running
+				int x = (int) ((editCanvas.getWidth() - 1) * (seekPos - 1) / (frames - 1));
 				gc.setFill(Color.DARKOLIVEGREEN);
 				gc.fillRect(0, 0, x, 2);
-				gc.setFill(Color.BLACK);
-				gc.fillText("Processing Video", 10, 16, 900);
 			}
-		} else {
-			// Cuttings
-			gc.setFill(Color.CADETBLUE);
-			gc.fillRect(0, 3, editCanvas.getWidth(), 6);
-		}
-		if (seeking && seekPos > 0) {
-			// Seek running
-			int x = (int) ((editCanvas.getWidth() - 1) * (seekPos - 1) / (frames - 1));
-			gc.setFill(Color.DARKOLIVEGREEN);
-			gc.fillRect(0, 0, x, 2);
-		}
 
-		// Time Ruler
-		double t1off = 1.0;
-		double t2off = 0.1;
-		int tlevel = 1;
-		int ttlevel = 0;
-		if (tt >= 10.0) {
-			t1off = 10.0;
-			t2off = 1.0;
-			tlevel++;
-		}
-		if (tt >= 60.0) {
-			t1off = 60.0;
-			t2off = 10.0;
-			tlevel++;
-			ttlevel++;
-		}
-		if (tt >= 3600.0) {
-			t1off = 3600.0;
-			t2off = 900.0;
-			tlevel++;
-			ttlevel++;
-		}
-		double tm = (((double) editCanvas.getWidth()) - 1.0) / tt;
-		gc.setFill(colorByLevel(tlevel));
-		for (double tx = 0.0; tx < tt; tx += t1off)
-			gc.fillRect(tx * tm - ttlevel, 0, 1 + ttlevel + ttlevel, tlevel * 2);
-		gc.setFill(colorByLevel(tlevel - 1));
-		for (double tx = 0.0; tx < tt; tx += t2off)
-			gc.fillRect(tx * tm, 1, 1, tlevel * 2 - 1);
-		gc.setFill(Color.BLACK);
-		gc.fillRect(0, 2, editCanvas.getWidth(), 1);
-		gc.fillRect(0, 2, 1, 16);
-		gc.fillRect(editCanvas.getWidth() - 1, 2, 1, 16);
+			// Time Ruler
+			double t1off = 1.0;
+			double t2off = 0.1;
+			int tlevel = 1;
+			int ttlevel = 0;
+			if (tt >= 10.0) {
+				t1off = 10.0;
+				t2off = 1.0;
+				tlevel++;
+			}
+			if (tt >= 60.0) {
+				t1off = 60.0;
+				t2off = 10.0;
+				tlevel++;
+				ttlevel++;
+			}
+			if (tt >= 3600.0) {
+				t1off = 3600.0;
+				t2off = 900.0;
+				tlevel++;
+				ttlevel++;
+			}
+			double tm = (((double) editCanvas.getWidth()) - 1.0) / tt;
+			gc.setFill(colorByLevel(tlevel));
+			for (double tx = 0.0; tx < tt; tx += t1off)
+				gc.fillRect(tx * tm - ttlevel, 0, 1 + ttlevel + ttlevel, tlevel * 2);
+			gc.setFill(colorByLevel(tlevel - 1));
+			for (double tx = 0.0; tx < tt; tx += t2off)
+				gc.fillRect(tx * tm, 1, 1, tlevel * 2 - 1);
+			gc.setFill(Color.BLACK);
+			gc.fillRect(0, 2, editCanvas.getWidth(), 1);
+			gc.fillRect(0, 2, 1, 16);
+			gc.fillRect(editCanvas.getWidth() - 1, 2, 1, 16);
 
-		// Mark to Position
-		Range r = clipBoardRange;
-		if (r != null) {
-			if (markPosition != -1)
-				gc.setFill(Color.rgb(64, 64, 192, 0.5));
-			else
+			// Mark to Position
+			Range r = clipBoardRange;
+			if (r != null) {
+				if (markPosition != -1)
+					gc.setFill(Color.rgb(64, 64, 192, 0.5));
+				else
+					gc.setFill(Color.rgb(128, 128, 64, 0.5));
+				gc.fillRect(xForPosition(r.start), 7, xForPosition(r.end) - xForPosition(r.start) + 1, 10);
+			}
+
+			// Clipboard
+			r = currentRange();
+			if (r != null) {
 				gc.setFill(Color.rgb(128, 128, 64, 0.5));
-			gc.fillRect(xForPosition(r.start), 7, xForPosition(r.end) - xForPosition(r.start) + 1, 10);
-		}
+				gc.fillRect(xForPosition(r.start), 7, xForPosition(r.end) - xForPosition(r.start), 10);
+			}
 
-		// Clipboard
-		r = currentRange();
-		if (r != null) {
-			gc.setFill(Color.rgb(128, 128, 64, 0.5));
-			gc.fillRect(xForPosition(r.start), 7, xForPosition(r.end) - xForPosition(r.start), 10);
+			// Current Position
+			int x = xForPosition(position);
+			gc.setFill(Color.RED);
+			gc.fillRect(x, 0, 1, editCanvas.getHeight());
 		}
-
-		// Current Position
-		int x = xForPosition(position);
-		gc.setFill(Color.RED);
-		gc.fillRect(x, 0, 1, editCanvas.getHeight());
 	}
 
 	private Range currentRange() {
@@ -465,12 +468,14 @@ public class ProcessingSceneController implements ProcessingListener {
 	}
 
 	private void adjustVideoLengthDisplay() {
-		Platform.runLater(() -> {
-			this.slider.setMax(frames);
+		if (frames > 0) {
+			Platform.runLater(() -> {
+				this.slider.setMax(frames);
 
-			this.maxFrameIndex.setText("/ " + (int) frames);
-			this.maxTime.setText("/ " + time(((double) (frames - 1)) / fps));
-		});
+				this.maxFrameIndex.setText("/ " + (int) frames);
+				this.maxTime.setText("/ " + time(((double) (frames - 1)) / fps));
+			});
+		}
 	}
 
 	private String time(double t) {

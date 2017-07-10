@@ -28,6 +28,7 @@ import de.screenflow.frankenstein.vf.global.OU2LR;
 import de.screenflow.frankenstein.vf.global.OutputSizeLimiter;
 import de.screenflow.frankenstein.vf.global.RL2LR;
 import de.screenflow.frankenstein.vf.global.StereoEffect;
+import de.screenflow.frankenstein.vf.input.CameraInput;
 import de.screenflow.frankenstein.vf.input.SlideShowInput;
 import de.screenflow.frankenstein.vf.input.TestImageInput;
 import de.screenflow.frankenstein.vf.input.VideoInput;
@@ -195,7 +196,10 @@ public class ConfigurationSceneController {
 	@FXML
 	Tab tabSlideshow;
 
-	@FXML RadioButton rDelay;
+	@FXML
+	RadioButton rDelay;
+
+	@FXML RadioButton rCameraInput;
 
 	/**
 	 * Initialize method, automatically called by @{link FXMLLoader}
@@ -236,7 +240,7 @@ public class ConfigurationSceneController {
 		rVideoFileOutput.setSelected(true);
 
 		tfPropertyInputDir.setText(configuration.getInputDir());
-		
+
 		tfPropertyTestScreenWidth.setText(String.valueOf(configuration.testScreenWidth));
 		tfPropertyTestScreenHeight.setText(String.valueOf(configuration.testScreenHeight));
 		if (configuration.anaglyphKeepWidth)
@@ -297,10 +301,8 @@ public class ConfigurationSceneController {
 	@FXML
 	public void doneButtonPressed(ActionEvent event) {
 		List<VideoFilter> filters = configuration.getFilters();
-
 		filters.clear();
 
-		configuration.doInput = false;
 		if (rVideoFileInput.isSelected()) {
 			configuration.setSource(new VideoInput(configuration.getInputVideo()));
 			configuration.doInput = true;
@@ -310,6 +312,8 @@ public class ConfigurationSceneController {
 		} else if (rTestVideoGenerator.isSelected()) {
 			configuration.setSource(new TestImageInput(configuration.testScreenWidth, configuration.testScreenHeight));
 			filters.add((VideoFilter) configuration.getSource());
+		} else if (rCameraInput.isSelected()) {
+			configuration.setSource(new CameraInput(0));
 		} else {
 			throw new Error("No Input Method.");
 		}
@@ -379,12 +383,18 @@ public class ConfigurationSceneController {
 		}
 	}
 
+	@FXML public void rActionCameraInput() {
+		removeTab(tabVideoFileInput);
+		removeTab(tabSlideshow);
+		removeTab(tabTestVideoGenerator);
+	}
+
 	private File chooseInputVideo() {
 		FileChooser fileChooser = new FileChooser();
 		fileChooser.setTitle("Video Input File");
 		fileChooser.getExtensionFilters().add(inputFileFilter);
 		String lastVideoDir = configuration.getInputVideoPath();
-		
+
 		if (configuration.getInputVideo() != null) {
 			File f = new File(configuration.getInputVideo());
 			if (!f.isDirectory())
@@ -392,20 +402,17 @@ public class ConfigurationSceneController {
 			if (f == null || !f.isDirectory())
 				f = new File(".");
 			fileChooser.setInitialDirectory(f);
-		}
-		else
-		if (lastVideoDir!=null)
+		} else if (lastVideoDir != null)
 			fileChooser.setInitialDirectory(new File(lastVideoDir));
 		else
 			fileChooser.setInitialDirectory(new File("."));
-		
-		
+
 		File file = fileChooser.showOpenDialog(stage);
 
 		if (file != null && file.exists() && !file.isDirectory()) {
 			configuration.setInputVideo(file.getAbsolutePath());
-			configuration.outputVideo = configuration.getInputVideo().substring(0, configuration.getInputVideo().lastIndexOf('.'))
-					+ "_edit" + ".mp4";
+			configuration.outputVideo = configuration.getInputVideo().substring(0,
+					configuration.getInputVideo().lastIndexOf('.')) + "_edit" + ".mp4";
 			tfPropertyOutputFile.setText(configuration.outputVideo);
 			main.setDocumentInTitle(file.getName());
 			if (rCloneLR.isSelected())
@@ -431,8 +438,7 @@ public class ConfigurationSceneController {
 				rTestVideoGenerator.setSelected(true);
 				if (!rCloneLR.isSelected())
 					rCloneLR.setSelected(true);
-			}
-			else {
+			} else {
 				rNoNormalization.setSelected(true);
 			}
 		} else {
@@ -448,7 +454,7 @@ public class ConfigurationSceneController {
 		DirectoryChooser dirChooser = new DirectoryChooser();
 		dirChooser.setTitle("Slides Directory");
 		String lastSlideDir = configuration.getInputDir();
-		if (lastSlideDir!=null)
+		if (lastSlideDir != null)
 			dirChooser.setInitialDirectory(new File(lastSlideDir));
 		if (configuration.getInputDir() != null) {
 			File f = new File(configuration.getInputDir());
@@ -659,5 +665,6 @@ public class ConfigurationSceneController {
 	public void tbActionStereoEffectFilterEnabled() {
 		sliderStereoPerspective.setDisable(!stereoEffectFilterEnabled.isSelected());
 	}
+
 
 }

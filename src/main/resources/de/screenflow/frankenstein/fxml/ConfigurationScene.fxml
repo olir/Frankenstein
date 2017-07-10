@@ -58,6 +58,11 @@
                         <Font size="16.0" />
                      </font>
                   </RadioButton>
+                  <RadioButton fx:id="rCameraInput" onAction="#rActionCameraInput" text="Camera Input" toggleGroup="$InputGroup">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </RadioButton>
                   <Label />
                   <CheckBox disable="true" mnemonicParsing="false" text="Pre-Processing">
                      <font>
@@ -523,7 +528,7 @@
                                           <Label text="closer" />
                                        </children>
                                     </FlowPane>
-                                    <ToggleButton fx:id="stereoEffectFilterEnabled" mnemonicParsing="false" text="3D Effect" onAction="#tbActionStereoEffectFilterEnabled" />
+                                    <ToggleButton fx:id="stereoEffectFilterEnabled" mnemonicParsing="false" onAction="#tbActionStereoEffectFilterEnabled" text="3D Effect" />
                                  </children>
                                  <columnConstraints>
                                     <ColumnConstraints fillWidth="false" halignment="LEFT" hgrow="NEVER" minWidth="10.0" prefWidth="100.0" />
