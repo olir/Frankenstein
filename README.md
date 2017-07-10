@@ -7,6 +7,7 @@ The output can be perfectly viewed in 3D with video players like [LittlStar](htt
 It appears there on a virtual 160-inch curved 3D display.
 
 [![Build Status](https://travis-ci.org/olir/Frankenstein.png)](https://travis-ci.org/olir/Frankenstein/builds) [![Dependency Status](https://www.versioneye.com/user/projects/594a6802368b0800421af505/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/594a6802368b0800421af505)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/de.screenflow/frankenstein/badge.png)](https://maven-badges.herokuapp.com/maven-central/de.screenflow/frankenstein)
 
 ## Screenshots
 <img src="doc/config.png" width="45%"> <img src="doc/processing.png" width="45%" />
