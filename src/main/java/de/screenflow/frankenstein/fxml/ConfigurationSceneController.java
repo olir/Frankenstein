@@ -55,7 +55,7 @@ public class ConfigurationSceneController {
 	@FXML
 	private Button doneButton;
 
-	private Main main;
+	private FxMain main;
 
 	private Stage stage;
 
@@ -289,27 +289,27 @@ public class ConfigurationSceneController {
 		});
 	}
 
-	public void configure(Main main, Stage stage) {
+	public void configure(FxMain main, Stage stage) {
 		this.main = main;
 		this.stage = stage;
 	}
 
 	@FXML
 	public void doneButtonPressed(ActionEvent event) {
-		List<VideoFilter> filters = configuration.filters;
+		List<VideoFilter> filters = configuration.getFilters();
 
 		filters.clear();
 
 		configuration.doInput = false;
 		if (rVideoFileInput.isSelected()) {
-			configuration.source = new VideoInput(configuration.getInputVideo());
+			configuration.setSource(new VideoInput(configuration.getInputVideo()));
 			configuration.doInput = true;
 		} else if (rSlideshowGenerator.isSelected()) {
-			configuration.source = new SlideShowInput(configuration.getInputDir());
-			filters.add((VideoFilter) configuration.source);
+			configuration.setSource(new SlideShowInput(configuration.getInputDir()));
+			filters.add((VideoFilter) configuration.getSource());
 		} else if (rTestVideoGenerator.isSelected()) {
-			configuration.source = new TestImageInput(configuration.testScreenWidth, configuration.testScreenHeight);
-			filters.add((VideoFilter) configuration.source);
+			configuration.setSource(new TestImageInput(configuration.testScreenWidth, configuration.testScreenHeight));
+			filters.add((VideoFilter) configuration.getSource());
 		} else {
 			throw new Error("No Input Method.");
 		}

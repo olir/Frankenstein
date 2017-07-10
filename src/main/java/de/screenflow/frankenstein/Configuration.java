@@ -26,6 +26,10 @@ import java.util.Properties;
 
 import de.screenflow.frankenstein.vf.VideoFilter;
 import de.screenflow.frankenstein.vf.VideoSource;
+import javafx.beans.property.StringProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.stage.DirectoryChooser;
 
 /**
  * Data class
@@ -34,9 +38,10 @@ public class Configuration {
 	// Ini-File properties
 	Properties iniProperties = new Properties();
 
-	public final List<VideoFilter> filters = new ArrayList<VideoFilter>();
+	// current global Video Filters
+	private final List<VideoFilter> filters = new ArrayList<VideoFilter>();
 
-	public VideoSource source;
+	private VideoSource source;
 
 	public boolean doInput = true;
 	public boolean doOutput = true;
@@ -65,6 +70,59 @@ public class Configuration {
 
 	public SectionedProperties metadata = new SectionedProperties();
 
+	public static Configuration configure(String[] args) {
+		Configuration configuration = new Configuration(null);
+
+//		addTab(tabTestVideoGenerator);
+//		addTab(tabClone);
+//		addTab(tabVideoFileOutput);
+
+//		rTestVideoGenerator.setSelected(true);
+//		rCloneLR.setSelected(true);
+//		rNoAlignment.setSelected(true);
+//		rNoVR.setSelected(true);
+//		rVideoFileOutput.setSelected(true);
+
+//		tfPropertyInputDir.setText(configuration.getInputDir());
+
+//		tfPropertyTestScreenWidth.setText(String.valueOf(configuration.testScreenWidth));
+//		tfPropertyTestScreenHeight.setText(String.valueOf(configuration.testScreenHeight));
+//		if (configuration.anaglyphKeepWidth)
+//			rPropertyAnaglyphKeepWidth.setSelected(true);
+//		else
+//			rPropertyAnaglyphDoubleWidth.setSelected(true);
+
+//		if (configuration.ouAdjustSize)
+//			rPropertyOUAdjustSize.setSelected(true);
+//		else
+//			rPropertyOUReduceSize.setSelected(true);
+//
+//		if (configuration.delayLeft)
+//			rDelayLeft.setSelected(true);
+//		else
+//			rDelayRight.setSelected(true);
+//
+//		sliderVRShrink.setValue(configuration.vrModeShrinkFactor * 100.0);
+//		sliderVRShrink.valueProperty().addListener((observable, oldvalue, newvalue) -> {
+//			int newFactor = newvalue.intValue();
+//			configuration.vrModeShrinkFactor = ((float) newFactor) / 100.0f;
+//			lVRShrinkDisplay.setText(String.valueOf(newFactor) + '%');
+//		});
+//
+//		if (configuration.vrModeShrinkOnly)
+//			vrModeFromVR.setSelected(true);
+//		else
+//			vrModeFromSBS.setSelected(true);
+//
+//		sliderStereoPerspective.setValue(configuration.perspective);
+		return configuration;
+	}
+
+	/**
+	 * Create empty configuration.
+	 *
+	 * @param helper ConfigHelper or null (non visual).
+	 */
 	public Configuration(ConfigHelper helper) {
 		String homeDir = System.getProperty("user.home");
 		outputVideo = new File(new File(System.getProperty("user.home")), "TestVideo.mp4").getAbsolutePath();
@@ -81,6 +139,8 @@ public class Configuration {
 		}
 
 		if (getFFmpegPath() == null) {
+			if (helper==null)
+				throw new RuntimeException("-ffmpegpath not set");
 			File dir = null;
 			while (dir == null) { // merciless inquisition
 				dir = helper.getFFmpegPath();
@@ -100,6 +160,8 @@ public class Configuration {
 			e.printStackTrace();
 		}
 		while (tf==null || !tf.canWrite()) { // merciless inquisition
+			if (helper==null)
+				throw new RuntimeException("-temppath not set");
 			tdf = helper.getTempPath();
 			try {
 				tf = File.createTempFile("Frankenstein", "tmp", tdf);
@@ -168,6 +230,18 @@ public class Configuration {
 		public File getFFmpegPath();
 
 		public File getTempPath();
+	}
+
+	public VideoSource getSource() {
+		return source;
+	}
+
+	public void setSource(VideoSource source) {
+		this.source = source;
+	}
+
+	public List<VideoFilter> getFilters() {
+		return filters;
 	}
 
 }

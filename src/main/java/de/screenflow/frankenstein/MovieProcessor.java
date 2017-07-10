@@ -58,7 +58,7 @@ public class MovieProcessor {
 		this.ffmpegPath = configuration.getFFmpegPath();
 		this.tempPath = new File(configuration.getTempPath());
 		this.configuration = configuration;
-		filters = configuration.filters;
+		filters = configuration.getFilters();
 	}
 
 	public void init(ProcessingListener l) {
@@ -70,7 +70,7 @@ public class MovieProcessor {
 			return;
 		}
 
-		frame = configuration.source.getFrame();
+		frame = configuration.getSource().getFrame();
 		if (frame != null && !frame.empty()) {
 			Mat newFrame = frame;
 			if (!filters.isEmpty()) {
@@ -101,7 +101,7 @@ public class MovieProcessor {
 		ffmpeg = new File(ffmpegPath, "\\bin\\ffmpeg.exe");
 
 		if (l != null)
-			l.videoStarted(configuration.source.getFrames(), configuration.source.getFps());
+			l.videoStarted(configuration.getSource().getFrames(), configuration.getSource().getFps());
 
 		currentPos = 1;
 	}
@@ -138,10 +138,10 @@ public class MovieProcessor {
 			Mat newFrame = null;
 
 			int i = 0;
-			while (!stopped && i < configuration.source.getFrames()) {
+			while (!stopped && i < configuration.getSource().getFrames()) {
 				i++;
-				currentPos = configuration.source.seek(i, l);
-				frame = configuration.source.getFrame();
+				currentPos = configuration.getSource().seek(i, l);
+				frame = configuration.getSource().getFrame();
 				if (frame != null && !frame.empty()) {
 					if (!filters.isEmpty()) {
 						newFrame = frame;
@@ -216,14 +216,14 @@ public class MovieProcessor {
 	}
 
 	public boolean openInput(ProcessingListener l) {
-		configuration.source.open(l);
+		configuration.getSource().open(l);
 
-		movie_fps = configuration.source.getFps();
-		movie_frameCount = configuration.source.getFrames();
-		movie_w = configuration.source.getWidth();
-		movie_h = configuration.source.getHeight();
+		movie_fps = configuration.getSource().getFps();
+		movie_frameCount = configuration.getSource().getFrames();
+		movie_w = configuration.getSource().getWidth();
+		movie_h = configuration.getSource().getHeight();
 
-		frame = configuration.source.getFrame();
+		frame = configuration.getSource().getFrame();
 
 		System.out.println("Dimensions: " + (int) movie_w + " x " + (int) movie_h);
 		System.out.println("fps: " + movie_fps + "  frameCount: " + (int) movie_frameCount);
@@ -232,7 +232,7 @@ public class MovieProcessor {
 	}
 
 	public void closeInput() {
-		configuration.source.close();
+		configuration.getSource().close();
 	}
 
 	public boolean openOutput(ProcessingListener l) {
@@ -303,10 +303,10 @@ public class MovieProcessor {
 				l.seeking(0);
 
 			currentPos = 0;
-			configuration.source.reopen(l);
+			configuration.getSource().reopen(l);
 		}
-		currentPos = configuration.source.seek(frameId, l);
-		frame = configuration.source.getFrame();
+		currentPos = configuration.getSource().seek(frameId, l);
+		frame = configuration.getSource().getFrame();
 		if (frame != null && !frame.empty()) {
 			Mat newFrame = frame;
 			for (VideoFilter filter : filters) {
