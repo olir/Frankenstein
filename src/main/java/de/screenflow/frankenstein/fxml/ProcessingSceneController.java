@@ -71,7 +71,7 @@ public class ProcessingSceneController implements ProcessingListener {
 
 	private MovieProcessor processor;
 
-	private Main main;
+	private FxMain main;
 
 	// private Stage stage;
 
@@ -367,7 +367,7 @@ public class ProcessingSceneController implements ProcessingListener {
 		return (int) ((editCanvas.getWidth() - 1) * (p - 1) / (frames - 1));
 	}
 
-	public void configure(Main main, Stage stage) {
+	public void configure(FxMain main, Stage stage) {
 		this.main = main;
 		// this.stage = stage;
 	}
