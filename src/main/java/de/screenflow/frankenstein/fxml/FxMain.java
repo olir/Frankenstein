@@ -40,11 +40,21 @@ public class FxMain extends Application {
 	public static final String APP_NAME = "Frankenstein VR";
 
 	private Configuration configuration;
+	private static Configuration initialConfiguration;
 
 	private static final double WIDTH = 1024.0;
 	private static final double HEIGHT = 768.0;
 
 	private Locale locale = Locale.getDefault();
+
+
+	public static void fxmain(Configuration c) {
+		initialConfiguration = c;
+		String[] args = {};
+		launch(args);
+	}
+
+
 
 	@Override
 	public void start(Stage primaryStage) {
@@ -138,16 +148,15 @@ public class FxMain extends Application {
 		return configuration;
 	}
 
+	public Configuration getInitialConfiguration() {
+		return initialConfiguration;
+	}
+
 	@Override
 	public void stop() {
 		// Stage is closing
 		System.out.println("stopping");
 		MovieProcessor.stop();
-	}
-
-	public static void fxmain() {
-		String[] args = {};
-		launch(args);
 	}
 
 	public void setDocumentInTitle(String name) {

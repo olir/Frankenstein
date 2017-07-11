@@ -15,17 +15,18 @@
  */
 package de.screenflow.frankenstein;
 
-import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.opencv.core.Mat;
 import org.opencv.core.Size;
 import org.opencv.videoio.VideoWriter;
 
+import de.screenflow.frankenstein.task.Task;
+import de.screenflow.frankenstein.task.TaskHandler;
+import de.screenflow.frankenstein.task.TimeTaskHandler;
 import de.screenflow.frankenstein.vf.VideoFilter;
 
 public class MovieProcessor {
@@ -114,11 +115,11 @@ public class MovieProcessor {
 			// 1. Detach Audio and Metadata from orginal video and store
 			// temporarily
 			if (configuration.doOutput && configuration.doInput) {
-				if (!new Task(
+				if (!new Task(this,
 						ffmpeg.getAbsolutePath() + " -y -i \"" + configuration.getInputVideo() + "\""
 								+ " -f ffmetadata " + tempMetadataFile.getAbsolutePath()
 								+ " -vn -ar 44100 -ac 2 -ab 192k -f mp3 -r 21 " + tempAudioFile.getAbsolutePath(),
-						l, "Splitting Audio").run())
+						new TimeTaskHandler(l, "Splitting Audio")).run())
 					return false;
 
 				configuration.metadata.clear();
@@ -128,9 +129,11 @@ public class MovieProcessor {
 
 			} else if (configuration.doOutput) {
 				// Create silent mp3
-				if (!new Task(ffmpeg.getAbsolutePath() + " -y -f lavfi -i anullsrc=r=44100:cl=mono -t "
-						+ (movie_frameCount / movie_fps) + " -q:a 9 -acodec libmp3lame "
-						+ tempAudioFile.getAbsolutePath(), l, "Creating Silent Audio Audio").run())
+				if (!new Task(this,
+						ffmpeg.getAbsolutePath() + " -y -f lavfi -i anullsrc=r=44100:cl=mono -t "
+								+ (movie_frameCount / movie_fps) + " -q:a 9 -acodec libmp3lame "
+								+ tempAudioFile.getAbsolutePath(),
+						new TimeTaskHandler(l, "Creating Silent Audio Audio")).run())
 					return false;
 			}
 
@@ -148,7 +151,8 @@ public class MovieProcessor {
 					if (!filters.isEmpty()) {
 						newFrame = frame;
 						for (VideoFilter filter : filters) {
-//System.out.println("MovieProcessor process"+filter.getClass().getName());
+							// System.out.println("MovieProcessor
+							// process"+filter.getClass().getName());
 							newFrame = filter.process(newFrame, i);
 						}
 					} else {
@@ -186,15 +190,17 @@ public class MovieProcessor {
 			if (configuration.doOutput) {
 				new File(configuration.outputVideo).delete();
 				if (configuration.doInput) {
-					if (!new Task(ffmpeg.getAbsolutePath() + " -y -i " + tempVideoFile.getAbsolutePath() + " -i "
+					if (!new Task(this, ffmpeg.getAbsolutePath() + " -y -i " + tempVideoFile.getAbsolutePath() + " -i "
 							+ tempAudioFile.getAbsolutePath() + " -i " + tempMetadataFile.getAbsolutePath()
 							+ " -map_metadata 2" + " -c:a aac -c:v libx264  -q 17 \"" + configuration.outputVideo + '"',
-							l, "Processing Output").run())
+							new TimeTaskHandler(l, "Processing Output")).run())
 						return false;
 				} else {
-					if (!new Task(ffmpeg.getAbsolutePath() + " -y -i " + tempVideoFile.getAbsolutePath() + " -i "
-							+ tempAudioFile.getAbsolutePath() + " -c:a aac -c:v libx264  -q 17 "
-							+ configuration.outputVideo, l, "Processing Output").run())
+					if (!new Task(this,
+							ffmpeg.getAbsolutePath() + " -y -i " + tempVideoFile.getAbsolutePath() + " -i "
+									+ tempAudioFile.getAbsolutePath() + " -c:a aac -c:v libx264  -q 17 "
+									+ configuration.outputVideo,
+							new TimeTaskHandler(l, "Processing Output")).run())
 						return false;
 				}
 				if (!new File(configuration.outputVideo).exists()) {
@@ -331,91 +337,75 @@ public class MovieProcessor {
 		l.seekDone(frameId);
 	}
 
-	private class Task {
+	public List<String> getVideoDevices() {
+		List<String> devices = new ArrayList<String>();
 
-		private String[] args;
-		private String command;
-		// private boolean shutdown = false;
-		// private File log;
-		private ProcessingListener l;
-		private final String taskMessage;
+		// case Windows:
+		if (!new Task(this, ffmpeg.getAbsolutePath() + " -y -list_devices true -f dshow -i dummy", new TaskHandler() {
+			boolean inDirectShowSection = false;
 
-		Task(String command, ProcessingListener l, String taskMessage) {
-			this.taskMessage = taskMessage;
-			this.command = command;
-			this.args = command.split(" ");
-			Task.this.l = l;
-		}
+			public void handleLine(String line) {
+				if (!inDirectShowSection) {
+					int s = line.indexOf("] DirectShow video devices");
+					if (s >= 0) {
+						inDirectShowSection = true;
+					}
+				}
+				else {
+					int s = line.indexOf("] DirectShow audio devices");
+					if (s >= 0) {
+						inDirectShowSection = false;
+						return;
+					}
 
-		private boolean run() {
-			ProcessBuilder processBuilder = new ProcessBuilder(args);
-			processBuilder.directory(new File(System.getProperty("java.io.tmpdir")));
-
-			try {
-				// Log to ...\AppData\Local\Temp
-				// log = File.createTempFile("frankestein_task_", ".log");
-				processBuilder.redirectErrorStream(true);
-				// processBuilder.redirectOutput(Redirect.appendTo(log));
-				System.out.println("Executing:\n" + command);
-				Process p = processBuilder.start();
-				InputStream is = p.getInputStream();
-				new Thread(new LogHandler(is, l)).start();
-				p.waitFor();
-				// log.deleteOnExit();
-				// shutdown = true;
-				return true;
-			} catch (IOException e) {
-				e.printStackTrace();
-				// shutdown = true;
-				return false;
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-				// shutdown = true;
-				return false;
-			}
-		}
-
-		private class LogHandler implements Runnable {
-			InputStream is;
-			ProcessingListener l;
-
-			LogHandler(InputStream is, ProcessingListener l) {
-				LogHandler.this.is = is;
-				LogHandler.this.l = l;
-			}
-
-			public void run() {
-				InputStreamReader isr = new InputStreamReader(is);
-				BufferedReader br = new BufferedReader(isr);
-				String line = null;
-				int s = 0, e = 0;
-				try {
-					while ((line = br.readLine()) != null) {
-						// System.out.println("> "+line);
-						s = line.indexOf("time=");
-						if (s >= 0) {
-							e = line.indexOf(' ', s);
-							progress(line.substring(s + 5, e));
+					s = line.indexOf("]  \"");
+					if (s>0) {
+						s++;
+						int e = line.indexOf("\"", s);
+						if (e>0) {
+							devices.add(line.substring(s,e));
 						}
 					}
-				} catch (IOException ex) {
-					ex.printStackTrace();
-				} catch (Exception ex) {
-					// Ignore
-					// System.err.println("substring: "+line.substring(s + 5,
-					// e));
-					System.err.println("line: " + line);
-					ex.printStackTrace();
 				}
-				progress(null);
 			}
+		}).run())
+			return devices;
+		return devices;
+	}
 
-			private void progress(String time) {
-				if (l != null)
-					l.taskUpdate(time, taskMessage);
-				// System.out.println("progress "+time);
+	public List<String> getAudioDevices() {
+		List<String> devices = new ArrayList<String>();
+
+		// case Windows:
+		if (!new Task(this, ffmpeg.getAbsolutePath() + " -y -list_devices true -f dshow -i dummy", new TaskHandler() {
+			boolean inDirectShowSection = false;
+
+			public void handleLine(String line) {
+				if (!inDirectShowSection) {
+					int s = line.indexOf("] DirectShow audio devices");
+					if (s >= 0) {
+						inDirectShowSection = true;
+					}
+				}
+				else {
+					int s = line.indexOf("] DirectShow video devices");
+					if (s >= 0) {
+						inDirectShowSection = false;
+						return;
+					}
+
+					s = line.indexOf("]  \"");
+					if (s>0) {
+						s++;
+						int e = line.indexOf("\"", s);
+						if (e>0) {
+							devices.add(line.substring(s,e));
+						}
+					}
+				}
 			}
-		}
-
+		}).run())
+			return devices;
+		return devices;
 	}
 }

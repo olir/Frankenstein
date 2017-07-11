@@ -26,10 +26,10 @@ import java.util.Properties;
 
 import de.screenflow.frankenstein.vf.VideoFilter;
 import de.screenflow.frankenstein.vf.VideoSource;
-import javafx.beans.property.StringProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.stage.DirectoryChooser;
+import de.screenflow.frankenstein.vf.input.CameraInput;
+import de.screenflow.frankenstein.vf.input.SlideShowInput;
+import de.screenflow.frankenstein.vf.input.TestImageInput;
+import de.screenflow.frankenstein.vf.input.VideoInput;
 
 /**
  * Data class
@@ -45,6 +45,8 @@ public class Configuration {
 
 	public boolean doInput = true;
 	public boolean doOutput = true;
+
+	private boolean visual = true;
 
 	private String inputVideo = null;
 	public String outputVideo = null;
@@ -70,58 +72,89 @@ public class Configuration {
 
 	public SectionedProperties metadata = new SectionedProperties();
 
-	public static Configuration configure(String[] args) {
+	public static Configuration cliCreateConfiguration(String[] args) {
 		Configuration configuration = new Configuration(null);
 
-//		addTab(tabTestVideoGenerator);
-//		addTab(tabClone);
-//		addTab(tabVideoFileOutput);
+		int optionKeyIndex;
+		String optionValue;
+		Properties optionProperties;
 
-//		rTestVideoGenerator.setSelected(true);
-//		rCloneLR.setSelected(true);
-//		rNoAlignment.setSelected(true);
-//		rNoVR.setSelected(true);
-//		rVideoFileOutput.setSelected(true);
+		optionKeyIndex = getOptionIndex(args, "visual");
+		configuration.setVisual(optionKeyIndex>=0);
 
-//		tfPropertyInputDir.setText(configuration.getInputDir());
+		optionKeyIndex = getOptionIndex(args, "source");
+		optionValue = getOptionValue(args, "source", "test", optionKeyIndex, "file", "test", "slides", "camera");
+		optionProperties = getOptionProperties(args, optionKeyIndex);
+		cliConfigureSource(configuration, optionValue, optionProperties);
 
-//		tfPropertyTestScreenWidth.setText(String.valueOf(configuration.testScreenWidth));
-//		tfPropertyTestScreenHeight.setText(String.valueOf(configuration.testScreenHeight));
-//		if (configuration.anaglyphKeepWidth)
-//			rPropertyAnaglyphKeepWidth.setSelected(true);
-//		else
-//			rPropertyAnaglyphDoubleWidth.setSelected(true);
-
-//		if (configuration.ouAdjustSize)
-//			rPropertyOUAdjustSize.setSelected(true);
-//		else
-//			rPropertyOUReduceSize.setSelected(true);
-//
-//		if (configuration.delayLeft)
-//			rDelayLeft.setSelected(true);
-//		else
-//			rDelayRight.setSelected(true);
-//
-//		sliderVRShrink.setValue(configuration.vrModeShrinkFactor * 100.0);
-//		sliderVRShrink.valueProperty().addListener((observable, oldvalue, newvalue) -> {
-//			int newFactor = newvalue.intValue();
-//			configuration.vrModeShrinkFactor = ((float) newFactor) / 100.0f;
-//			lVRShrinkDisplay.setText(String.valueOf(newFactor) + '%');
-//		});
-//
-//		if (configuration.vrModeShrinkOnly)
-//			vrModeFromVR.setSelected(true);
-//		else
-//			vrModeFromSBS.setSelected(true);
-//
-//		sliderStereoPerspective.setValue(configuration.perspective);
 		return configuration;
+	}
+
+	private static void cliConfigureSource(Configuration configuration, String optionValue,
+			Properties optionProperties) {
+		switch (optionValue) {
+		case "file":
+			configuration.source = new VideoInput(optionProperties.getProperty("file", "."));
+		case "slides":
+			configuration.source = new SlideShowInput(optionProperties.getProperty("dir", "."));
+		case "camera":
+			configuration.source = new CameraInput(0);
+		default:
+		case "test":
+			configuration.source = new TestImageInput(Integer.valueOf(optionProperties.getProperty("width", "1024")),
+					Integer.valueOf(optionProperties.getProperty("height", "768")));
+		}
+
+	}
+
+	private static int getOptionIndex(String[] args, String optionKey) {
+		for (int i = 0; i < args.length; i++) {
+			if (args[i].startsWith("-" + optionKey + "=")) {
+				return i;
+			}
+		}
+		return -1;
+	}
+
+	private static String getOptionValue(String[] args, String optionKey, String defaultValue, int optionKeyIndex,
+			String... optionValues) {
+		if (optionKeyIndex < 0)
+			return defaultValue;
+
+		String value = args[optionKeyIndex].substring(optionKey.length() + 2);
+		for (String v : optionValues) {
+			if (v.equals(value))
+				return v;
+		}
+		System.err.println("Warning: Invalid option for -"+optionKey+": '"+value+"'. Using default instead: "+defaultValue);
+		return defaultValue;
+	}
+
+	private static Properties getOptionProperties(String[] args, int optionKeyIndex) {
+		Properties p = new Properties();
+
+		if (optionKeyIndex < 0)
+			return p;
+
+		for (int i = optionKeyIndex + 1; i < args.length; i++) {
+			if (args[i].startsWith("-")) {
+				break;
+			}
+			int sep = args[i].indexOf('=');
+			if (sep > 0) {
+				String key = args[i].substring(0, sep);
+				String value = args[i].substring(sep + 1);
+				p.setProperty(key, value);
+			}
+		}
+		return p;
 	}
 
 	/**
 	 * Create empty configuration.
 	 *
-	 * @param helper ConfigHelper or null (non visual).
+	 * @param helper
+	 *            ConfigHelper or null (non visual).
 	 */
 	public Configuration(ConfigHelper helper) {
 		String homeDir = System.getProperty("user.home");
@@ -139,7 +172,7 @@ public class Configuration {
 		}
 
 		if (getFFmpegPath() == null) {
-			if (helper==null)
+			if (helper == null)
 				throw new RuntimeException("-ffmpegpath not set");
 			File dir = null;
 			while (dir == null) { // merciless inquisition
@@ -159,8 +192,8 @@ public class Configuration {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		while (tf==null || !tf.canWrite()) { // merciless inquisition
-			if (helper==null)
+		while (tf == null || !tf.canWrite()) { // merciless inquisition
+			if (helper == null)
 				throw new RuntimeException("-temppath not set");
 			tdf = helper.getTempPath();
 			try {
@@ -242,6 +275,14 @@ public class Configuration {
 
 	public List<VideoFilter> getFilters() {
 		return filters;
+	}
+
+	public boolean isVisual() {
+		return visual;
+	}
+
+	public void setVisual(boolean visual) {
+		this.visual = visual;
 	}
 
 }

@@ -7,21 +7,24 @@ import java.util.Arrays;
 public class Main {
 	public static void main(String[] args) {
 
-		System.out.println("Args: "+Arrays.toString(args));
+		System.out.println("Args: " + Arrays.toString(args));
 
-		Configuration c = Configuration.configure(args);
+		Configuration c = Configuration.cliCreateConfiguration(args);
 
-		// todo
+		if (c.isVisual()) {
 
-		Class<?> fxMain;
-		try {
-			fxMain = Class.forName("de.screenflow.frankenstein.fxml.FxMain");
-			Class<?> parameterTypes [] = {};
-			Method main = fxMain.getDeclaredMethod("fxmain", parameterTypes);
-			Object [] invokeArgs = {};
-			main.invoke(fxMain, invokeArgs);
-		} catch (ClassNotFoundException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
-			e.printStackTrace();
+			Class<?> fxMain;
+			try {
+				fxMain = Class.forName("de.screenflow.frankenstein.fxml.FxMain");
+				Class<?> parameterTypes[] = {de.screenflow.frankenstein.Configuration.class};
+				Method main = fxMain.getDeclaredMethod("fxmain", parameterTypes);
+				Object[] invokeArgs = {c};
+				main.invoke(fxMain, invokeArgs);
+			} catch (ClassNotFoundException | IllegalAccessException | IllegalArgumentException
+					| InvocationTargetException | NoSuchMethodException | SecurityException e) {
+				e.printStackTrace();
+			}
+
 		}
 	}
 }
