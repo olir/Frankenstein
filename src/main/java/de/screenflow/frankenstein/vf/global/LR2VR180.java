@@ -67,7 +67,7 @@ public class LR2VR180 implements VideoFilter {
 
 		if (aspect > 2f)
 			aspect = aspect / 2f; // not a half sbs
-		if (aspect < 1.3f) {
+		if (aspect < 1.24f) {
 			aspect *= 1.3f;
 			vcut = 1;
 		}

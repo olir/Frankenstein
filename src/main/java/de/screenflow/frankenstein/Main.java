@@ -11,7 +11,7 @@ public class Main {
 
 		Configuration c = Configuration.cliCreateConfiguration(args);
 
-		if (c.isVisual()) {
+		if (args.length==0 || c.isVisual()) {
 
 			Class<?> fxMain;
 			try {
