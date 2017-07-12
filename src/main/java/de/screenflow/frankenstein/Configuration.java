@@ -72,12 +72,17 @@ public class Configuration {
 
 	public SectionedProperties metadata = new SectionedProperties();
 
+	public static StringBuffer usage = new StringBuffer();
+
 	public static Configuration cliCreateConfiguration(String[] args) {
 		Configuration configuration = new Configuration(null);
 
 		int optionKeyIndex;
 		String optionValue;
 		Properties optionProperties;
+
+		usage.setLength(0);
+		usage.append("frankenstein");
 
 		optionKeyIndex = getOptionIndex(args, "visual");
 		configuration.setVisual(optionKeyIndex>=0);
@@ -86,6 +91,12 @@ public class Configuration {
 		optionValue = getOptionValue(args, "source", "test", optionKeyIndex, "file", "test", "slides", "camera");
 		optionProperties = getOptionProperties(args, optionKeyIndex);
 		cliConfigureSource(configuration, optionValue, optionProperties);
+
+		// todo ...
+
+		if (getOptionIndex(args, "?")>=0) {
+			return null;
+		}
 
 		return configuration;
 	}
@@ -108,8 +119,11 @@ public class Configuration {
 	}
 
 	private static int getOptionIndex(String[] args, String optionKey) {
+		usage.append(" -");
+		usage.append(optionKey);
+
 		for (int i = 0; i < args.length; i++) {
-			if (args[i].startsWith("-" + optionKey + "=")) {
+			if (args[i].startsWith("-" + optionKey + "=") || args[i].equals("-" + optionKey)) {
 				return i;
 			}
 		}
@@ -118,6 +132,13 @@ public class Configuration {
 
 	private static String getOptionValue(String[] args, String optionKey, String defaultValue, int optionKeyIndex,
 			String... optionValues) {
+		usage.append("=");
+		for (String opt : optionValues) {
+			usage.append(opt);
+			usage.append('|');
+		}
+		usage.setLength(usage.length()-1);
+
 		if (optionKeyIndex < 0)
 			return defaultValue;
 
@@ -283,6 +304,10 @@ public class Configuration {
 
 	public void setVisual(boolean visual) {
 		this.visual = visual;
+	}
+
+	public static String getUsage() {
+		return usage.toString();
 	}
 
 }
