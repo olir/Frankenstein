@@ -45,7 +45,7 @@ public class FxMain extends Application {
 	private static final double WIDTH = 1024.0;
 	private static final double HEIGHT = 768.0;
 
-	private Locale locale = Locale.getDefault();
+	private static Locale locale = Locale.getDefault();
 
 
 	public static void fxmain(Configuration c) {
@@ -70,6 +70,7 @@ public class FxMain extends Application {
 				System.out.println("Warning: nu.pattern.OpenCV not found."); // eclipse
 																				// environment
 			}
+			System.out.println("Loading from "+System.getProperty("java.library.path"));
 			System.loadLibrary(org.opencv.core.Core.NATIVE_LIBRARY_NAME);
 
 			theStage = primaryStage;
@@ -165,4 +166,11 @@ public class FxMain extends Application {
 		else
 			theStage.setTitle(APP_NAME);
 	}
+
+
+
+	public static Locale getLocale() {
+		return locale;
+	}
+
 }

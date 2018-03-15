@@ -32,7 +32,7 @@ import de.screenflow.frankenstein.vf.input.TestImageInput;
 import de.screenflow.frankenstein.vf.input.VideoInput;
 
 /**
- * Data class
+ * Handles information about the configuration of the 'Project' and the tool.
  */
 public class Configuration {
 	// Ini-File properties

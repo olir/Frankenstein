@@ -17,9 +17,14 @@ package de.screenflow.frankenstein.fxml;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
+import java.io.IOException;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.PropertyResourceBundle;
+import java.util.ResourceBundle;
 
 import org.opencv.core.CvException;
 import org.opencv.core.Mat;
@@ -28,6 +33,7 @@ import org.opencv.core.Range;
 import de.screenflow.frankenstein.Configuration;
 import de.screenflow.frankenstein.MovieProcessor;
 import de.screenflow.frankenstein.ProcessingListener;
+import de.screenflow.frankenstein.vf.VideoFilter;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -36,6 +42,9 @@ import javafx.collections.ObservableList;
 import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
@@ -48,6 +57,8 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
+import javafx.stage.Modality;
+import javafx.stage.Popup;
 import javafx.stage.Stage;
 
 public class ProcessingSceneController implements ProcessingListener {
@@ -113,11 +124,11 @@ public class ProcessingSceneController implements ProcessingListener {
 	@FXML
 	Button btnMark;
 
-	@FXML
-	Button btnCopy;
-
-	@FXML
-	Button btnPaste;
+	// @FXML
+	// Button btnCopy;
+	//
+	// @FXML
+	// Button btnPaste;
 
 	@FXML
 	ToggleButton btnOneFrame;
@@ -203,8 +214,8 @@ public class ProcessingSceneController implements ProcessingListener {
 			btnMark.setDisable(true);
 			btnOneFrame.setDisable(true);
 			btnClear.setDisable(true);
-			btnCopy.setDisable(true);
-			btnPaste.setDisable(true);
+			// btnCopy.setDisable(true);
+			// btnPaste.setDisable(true);
 			btnListAdd.setDisable(true);
 			btnListFilter.setDisable(true);
 			btnListDelete.setDisable(true);
@@ -391,8 +402,8 @@ public class ProcessingSceneController implements ProcessingListener {
 				btnMark.setDisable(false);
 				btnOneFrame.setDisable(true);
 				btnClear.setDisable(true);
-				btnCopy.setDisable(true);
-				btnPaste.setDisable(true);
+				// btnCopy.setDisable(true);
+				// btnPaste.setDisable(true);
 				btnListAdd.setDisable(true);
 				btnListFilter.setDisable(true);
 				btnListDelete.setDisable(true);
@@ -514,8 +525,8 @@ public class ProcessingSceneController implements ProcessingListener {
 			drawEditCanvas();
 			btnMark.setDisable(true);
 			btnClear.setDisable(true);
-			btnCopy.setDisable(true);
-			btnPaste.setDisable(true);
+			// btnCopy.setDisable(true);
+			// btnPaste.setDisable(true);
 			btnListAdd.setDisable(true);
 			btnListFilter.setDisable(true);
 			btnListDelete.setDisable(true);
@@ -631,7 +642,7 @@ public class ProcessingSceneController implements ProcessingListener {
 			btnMark.setDisable(false);
 			btnOneFrame.setDisable(false);
 			btnClear.setDisable(false);
-			btnCopy.setDisable(false);
+			// btnCopy.setDisable(false);
 			btnListAdd.setDisable(false);
 			drawEditCanvas();
 			updateDuration();
@@ -647,33 +658,33 @@ public class ProcessingSceneController implements ProcessingListener {
 			btnMark.setDisable(false);
 			btnOneFrame.setDisable(true);
 			btnClear.setDisable(true);
-			btnCopy.setDisable(true);
-			btnPaste.setDisable(true);
+			// btnCopy.setDisable(true);
+			// btnPaste.setDisable(true);
 			btnListAdd.setDisable(true);
 			drawEditCanvas();
 			updateDuration();
 		});
 	}
 
-	@FXML
-	public void copy() {
-		clipBoardRange = currentRange();
-		markPosition = -1;
-		btnClear.setDisable(true);
-		btnMark.setDisable(false);
-		btnCopy.setDisable(true);
-		btnPaste.setDisable(false);
-		btnListAdd.setDisable(true);
-		Platform.runLater(() -> {
-			drawEditCanvas();
-			updateDuration();
-		});
-	}
-
-	@FXML
-	public void paste() {
-		System.err.println("paste");
-	}
+	// @FXML
+	// public void copy() {
+	// clipBoardRange = currentRange();
+	// markPosition = -1;
+	// btnClear.setDisable(true);
+	// btnMark.setDisable(false);
+	// btnCopy.setDisable(true);
+	// btnPaste.setDisable(false);
+	// btnListAdd.setDisable(true);
+	// Platform.runLater(() -> {
+	// drawEditCanvas();
+	// updateDuration();
+	// });
+	// }
+	//
+	// @FXML
+	// public void paste() {
+	// System.err.println("paste");
+	// }
 
 	@FXML
 	public void oneFrameChanged() {
@@ -731,11 +742,26 @@ public class ProcessingSceneController implements ProcessingListener {
 	public void filterAdd() {
 		FilterElement val = new FilterElement(currentRange());
 		filterListData.add(val);
-		clearMark();
+		// clearMark();
 	}
 
 	@FXML
 	public void filterSetup() {
+
+		FilterSetupController controller = new FilterSetupController();
+		PropertyResourceBundle bundleConfiguration = (PropertyResourceBundle) ResourceBundle
+				.getBundle("de/screenflow/frankenstein/bundles/filtersetup", FxMain.getLocale());
+		FXMLLoader loader = new FXMLLoader(getClass().getResource("FilterSetupPopup.fxml"), bundleConfiguration);
+		Stage stage = new Stage();
+		try {
+			stage.setScene(new Scene(loader.load()));
+			stage.setTitle("Edit filter "+selectedFilter.toStringRange());
+			stage.initModality(Modality.APPLICATION_MODAL);
+			stage.initOwner(btnListFilter.getScene().getWindow());
+			stage.showAndWait();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@FXML
@@ -746,13 +772,18 @@ public class ProcessingSceneController implements ProcessingListener {
 
 	class FilterElement {
 		Range r;
-
+		VideoFilter filter = null;
+		
 		FilterElement(Range r) {
 			FilterElement.this.r = r;
 		}
 
 		public String toString() {
-			return r.toString();
+			return toStringRange()+" "+(filter!=null?filter:"<none>");
+		}
+		
+		public String toStringRange() {
+			return "" + time((r.start - 1.0) / fps) + "-" + time((r.end - 1.0) / fps) + " " + r.toString();
 		}
 	}
 

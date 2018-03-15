@@ -98,21 +98,6 @@
                               <Insets bottom="-2.0" top="-2.0" />
                            </padding>
                         </TextField>
-                        <Label fx:id="l_durationTitle" text="Duration" GridPane.columnIndex="3" GridPane.halignment="RIGHT" GridPane.hgrow="NEVER" GridPane.valignment="BOTTOM" GridPane.vgrow="NEVER">
-                           <font>
-                              <Font size="14.0" />
-                           </font>
-                        </Label>
-                        <Label fx:id="l_durationTime" alignment="CENTER_RIGHT" contentDisplay="RIGHT" text="00:00:00.00" GridPane.columnIndex="3" GridPane.halignment="RIGHT" GridPane.hgrow="NEVER" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="NEVER">
-                           <font>
-                              <Font size="14.0" />
-                           </font>
-                        </Label>
-                        <Label fx:id="l_durationFrames" alignment="CENTER_RIGHT" contentDisplay="RIGHT" nodeOrientation="LEFT_TO_RIGHT" text="0" textAlignment="RIGHT" GridPane.columnIndex="3" GridPane.halignment="RIGHT" GridPane.hgrow="NEVER" GridPane.rowIndex="2" GridPane.valignment="CENTER" GridPane.vgrow="NEVER">
-                           <font>
-                              <Font size="14.0" />
-                           </font>
-                        </Label>
                      </children>
                      <padding>
                         <Insets left="8.0" right="8.0" />
@@ -128,18 +113,44 @@
                         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
                     </rowConstraints>
                      <children>
-                        <HBox fillHeight="false" spacing="4.0" GridPane.columnSpan="2">
+                        <HBox fillHeight="false" prefHeight="51.0" prefWidth="336.0" spacing="4.0" GridPane.columnSpan="2">
                            <children>
                               <Button fx:id="btnMark" minWidth="44.0" mnemonicParsing="false" onAction="#createMark" text="M" />
                               <ToggleButton fx:id="btnOneFrame" minWidth="44.0" mnemonicParsing="false" onAction="#oneFrameChanged" text="1" />
                               <Button fx:id="btnClear" disable="true" minWidth="44.0" mnemonicParsing="false" onAction="#clearMark" text="Clr" />
                               <Label minWidth="32.0" />
-                              <Button fx:id="btnCopy" disable="true" minWidth="44.0" mnemonicParsing="false" onAction="#copy" text="C" />
-                              <Button fx:id="btnPaste" disable="true" minWidth="44.0" mnemonicParsing="false" onAction="#paste" text="P" />
-                              <Button disable="true" minWidth="44.0" mnemonicParsing="false" text="D" />
-                              <Label minWidth="32.0" />
                            </children>
                         </HBox>
+                        <GridPane GridPane.halignment="LEFT" GridPane.hgrow="NEVER" GridPane.rowIndex="1" GridPane.valignment="TOP" GridPane.vgrow="NEVER">
+                          <columnConstraints>
+                            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+                          </columnConstraints>
+                          <rowConstraints>
+                            <RowConstraints fillHeight="false" maxHeight="16.0" minHeight="16.0" prefHeight="16.0" valignment="BOTTOM" vgrow="NEVER" />
+                            <RowConstraints fillHeight="false" maxHeight="16.0" minHeight="16.0" prefHeight="16.0" valignment="CENTER" vgrow="NEVER" />
+                            <RowConstraints fillHeight="false" maxHeight="16.0" minHeight="16.0" prefHeight="16.0" valignment="CENTER" vgrow="NEVER" />
+                          </rowConstraints>
+                           <padding>
+                              <Insets left="8.0" right="8.0" />
+                           </padding>
+                           <children>
+                              <Label fx:id="l_durationTitle" text="Duration" GridPane.halignment="RIGHT" GridPane.hgrow="NEVER" GridPane.valignment="BOTTOM" GridPane.vgrow="NEVER">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="l_durationTime" alignment="CENTER_RIGHT" contentDisplay="RIGHT" text="00:00:00.00" GridPane.halignment="RIGHT" GridPane.hgrow="NEVER" GridPane.rowIndex="1" GridPane.valignment="CENTER" GridPane.vgrow="NEVER">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                              <Label fx:id="l_durationFrames" alignment="CENTER_RIGHT" contentDisplay="RIGHT" nodeOrientation="LEFT_TO_RIGHT" text="0" textAlignment="RIGHT" GridPane.halignment="RIGHT" GridPane.hgrow="NEVER" GridPane.rowIndex="2" GridPane.valignment="CENTER" GridPane.vgrow="NEVER">
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                           </children>
+                        </GridPane>
                         <GridPane hgap="4.0" maxHeight="-Infinity" maxWidth="-Infinity" vgap="4.0" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="1">
                           <columnConstraints>
                             <ColumnConstraints halignment="RIGHT" hgrow="ALWAYS" />
@@ -155,7 +166,7 @@
                                     <Font size="14.0" />
                                  </font>
                               </Button>
-                              <Button fx:id="btnListFilter" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#filterSetup" prefHeight="28.0" prefWidth="60.0" text="Filter..." textAlignment="CENTER" GridPane.rowIndex="1">
+                              <Button fx:id="btnListFilter" alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#filterSetup" prefHeight="28.0" prefWidth="60.0" text="Edit..." textAlignment="CENTER" GridPane.rowIndex="1">
                                  <font>
                                     <Font size="14.0" />
                                  </font>
@@ -165,6 +176,7 @@
                                     <Font size="14.0" />
                                  </font>
                               </Button>
+                              <Label minWidth="32.0" />
                            </children>
                         </GridPane>
                      </children>
@@ -174,7 +186,7 @@
                         <ListView fx:id="listViewFilter" maxHeight="132.0" maxWidth="310.0" minHeight="200.0" BorderPane.alignment="TOP_LEFT" />
                      </center>
                      <top>
-                        <Label text="Local Filter List:" BorderPane.alignment="BOTTOM_LEFT">
+                        <Label text="Section Filters:" BorderPane.alignment="BOTTOM_LEFT">
                            <font>
                               <Font size="14.0" />
                            </font>
