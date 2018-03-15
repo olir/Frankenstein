@@ -140,7 +140,9 @@ public class MovieProcessor {
 			// 2. Process Video without audio ()
 			System.out.print("Processing video: ");
 			Mat newFrame = null;
-
+			if (l != null)
+				l.taskUpdate(null, "Processing video");
+			
 			int i = 0;
 			while (!stopped
 					&& (configuration.getSource().getFrames() < 0 || i < configuration.getSource().getFrames())) {
@@ -193,7 +195,7 @@ public class MovieProcessor {
 					if (!new Task(this, ffmpeg.getAbsolutePath() + " -y -i " + tempVideoFile.getAbsolutePath() + " -i "
 							+ tempAudioFile.getAbsolutePath() + " -i " + tempMetadataFile.getAbsolutePath()
 							+ " -map_metadata 2" + " -c:a aac -c:v libx264  -q 17 \"" + configuration.outputVideo + '"',
-							new TimeTaskHandler(l, "Processing Output")).run())
+							new TimeTaskHandler(l, "Assembling Output")).run())
 						return false;
 				} else {
 					if (!new Task(this,

@@ -266,13 +266,14 @@ public class ProcessingSceneController implements ProcessingListener {
 				}
 			} else {
 				// Cuttings
-				gc.setFill(Color.CADETBLUE);
-				gc.fillRect(0, 3, editCanvas.getWidth(), 6);
+				gc.setFill(Color.LIGHTGRAY);
+				if (!seeking)
+					gc.fillRect(0, 3, editCanvas.getWidth(), 6);
 			}
 			if (seeking && seekPos > 0) {
 				// Seek running
 				int x = (int) ((editCanvas.getWidth() - 1) * (seekPos - 1) / (frames - 1));
-				gc.setFill(Color.DARKOLIVEGREEN);
+				gc.setFill(Color.RED);
 				gc.fillRect(0, 0, x, 2);
 			}
 
