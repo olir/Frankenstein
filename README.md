@@ -17,15 +17,13 @@ It appears there on a virtual 160-inch curved 3D display.
 I have uploaded some samples to vimeo: <a href="https://vimeo.com/user68089135"><img src="doc/vimeo.png"/></a>
 
 ## Status
-Release 0.1: Windows only (Developed/Tested on a Windows 10 64bit.)
+For current status see [Release Notes](https://github.com/olir/Frankenstein/blob/master/RELEASE-NOTES.md)
+Latest Release: 0.1: Windows only (Developed/Tested on a Windows 10 64bit.)
 
 Install Pre-Requisites first (see below), then you have 3 options to start it:
 A) Jar execution: Download and execute the jar file from the release (see section below) 
 B) Java Webstart: You can execute releases with Java Webstart (see section below) 
 C) From Maven: You can also use maven to run it with "mvn clean package exec:exec"
-
-## Issues:
-- Video editing / local filters is under construction
 
 # Pre-Requisites
 - [FFmpeg 3.1.1+](https://ffmpeg.org) installed. Select path at first startup (is stored in frankenstein.ini at user-home)
