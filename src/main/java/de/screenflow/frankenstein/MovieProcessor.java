@@ -226,29 +226,29 @@ public class MovieProcessor {
 			}
 
 			if (configuration.doOutput) {
-				new File(configuration.outputVideo).delete();
+				File of = findFreeFile(new File(configuration.outputVideo));
+				
 				if (!configuration.doInput || !(configuration.getSource() instanceof VideoStreamSource)) {
 					if (configuration.doInput) {
 						if (!new Task(this,
 								ffmpeg.getAbsolutePath() + " -y -i " + tempVideoFile.getAbsolutePath() + " -i "
 										+ tempAudioFile.getAbsolutePath() + " -i " + tempMetadataFile.getAbsolutePath()
 										+ " -map_metadata 2" + " -c:a aac -c:v libx264  -q 17 \""
-										+ configuration.outputVideo + '"',
+										+ of.getAbsolutePath() + '"',
 								new TimeTaskHandler(l, "Assembling Output")).run())
 							return false;
 					} else {
 						if (!new Task(this,
 								ffmpeg.getAbsolutePath() + " -y -i " + tempVideoFile.getAbsolutePath() + " -i "
 										+ tempAudioFile.getAbsolutePath() + " -c:a aac -c:v libx264  -q 17 "
-										+ configuration.outputVideo,
+										+ of.getAbsolutePath(),
 								new TimeTaskHandler(l, "Processing Output")).run())
 							return false;
 					}
 				} else {
 					System.out.println("Renaming temp  file "+tempVideoFile.getAbsolutePath());
-					tempVideoFile.renameTo(new File(configuration.outputVideo));
+					tempVideoFile.renameTo(of);
 				}
-				File of = new File(configuration.outputVideo);
 				if (!of.exists()) {
 					System.err.println("Missing output "+of.getAbsolutePath());
 					return false;
@@ -272,6 +272,30 @@ public class MovieProcessor {
 		streamStopped = true;
 	}
 
+	private File findFreeFile(File f) {
+		int i = 0;
+		while (f.exists()) {
+			f = new File(f.getParent(), numberFileName(f.getName(), ++i));
+		}
+		return f;
+	}
+
+	private String numberFileName(String name, int increment) {
+		int dotindex = name.lastIndexOf('.');
+		int nbrindex = name.indexOf('(');
+		if (nbrindex > -1 && name.indexOf(')', nbrindex+1) < 0) {
+			nbrindex = -1;
+		}
+		if (nbrindex<0)
+			nbrindex = dotindex;
+		
+		if (dotindex >= 0)
+			return name.substring(0, nbrindex) + "(" + increment + ")" + "." + name.substring(dotindex + 1);
+		else
+			return name;
+	}
+	
+	
 	public static void stop() {
 		stopped = true;
 	}

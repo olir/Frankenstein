@@ -199,7 +199,8 @@ public class ConfigurationSceneController {
 	@FXML
 	RadioButton rDelay;
 
-	@FXML RadioButton rCameraInput;
+	@FXML
+	RadioButton rCameraInput;
 
 	/**
 	 * Initialize method, automatically called by @{link FXMLLoader}
@@ -383,8 +384,14 @@ public class ConfigurationSceneController {
 		}
 	}
 
-	@FXML public void rActionCameraInput() {
-		configuration.outputVideo = "stream.mp4";
+	@FXML
+	public void rActionCameraInput() {
+		String lastVideoDir = configuration.getInputVideoPath();
+		if (lastVideoDir != null)
+			configuration.outputVideo = new File(new File(lastVideoDir), "stream.mp4").getAbsolutePath();
+		else
+			configuration.outputVideo = new File(new File("."), "stream.mp4").getAbsolutePath();
+		
 		tfPropertyOutputFile.setText(configuration.outputVideo);
 		removeTab(tabVideoFileInput);
 		removeTab(tabSlideshow);
@@ -667,6 +674,5 @@ public class ConfigurationSceneController {
 	public void tbActionStereoEffectFilterEnabled() {
 		sliderStereoPerspective.setDisable(!stereoEffectFilterEnabled.isSelected());
 	}
-
 
 }
