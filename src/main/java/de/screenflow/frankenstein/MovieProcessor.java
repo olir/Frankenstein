@@ -108,6 +108,28 @@ public class MovieProcessor {
 		currentPos = 1;
 	}
 
+	public void processStreamFrame(ProcessingListener l) {
+		currentPos = 1;
+
+		frame = configuration.getSource().getFrame();
+		if (frame != null && !frame.empty()) {
+			Mat newFrame = frame;
+			for (VideoFilter filter : filters) {
+//				System.out.println("MovieProcessor processStreamFrame " + filter.getClass().getName());
+				newFrame = filter.process(newFrame, 1);
+			}
+			if (l != null)
+				l.nextFrameProcessed(newFrame, currentPos);
+
+			movie_w = newFrame.cols();
+			movie_h = newFrame.rows();
+		} else {
+			if (l != null)
+				l.prematureEnd(1);
+			return;
+		}
+	}
+	
 	public boolean process(ProcessingListener l) {
 		try {
 			System.out.print("doOutput=" + configuration.doOutput);

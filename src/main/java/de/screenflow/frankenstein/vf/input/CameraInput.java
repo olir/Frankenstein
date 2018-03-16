@@ -15,6 +15,9 @@
  */
 package de.screenflow.frankenstein.vf.input;
 
+import java.util.Timer;
+import java.util.TimerTask;
+
 import org.opencv.core.Mat;
 import org.opencv.videoio.VideoCapture;
 import org.opencv.videoio.Videoio;
@@ -31,13 +34,15 @@ public class CameraInput implements VideoSource {
 	private int width;
 	private int height;
 
+	private Timer timer = null;
+
 	public CameraInput(int id) {
 		this.id = id;
 	}
 
 	@Override
 	public int getFrames() {
-		return -1;
+		return 1;
 	}
 
 	@Override
@@ -56,6 +61,15 @@ public class CameraInput implements VideoSource {
 		currentFrame = retrieve(currentFrame, l);
 		width = (int) movie.get(Videoio.CAP_PROP_FRAME_WIDTH);
 		height = (int) movie.get(Videoio.CAP_PROP_FRAME_HEIGHT);
+		
+		timer = new Timer();
+		timer.schedule(new TimerTask() {
+			@Override
+			public void run() {
+				currentFrame = retrieve(currentFrame, l);
+				l.nextFrameLoaded(currentFrame);
+			}
+		}, 0, (int)(1000.0/fps));
 	}
 
 	@Override
@@ -63,6 +77,9 @@ public class CameraInput implements VideoSource {
 		if (movie != null)
 			movie.release();
 		movie = null;
+		if (timer != null)
+			timer.cancel();
+		timer = null;
 	}
 
 	@Override

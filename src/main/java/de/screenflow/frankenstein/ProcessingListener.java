@@ -19,7 +19,7 @@ import org.opencv.core.Mat;
 
 public interface ProcessingListener {
 	void videoStarted(int frames, double fps);
-	void nextFrameLoaded(Mat frame, int frameId);
+	void nextFrameLoaded(Mat frame);
 	void nextFrameProcessed(Mat frame, int frameId);
 	void seekDone(int frameId);
 	void seeking(int i);

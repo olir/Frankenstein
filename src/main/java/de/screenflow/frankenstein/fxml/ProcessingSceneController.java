@@ -562,7 +562,8 @@ public class ProcessingSceneController implements ProcessingListener {
 	}
 
 	@Override
-	public void nextFrameLoaded(Mat frame, int frameId) {
+	public void nextFrameLoaded(Mat frame) {
+		processor.processStreamFrame(this);
 	}
 
 	@Override
@@ -738,6 +739,7 @@ public class ProcessingSceneController implements ProcessingListener {
 		seekingErrorHandling = true;
 		seekPos = -1;
 		System.err.println("Warning: Premature end of source at frame " + realFrameCount);
+		new Error().printStackTrace();
 		Platform.runLater(() -> {
 			this.slider.setValue(realFrameCount);
 			adjustVideoLengthDisplay();
