@@ -176,7 +176,6 @@
                                     <Font size="14.0" />
                                  </font>
                               </Button>
-                              <Label minWidth="32.0" />
                            </children>
                         </GridPane>
                      </children>

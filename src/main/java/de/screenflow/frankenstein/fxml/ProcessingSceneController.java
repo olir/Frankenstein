@@ -201,6 +201,9 @@ public class ProcessingSceneController implements ProcessingListener {
 				selectedFilter = newValue;
 				btnListDelete.setDisable(newValue == null);
 				btnListFilter.setDisable(newValue == null);
+				Platform.runLater(() -> {
+					drawEditCanvas();
+				});
 			}
 		});
 
@@ -265,10 +268,33 @@ public class ProcessingSceneController implements ProcessingListener {
 					gc.fillText("Processing Video", 10, 16, 900);
 				}
 			} else {
-				// Cuttings
-				gc.setFill(Color.LIGHTGRAY);
-				if (!seeking)
+				// Show Cuttings
+				if (!seeking) {
+					// Base color
+					gc.setFill(Color.LIGHTGRAY);
 					gc.fillRect(0, 3, editCanvas.getWidth(), 6);
+
+					// Visualize Filter ranges
+					gc.setFill(Color.CADETBLUE.deriveColor(1.0, 1.0, 1.0, 0.5));
+					for (FilterElement fe : filterListData) {
+						int x = (int) ((editCanvas.getWidth() - 1) * (fe.r.start - 1) / (frames - 1));
+						int w = (int) ((editCanvas.getWidth() - 1) * (fe.r.end - fe.r.start) / (frames - 1));
+						if (w < 2)
+							w = 2;
+						gc.fillRect(x, 3, w, 6);
+					}
+
+					// Visualize selectedFilter
+					if (selectedFilter != null) {
+						gc.setFill(Color.DODGERBLUE);
+						int x = (int) ((editCanvas.getWidth() - 1) * (selectedFilter.r.start - 1) / (frames - 1));
+						int w = (int) ((editCanvas.getWidth() - 1) * (selectedFilter.r.end - selectedFilter.r.start)
+								/ (frames - 1));
+						if (w < 2)
+							w = 2;
+						gc.fillRect(x, 3, w, 6);
+					}
+				}
 			}
 			if (seeking && seekPos > 0) {
 				// Seek running
@@ -743,7 +769,9 @@ public class ProcessingSceneController implements ProcessingListener {
 	public void filterAdd() {
 		FilterElement val = new FilterElement(currentRange());
 		filterListData.add(val);
-		// clearMark();
+		Platform.runLater(() -> {
+			drawEditCanvas();
+		});
 	}
 
 	@FXML
@@ -756,10 +784,13 @@ public class ProcessingSceneController implements ProcessingListener {
 		Stage stage = new Stage();
 		try {
 			stage.setScene(new Scene(loader.load()));
-			stage.setTitle("Edit filter "+selectedFilter.toStringRange());
+			stage.setTitle("Edit filter " + selectedFilter.toStringRange());
 			stage.initModality(Modality.APPLICATION_MODAL);
 			stage.initOwner(btnListFilter.getScene().getWindow());
 			stage.showAndWait();
+			Platform.runLater(() -> {
+				drawEditCanvas();
+			});
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -769,20 +800,23 @@ public class ProcessingSceneController implements ProcessingListener {
 	public void filterDelete() {
 		filterListData.remove(selectedFilter);
 		listViewFilter.getSelectionModel().clearSelection();
+		Platform.runLater(() -> {
+			drawEditCanvas();
+		});
 	}
 
 	class FilterElement {
 		Range r;
 		VideoFilter filter = null;
-		
+
 		FilterElement(Range r) {
 			FilterElement.this.r = r;
 		}
 
 		public String toString() {
-			return toStringRange()+" "+(filter!=null?filter:"<none>");
+			return toStringRange() + " " + (filter != null ? filter : "<none>");
 		}
-		
+
 		public String toStringRange() {
 			return "" + time((r.start - 1.0) / fps) + "-" + time((r.end - 1.0) / fps) + " " + r.toString();
 		}
