@@ -41,7 +41,7 @@
                         <Font name="System Bold" size="16.0" />
                      </font>
                   </Label>
-                  <RadioButton fx:id="rVideoFileInput" onAction="#rActionVideoFileInput" text="Video File Input">
+                  <RadioButton fx:id="rVideoFileInput" onAction="#rActionVideoFileInput" text="Video File">
                      <toggleGroup>
                         <ToggleGroup fx:id="InputGroup" />
                      </toggleGroup>
@@ -58,7 +58,7 @@
                         <Font size="16.0" />
                      </font>
                   </RadioButton>
-                  <RadioButton fx:id="rCameraInput" onAction="#rActionCameraInput" text="Camera Input" toggleGroup="$InputGroup">
+                  <RadioButton fx:id="rCameraInput" onAction="#rActionCameraInput" text="Camera (no audio)" toggleGroup="$InputGroup">
                      <font>
                         <Font size="16.0" />
                      </font>

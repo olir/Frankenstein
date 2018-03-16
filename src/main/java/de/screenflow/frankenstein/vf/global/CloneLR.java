@@ -43,15 +43,15 @@ public class CloneLR implements VideoFilter {
 
 	@Override
 	public Mat process(Mat sourceFrame, int frameId) {
-		System.out.println("???");
+//		System.out.println("???");
 
 		Rect roi = new Rect(0, 0, sourceFrame.cols(), sourceFrame.rows());
 		sourceFrame.copyTo(new Mat(newFrame, roi));
-		System.out.println("???"+newFrame.cols()+" "+sourceFrame.cols());
+//		System.out.println("???"+newFrame.cols()+" "+sourceFrame.cols());
 
 		roi = new Rect(sourceFrame.cols(), 0, sourceFrame.cols(), sourceFrame.rows());
 		sourceFrame.copyTo(new Mat(newFrame, roi));
-		System.out.println("???");
+//		System.out.println("???");
 
 		return newFrame;
 	}

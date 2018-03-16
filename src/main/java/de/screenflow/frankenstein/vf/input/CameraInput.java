@@ -24,8 +24,9 @@ import org.opencv.videoio.Videoio;
 
 import de.screenflow.frankenstein.ProcessingListener;
 import de.screenflow.frankenstein.vf.VideoSource;
+import de.screenflow.frankenstein.vf.VideoStreamSource;
 
-public class CameraInput implements VideoSource {
+public class CameraInput implements VideoStreamSource {
 	private final int id;
 	
 	private VideoCapture movie = null;
@@ -72,6 +73,13 @@ public class CameraInput implements VideoSource {
 		}, 0, (int)(1000.0/fps));
 	}
 
+	public void pause() {
+		try {
+			Thread.sleep((int)(1000.0/fps));
+		} catch (InterruptedException e) {
+		}
+	}
+	
 	@Override
 	public void close() {
 		if (movie != null)

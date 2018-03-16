@@ -384,6 +384,8 @@ public class ConfigurationSceneController {
 	}
 
 	@FXML public void rActionCameraInput() {
+		configuration.outputVideo = "stream.mp4";
+		tfPropertyOutputFile.setText(configuration.outputVideo);
 		removeTab(tabVideoFileInput);
 		removeTab(tabSlideshow);
 		removeTab(tabTestVideoGenerator);

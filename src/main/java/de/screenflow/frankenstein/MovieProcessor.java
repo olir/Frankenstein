@@ -28,6 +28,8 @@ import de.screenflow.frankenstein.task.Task;
 import de.screenflow.frankenstein.task.TaskHandler;
 import de.screenflow.frankenstein.task.TimeTaskHandler;
 import de.screenflow.frankenstein.vf.VideoFilter;
+import de.screenflow.frankenstein.vf.VideoStreamSource;
+import de.screenflow.frankenstein.vf.input.VideoInput;
 
 public class MovieProcessor {
 
@@ -51,6 +53,7 @@ public class MovieProcessor {
 	private double movie_w;
 
 	private static boolean stopped = false;
+	private boolean streamStopped = false;
 	int currentPos = 0;
 
 	private File ffmpeg;
@@ -115,7 +118,8 @@ public class MovieProcessor {
 		if (frame != null && !frame.empty()) {
 			Mat newFrame = frame;
 			for (VideoFilter filter : filters) {
-//				System.out.println("MovieProcessor processStreamFrame " + filter.getClass().getName());
+				// System.out.println("MovieProcessor processStreamFrame " +
+				// filter.getClass().getName());
 				newFrame = filter.process(newFrame, 1);
 			}
 			if (l != null)
@@ -129,34 +133,39 @@ public class MovieProcessor {
 			return;
 		}
 	}
-	
+
 	public boolean process(ProcessingListener l) {
 		try {
-			System.out.print("doOutput=" + configuration.doOutput);
+			streamStopped = !configuration.doInput || !(configuration.getSource() instanceof VideoStreamSource);
+			if (!configuration.doInput || !(configuration.getSource() instanceof VideoStreamSource)) {
+				System.out.print(
+						"doOutput=" + configuration.doOutput + " with source=" + (configuration.getSource() != null
+								? configuration.getSource().getClass().getName() : "none"));
 
-			// 1. Detach Audio and Metadata from orginal video and store
-			// temporarily
-			if (configuration.doOutput && configuration.doInput) {
-				if (!new Task(this,
-						ffmpeg.getAbsolutePath() + " -y -i \"" + configuration.getInputVideo() + "\""
-								+ " -f ffmetadata " + tempMetadataFile.getAbsolutePath()
-								+ " -vn -ar 44100 -ac 2 -ab 192k -f mp3 -r 21 " + tempAudioFile.getAbsolutePath(),
-						new TimeTaskHandler(l, "Splitting Audio")).run())
-					return false;
+				// 1. Detach Audio and Metadata from orginal video and store
+				// temporarily
+				if (configuration.doOutput && configuration.doInput) {
+					if (!new Task(this,
+							ffmpeg.getAbsolutePath() + " -y -i \"" + configuration.getInputVideo() + "\""
+									+ " -f ffmetadata " + tempMetadataFile.getAbsolutePath()
+									+ " -vn -ar 44100 -ac 2 -ab 192k -f mp3 -r 21 " + tempAudioFile.getAbsolutePath(),
+							new TimeTaskHandler(l, "Splitting Audio")).run())
+						return false;
 
-				configuration.metadata.clear();
-				configuration.metadata.load(tempMetadataFile);
-				System.out
-						.print("Meta Data:\n===================\n" + configuration.metadata + "===================\n");
+					configuration.metadata.clear();
+					configuration.metadata.load(tempMetadataFile);
+					System.out.print(
+							"Meta Data:\n===================\n" + configuration.metadata + "===================\n");
 
-			} else if (configuration.doOutput) {
-				// Create silent mp3
-				if (!new Task(this,
-						ffmpeg.getAbsolutePath() + " -y -f lavfi -i anullsrc=r=44100:cl=mono -t "
-								+ (movie_frameCount / movie_fps) + " -q:a 9 -acodec libmp3lame "
-								+ tempAudioFile.getAbsolutePath(),
-						new TimeTaskHandler(l, "Creating Silent Audio Audio")).run())
-					return false;
+				} else if (configuration.doOutput) {
+					// Create silent mp3
+					if (!new Task(this,
+							ffmpeg.getAbsolutePath() + " -y -f lavfi -i anullsrc=r=44100:cl=mono -t "
+									+ (movie_frameCount / movie_fps) + " -q:a 9 -acodec libmp3lame "
+									+ tempAudioFile.getAbsolutePath(),
+							new TimeTaskHandler(l, "Creating Silent Audio Audio")).run())
+						return false;
+				}
 			}
 
 			// 2. Process Video without audio ()
@@ -164,13 +173,18 @@ public class MovieProcessor {
 			Mat newFrame = null;
 			if (l != null)
 				l.taskUpdate(null, "Processing video");
-			
+
 			int i = 0;
-			while (!stopped
-					&& (configuration.getSource().getFrames() < 0 || i < configuration.getSource().getFrames())) {
+			while (!stopped && (configuration.getSource().getFrames() < 0 || i < configuration.getSource().getFrames()
+					|| !streamStopped)) {
 				i++;
-				currentPos = configuration.getSource().seek(i, l);
-				frame = configuration.getSource().getFrame();
+				if (streamStopped) {
+					currentPos = configuration.getSource().seek(i, l);
+					frame = configuration.getSource().getFrame();
+				} else {
+					((VideoStreamSource)configuration.getSource()).pause();
+					frame = configuration.getSource().getFrame();
+				}
 				if (frame != null && !frame.empty()) {
 					if (!filters.isEmpty()) {
 						newFrame = frame;
@@ -213,33 +227,49 @@ public class MovieProcessor {
 
 			if (configuration.doOutput) {
 				new File(configuration.outputVideo).delete();
-				if (configuration.doInput) {
-					if (!new Task(this, ffmpeg.getAbsolutePath() + " -y -i " + tempVideoFile.getAbsolutePath() + " -i "
-							+ tempAudioFile.getAbsolutePath() + " -i " + tempMetadataFile.getAbsolutePath()
-							+ " -map_metadata 2" + " -c:a aac -c:v libx264  -q 17 \"" + configuration.outputVideo + '"',
-							new TimeTaskHandler(l, "Assembling Output")).run())
-						return false;
+				if (!configuration.doInput || !(configuration.getSource() instanceof VideoStreamSource)) {
+					if (configuration.doInput) {
+						if (!new Task(this,
+								ffmpeg.getAbsolutePath() + " -y -i " + tempVideoFile.getAbsolutePath() + " -i "
+										+ tempAudioFile.getAbsolutePath() + " -i " + tempMetadataFile.getAbsolutePath()
+										+ " -map_metadata 2" + " -c:a aac -c:v libx264  -q 17 \""
+										+ configuration.outputVideo + '"',
+								new TimeTaskHandler(l, "Assembling Output")).run())
+							return false;
+					} else {
+						if (!new Task(this,
+								ffmpeg.getAbsolutePath() + " -y -i " + tempVideoFile.getAbsolutePath() + " -i "
+										+ tempAudioFile.getAbsolutePath() + " -c:a aac -c:v libx264  -q 17 "
+										+ configuration.outputVideo,
+								new TimeTaskHandler(l, "Processing Output")).run())
+							return false;
+					}
 				} else {
-					if (!new Task(this,
-							ffmpeg.getAbsolutePath() + " -y -i " + tempVideoFile.getAbsolutePath() + " -i "
-									+ tempAudioFile.getAbsolutePath() + " -c:a aac -c:v libx264  -q 17 "
-									+ configuration.outputVideo,
-							new TimeTaskHandler(l, "Processing Output")).run())
-						return false;
+					System.out.println("Renaming temp  file "+tempVideoFile.getAbsolutePath());
+					tempVideoFile.renameTo(new File(configuration.outputVideo));
 				}
-				if (!new File(configuration.outputVideo).exists()) {
-					System.err.println("Missing output.");
+				File of = new File(configuration.outputVideo);
+				if (!of.exists()) {
+					System.err.println("Missing output "+of.getAbsolutePath());
 					return false;
+				} else {
+					System.out.println("Video created: " + of.getAbsolutePath());
 				}
 				tempVideoFile.delete();
 				tempAudioFile.delete();
 				tempMetadataFile.delete();
 			}
 		} finally {
-			closeInput();
+//			if (!configuration.doInput || !(configuration.getSource() instanceof VideoStreamSource))
+//				closeInput();
 			closeOutput();
+			openOutput(null);
 		}
 		return true;
+	}
+
+	public void stopStream() {
+		streamStopped = true;
 	}
 
 	public static void stop() {
@@ -374,8 +404,7 @@ public class MovieProcessor {
 					if (s >= 0) {
 						inDirectShowSection = true;
 					}
-				}
-				else {
+				} else {
 					int s = line.indexOf("] DirectShow audio devices");
 					if (s >= 0) {
 						inDirectShowSection = false;
@@ -383,11 +412,11 @@ public class MovieProcessor {
 					}
 
 					s = line.indexOf("]  \"");
-					if (s>0) {
+					if (s > 0) {
 						s++;
 						int e = line.indexOf("\"", s);
-						if (e>0) {
-							devices.add(line.substring(s,e));
+						if (e > 0) {
+							devices.add(line.substring(s, e));
 						}
 					}
 				}
@@ -410,8 +439,7 @@ public class MovieProcessor {
 					if (s >= 0) {
 						inDirectShowSection = true;
 					}
-				}
-				else {
+				} else {
 					int s = line.indexOf("] DirectShow video devices");
 					if (s >= 0) {
 						inDirectShowSection = false;
@@ -419,11 +447,11 @@ public class MovieProcessor {
 					}
 
 					s = line.indexOf("]  \"");
-					if (s>0) {
+					if (s > 0) {
 						s++;
 						int e = line.indexOf("\"", s);
-						if (e>0) {
-							devices.add(line.substring(s,e));
+						if (e > 0) {
+							devices.add(line.substring(s, e));
 						}
 					}
 				}
@@ -432,4 +460,5 @@ public class MovieProcessor {
 			return devices;
 		return devices;
 	}
+
 }

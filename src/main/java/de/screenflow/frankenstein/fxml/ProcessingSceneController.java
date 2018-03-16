@@ -34,6 +34,7 @@ import de.screenflow.frankenstein.Configuration;
 import de.screenflow.frankenstein.MovieProcessor;
 import de.screenflow.frankenstein.ProcessingListener;
 import de.screenflow.frankenstein.vf.VideoFilter;
+import de.screenflow.frankenstein.vf.VideoStreamSource;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -486,6 +487,14 @@ public class ProcessingSceneController implements ProcessingListener {
 		new Thread(r).start();
 	}
 
+	void startProcessing(Configuration configuration) {
+		runProcessing(configuration);
+	}
+
+	void stopProcessing() {
+		processor.stopStream();
+	}
+
 	@Override
 	public void videoStarted(int frames, double fps) {
 		this.fps = fps;
@@ -648,14 +657,31 @@ public class ProcessingSceneController implements ProcessingListener {
 		});
 	}
 
+	boolean streamRunning = false;
+
 	@FXML
 	public void startButtonPressed() {
-		Configuration configuration = main.getConfiguration();
-		Platform.runLater(() -> {
-			startButton.setDisable(true);
-			configureButton.setDisable(true);
-		});
-		runProcessing(configuration);
+		if (streamRunning) {
+			streamRunning = false;
+			stopProcessing();
+			Platform.runLater(() -> {
+				startButton.setText("start");
+			});
+		} else {
+			Configuration configuration = main.getConfiguration();
+			Platform.runLater(() -> {
+				if (configuration.getSource() instanceof VideoStreamSource) {
+					startButton.setText("stop");
+					streamRunning = true;
+				} else
+					startButton.setDisable(true);
+				configureButton.setDisable(true);
+			});
+			if (streamRunning)
+				startProcessing(configuration);
+			else
+				runProcessing(configuration);
+		}
 	}
 
 	@FXML
@@ -739,7 +765,10 @@ public class ProcessingSceneController implements ProcessingListener {
 		seekingErrorHandling = true;
 		seekPos = -1;
 		System.err.println("Warning: Premature end of source at frame " + realFrameCount);
-		new Error().printStackTrace();
+		if (realFrameCount==1) {
+			System.err.println("Fatal: If video source is a cam, close other instances first.");
+			System.exit(-1);
+		}
 		Platform.runLater(() -> {
 			this.slider.setValue(realFrameCount);
 			adjustVideoLengthDisplay();
