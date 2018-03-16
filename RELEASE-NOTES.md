@@ -3,6 +3,7 @@
 - Global pipeline working
 - Executable as jar, by jnlp and maven
 
-## Upcomming changes
-- Executable from CLI (java -jar target/frankenstein.jar ARGS...)
+## Version 0.2 (currently working on)
+- Cam Stream Input (no audio)
+- Video Segment Filters
 
