@@ -130,7 +130,6 @@ public class MovieProcessor {
 		} else {
 			if (l != null)
 				l.prematureEnd(1);
-			return;
 		}
 	}
 
@@ -182,7 +181,7 @@ public class MovieProcessor {
 					currentPos = configuration.getSource().seek(i, l);
 					frame = configuration.getSource().getFrame();
 				} else {
-					((VideoStreamSource)configuration.getSource()).pause();
+					((VideoStreamSource) configuration.getSource()).pause();
 					frame = configuration.getSource().getFrame();
 				}
 				if (frame != null && !frame.empty()) {
@@ -227,14 +226,12 @@ public class MovieProcessor {
 
 			if (configuration.doOutput) {
 				File of = findFreeFile(new File(configuration.outputVideo));
-				
+
 				if (!configuration.doInput || !(configuration.getSource() instanceof VideoStreamSource)) {
 					if (configuration.doInput) {
-						if (!new Task(this,
-								ffmpeg.getAbsolutePath() + " -y -i " + tempVideoFile.getAbsolutePath() + " -i "
-										+ tempAudioFile.getAbsolutePath() + " -i " + tempMetadataFile.getAbsolutePath()
-										+ " -map_metadata 2" + " -c:a aac -c:v libx264  -q 17 \""
-										+ of.getAbsolutePath() + '"',
+						if (!new Task(this, ffmpeg.getAbsolutePath() + " -y -i " + tempVideoFile.getAbsolutePath()
+								+ " -i " + tempAudioFile.getAbsolutePath() + " -i " + tempMetadataFile.getAbsolutePath()
+								+ " -map_metadata 2" + " -c:a aac -c:v libx264  -q 17 \"" + of.getAbsolutePath() + '"',
 								new TimeTaskHandler(l, "Assembling Output")).run())
 							return false;
 					} else {
@@ -246,11 +243,11 @@ public class MovieProcessor {
 							return false;
 					}
 				} else {
-					System.out.println("Renaming temp  file "+tempVideoFile.getAbsolutePath());
+					System.out.println("Renaming temp  file " + tempVideoFile.getAbsolutePath());
 					tempVideoFile.renameTo(of);
 				}
 				if (!of.exists()) {
-					System.err.println("Missing output "+of.getAbsolutePath());
+					System.err.println("Missing output " + of.getAbsolutePath());
 					return false;
 				} else {
 					System.out.println("Video created: " + of.getAbsolutePath());
@@ -260,8 +257,9 @@ public class MovieProcessor {
 				tempMetadataFile.delete();
 			}
 		} finally {
-//			if (!configuration.doInput || !(configuration.getSource() instanceof VideoStreamSource))
-//				closeInput();
+			// if (!configuration.doInput || !(configuration.getSource()
+			// instanceof VideoStreamSource))
+			// closeInput();
 			closeOutput();
 			openOutput(null);
 		}
@@ -283,19 +281,18 @@ public class MovieProcessor {
 	private String numberFileName(String name, int increment) {
 		int dotindex = name.lastIndexOf('.');
 		int nbrindex = name.indexOf('(');
-		if (nbrindex > -1 && name.indexOf(')', nbrindex+1) < 0) {
+		if (nbrindex > -1 && name.indexOf(')', nbrindex + 1) < 0) {
 			nbrindex = -1;
 		}
-		if (nbrindex<0)
+		if (nbrindex < 0)
 			nbrindex = dotindex;
-		
+
 		if (dotindex >= 0)
 			return name.substring(0, nbrindex) + "(" + increment + ")" + "." + name.substring(dotindex + 1);
 		else
 			return name;
 	}
-	
-	
+
 	public static void stop() {
 		stopped = true;
 	}

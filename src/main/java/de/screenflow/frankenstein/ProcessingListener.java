@@ -17,9 +17,11 @@ package de.screenflow.frankenstein;
 
 import org.opencv.core.Mat;
 
+import de.screenflow.frankenstein.vf.VideoStreamSource;
+
 public interface ProcessingListener {
 	void videoStarted(int frames, double fps);
-	void nextFrameLoaded(Mat frame);
+	void nextFrameLoaded(VideoStreamSource s);
 	void nextFrameProcessed(Mat frame, int frameId);
 	void seekDone(int frameId);
 	void seeking(int i);

@@ -34,6 +34,8 @@ public class CameraInput implements VideoStreamSource {
 	private double fps = 10.0;
 	private int width;
 	private int height;
+	private int currentPos;
+	private int frames;
 
 	private Timer timer = null;
 
@@ -43,7 +45,7 @@ public class CameraInput implements VideoStreamSource {
 
 	@Override
 	public int getFrames() {
-		return 1;
+		return frames;
 	}
 
 	@Override
@@ -62,13 +64,17 @@ public class CameraInput implements VideoStreamSource {
 		currentFrame = retrieve(currentFrame, l);
 		width = (int) movie.get(Videoio.CAP_PROP_FRAME_WIDTH);
 		height = (int) movie.get(Videoio.CAP_PROP_FRAME_HEIGHT);
+		frames = 1;
+		currentPos = 0;
 		
 		timer = new Timer();
 		timer.schedule(new TimerTask() {
 			@Override
 			public void run() {
+				currentPos++;
+				frames++;
 				currentFrame = retrieve(currentFrame, l);
-				l.nextFrameLoaded(currentFrame);
+				l.nextFrameLoaded(CameraInput.this);
 			}
 		}, 0, (int)(1000.0/fps));
 	}
@@ -128,6 +134,11 @@ public class CameraInput implements VideoStreamSource {
 	public int seek(int pos, ProcessingListener l) {
 		currentFrame = retrieve(currentFrame, l);
 		return pos; 
+	}
+
+	@Override
+	public int getCurrentPos() {
+		return currentPos;
 	}
 
 }

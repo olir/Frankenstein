@@ -28,6 +28,7 @@ import de.screenflow.frankenstein.vf.VideoFilter;
 import de.screenflow.frankenstein.vf.VideoSource;
 import de.screenflow.frankenstein.vf.input.CameraInput;
 import de.screenflow.frankenstein.vf.input.SlideShowInput;
+import de.screenflow.frankenstein.vf.input.StreamInput;
 import de.screenflow.frankenstein.vf.input.TestImageInput;
 import de.screenflow.frankenstein.vf.input.VideoInput;
 
@@ -50,7 +51,10 @@ public class Configuration {
 
 	private String inputVideo = null;
 	public String outputVideo = null;
-
+	private String recordingVideo = null;
+	private String inputVideoStreamURL = null;
+	
+	
 	public int limitOutputWidth = 2880;
 
 	public int testScreenWidth = 1280;
@@ -88,7 +92,7 @@ public class Configuration {
 		configuration.setVisual(optionKeyIndex>=0);
 
 		optionKeyIndex = getOptionIndex(args, "source");
-		optionValue = getOptionValue(args, "source", "test", optionKeyIndex, "file", "test", "slides", "camera");
+		optionValue = getOptionValue(args, "source", "test", optionKeyIndex, "file", "test", "slides", "camera", "stream");
 		optionProperties = getOptionProperties(args, optionKeyIndex);
 		cliConfigureSource(configuration, optionValue, optionProperties);
 
@@ -105,11 +109,13 @@ public class Configuration {
 			Properties optionProperties) {
 		switch (optionValue) {
 		case "file":
-			configuration.source = new VideoInput(optionProperties.getProperty("file", "."));
+			configuration.source = new VideoInput(optionProperties.getProperty("file", null));
 		case "slides":
 			configuration.source = new SlideShowInput(optionProperties.getProperty("dir", "."));
 		case "camera":
 			configuration.source = new CameraInput(0);
+		case "stream":
+			configuration.source = new StreamInput(optionProperties.getProperty("stream", null), optionProperties.getProperty("file", null));
 		default:
 		case "test":
 			configuration.source = new TestImageInput(Integer.valueOf(optionProperties.getProperty("width", "1024")),
@@ -276,8 +282,30 @@ public class Configuration {
 		savePreferences();
 	}
 
+	public String getRecordingVideo() {
+		return recordingVideo;
+	}
+
+	public void setRecordingVideo(String recordingVideo) {
+		this.recordingVideo = recordingVideo;
+		iniProperties.setProperty("recordingvideopath", new File(recordingVideo).getParent());
+		savePreferences();
+	}
+
 	public String getInputVideoPath() {
 		return iniProperties.getProperty("inputvideopath");
+	}
+
+	public String getInputStreamURL() {
+		return inputVideoStreamURL;
+	}
+
+	public void setInputStreamURL(String inputVideoStreamURL) {
+		this.inputVideoStreamURL = inputVideoStreamURL;
+	}
+	
+	public String getRecordingVideoPath() {
+		return iniProperties.getProperty("recordingvideopath", iniProperties.getProperty("inputvideopath"));
 	}
 
 	public interface ConfigHelper {

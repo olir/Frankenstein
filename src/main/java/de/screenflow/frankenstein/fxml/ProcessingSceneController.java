@@ -526,12 +526,16 @@ public class ProcessingSceneController implements ProcessingListener {
 	}
 
 	private String time(double t) {
-		LocalTime lt = LocalTime.ofNanoOfDay((long) (t * 1000000000.0));
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss.SS");
+		try {
+			LocalTime lt = LocalTime.ofNanoOfDay((long) (t * 1000000000.0));
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss.SS");
 
-		String text = lt.format(formatter);
-
-		return text;
+			String text = lt.format(formatter);
+			return text;
+		} catch (java.time.DateTimeException e) {
+			System.err.println(e.getLocalizedMessage()+": t="+t );
+			return "<invalid>";
+		}
 	}
 
 	private double time(String t) {
@@ -571,8 +575,18 @@ public class ProcessingSceneController implements ProcessingListener {
 	}
 
 	@Override
-	public void nextFrameLoaded(Mat frame) {
+	public void nextFrameLoaded(VideoStreamSource s) {
+		Mat frame = s.getFrame();
+		int frameId = s.getCurrentPos()+1;
+		this.frames = s.getFrames();
 		processor.processStreamFrame(this);
+		Platform.runLater(() -> {
+			// System.out.println("nextFrameProcessed "+frameId);
+			this.currentFrameIndex.setText("" + frameId);
+			this.currentTime.setText("" + time((frameId - 1) / fps));
+					drawEditCanvas();
+		});
+		adjustVideoLengthDisplay();
 	}
 
 	@Override
@@ -590,6 +604,9 @@ public class ProcessingSceneController implements ProcessingListener {
 					drawEditCanvas();
 				}
 			}
+			// else {
+			// System.out.println("nextFrameProcessed / cols = 0.");
+			// }
 		});
 	}
 
@@ -765,8 +782,8 @@ public class ProcessingSceneController implements ProcessingListener {
 		seekingErrorHandling = true;
 		seekPos = -1;
 		System.err.println("Warning: Premature end of source at frame " + realFrameCount);
-		if (realFrameCount==1) {
-			System.err.println("Fatal: If video source is a cam, close other instances first.");
+		if (realFrameCount == 1) {
+			System.err.println("Fatal: If video source is a cam, close other instances first. If video source is a stream, try recording.");
 			System.exit(-1);
 		}
 		Platform.runLater(() -> {

@@ -30,6 +30,7 @@ import de.screenflow.frankenstein.vf.global.RL2LR;
 import de.screenflow.frankenstein.vf.global.StereoEffect;
 import de.screenflow.frankenstein.vf.input.CameraInput;
 import de.screenflow.frankenstein.vf.input.SlideShowInput;
+import de.screenflow.frankenstein.vf.input.StreamInput;
 import de.screenflow.frankenstein.vf.input.TestImageInput;
 import de.screenflow.frankenstein.vf.input.VideoInput;
 import javafx.beans.property.StringProperty;
@@ -49,6 +50,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.Slider;
 import javafx.scene.control.Label;
 import javafx.scene.control.ToggleButton;
+import javafx.scene.input.InputMethodEvent;
 
 public class ConfigurationSceneController {
 
@@ -63,6 +65,7 @@ public class ConfigurationSceneController {
 	private Configuration configuration;
 	private FileChooser.ExtensionFilter inputFileFilter = new FileChooser.ExtensionFilter("Video Files", "*.mp4",
 			"*.avi", "*.wmv", "*.mks", "*.mpg", "*.mov");
+	private FileChooser.ExtensionFilter recordingFileFilter = new FileChooser.ExtensionFilter("Video Files", "*.mp4");
 
 	@FXML
 	RadioButton rVideoFileInput;
@@ -202,6 +205,15 @@ public class ConfigurationSceneController {
 	@FXML
 	RadioButton rCameraInput;
 
+	@FXML
+	RadioButton rStreamInput;
+
+	@FXML Tab tabVideoStreamInput;
+
+	@FXML TextField tfPropertyInputStream;
+
+	@FXML TextField tfPropertyRecordingFile;
+
 	/**
 	 * Initialize method, automatically called by @{link FXMLLoader}
 	 */
@@ -292,6 +304,11 @@ public class ConfigurationSceneController {
 			int newPerspective = newvalue.intValue();
 			configuration.perspective = newPerspective;
 		});
+		
+		configuration.setInputStreamURL(tfPropertyInputStream.getText());
+		tfPropertyInputStream.textProperty().addListener((observable, oldValue, newValue) -> {
+			configuration.setInputStreamURL(tfPropertyInputStream.getText());
+        });		
 	}
 
 	public void configure(FxMain main, Stage stage) {
@@ -315,6 +332,9 @@ public class ConfigurationSceneController {
 			filters.add((VideoFilter) configuration.getSource());
 		} else if (rCameraInput.isSelected()) {
 			configuration.setSource(new CameraInput(0));
+		} else if (rStreamInput.isSelected()) {
+			configuration.setSource(new StreamInput(configuration.getInputStreamURL(), configuration.getRecordingVideo()));
+			configuration.doInput = true;
 		} else {
 			throw new Error("No Input Method.");
 		}
@@ -381,11 +401,27 @@ public class ConfigurationSceneController {
 			addTab(tabVideoFileInput);
 			removeTab(tabSlideshow);
 			removeTab(tabTestVideoGenerator);
+			removeTab(tabVideoStreamInput);
 		}
 	}
 
 	@FXML
 	public void rActionCameraInput() {
+		String lastVideoDir = configuration.getInputVideoPath();
+		if (lastVideoDir != null)
+			configuration.outputVideo = new File(new File(lastVideoDir), "stream.mp4").getAbsolutePath();
+		else
+			configuration.outputVideo = new File(new File("."), "stream.mp4").getAbsolutePath();
+		
+		tfPropertyOutputFile.setText(configuration.outputVideo);
+		removeTab(tabVideoFileInput);
+		removeTab(tabSlideshow);
+		removeTab(tabTestVideoGenerator);
+		removeTab(tabVideoStreamInput);
+	}
+	
+	@FXML
+	public void rActionStreamInput() {
 		String lastVideoDir = configuration.getInputVideoPath();
 		if (lastVideoDir != null)
 			configuration.outputVideo = new File(new File(lastVideoDir), "stream.mp4").getAbsolutePath();
@@ -429,6 +465,7 @@ public class ConfigurationSceneController {
 			addTab(tabVideoFileInput);
 			removeTab(tabSlideshow);
 			removeTab(tabTestVideoGenerator);
+			removeTab(tabVideoStreamInput);
 			tfPropertyInputFile.setText(file.getAbsolutePath());
 			return file;
 		} else {
@@ -437,6 +474,49 @@ public class ConfigurationSceneController {
 		}
 	}
 
+	private File chooseRecordingVideo() {
+		FileChooser fileChooser = new FileChooser();
+		fileChooser.setTitle("Video Recording File");
+		fileChooser.getExtensionFilters().add(recordingFileFilter);
+		String lastVideoDir = configuration.getRecordingVideoPath();
+
+		if (configuration.getRecordingVideo() != null) {
+			File f = new File(configuration.getRecordingVideo());
+			if (!f.isDirectory())
+				f = f.getParentFile();
+			if (f == null || !f.isDirectory())
+				f = new File(".");
+			fileChooser.setInitialDirectory(f);
+		} else if (lastVideoDir != null)
+			fileChooser.setInitialDirectory(new File(lastVideoDir));
+		else
+			fileChooser.setInitialDirectory(new File("."));
+
+		File file = fileChooser.showSaveDialog(stage);
+		if (!file.getName().endsWith(".mp4")) {
+			file = new File(file.getParentFile(), file.getName().replaceAll("\\..*", ".mp4")); 
+		}
+		if (file != null && !file.isDirectory()) {
+			configuration.setRecordingVideo(file.getAbsolutePath());
+			configuration.outputVideo = configuration.getRecordingVideo().substring(0,
+					configuration.getRecordingVideo().lastIndexOf('.')) + "_edit" + ".mp4";
+			tfPropertyOutputFile.setText(configuration.outputVideo);
+			main.setDocumentInTitle(file.getName());
+			if (rCloneLR.isSelected())
+				rNoNormalization.setSelected(true);
+			addTab(tabVideoStreamInput);
+			removeTab(tabVideoFileInput);
+			removeTab(tabSlideshow);
+			removeTab(tabTestVideoGenerator);
+			tfPropertyRecordingFile.setText(file.getAbsolutePath());
+			return file;
+		} else {
+			tfPropertyOutputFile.setText(configuration.outputVideo);
+			return null;
+		}
+	}
+
+	
 	@FXML
 	public void rActionSlideshowGenerator() {
 
@@ -588,9 +668,9 @@ public class ConfigurationSceneController {
 			if (!rCloneLR.isSelected())
 				rCloneLR.setSelected(true);
 		}
-		removeTab(tabVideoFileInput);
-		removeTab(tabSlideshow);
-		addTab(tabTestVideoGenerator);
+//		removeTab(tabVideoFileInput);
+//		removeTab(tabSlideshow);
+//		addTab(tabTestVideoGenerator);
 	}
 
 	@FXML
@@ -607,6 +687,20 @@ public class ConfigurationSceneController {
 		addTab(tabTestVideoGenerator);
 	}
 
+	@FXML 
+	public void btnActionChangeRecordingFile() {
+		File file = chooseRecordingVideo();
+		if (file == null) {
+			main.setDocumentInTitle(null);
+			rTestVideoGenerator.setSelected(true);
+			if (!rCloneLR.isSelected())
+				rCloneLR.setSelected(true);
+		}
+//		removeTab(tabVideoFileInput);
+//		removeTab(tabSlideshow);
+//		addTab(tabTestVideoGenerator);
+	}
+	
 	// @FXML
 	public boolean tfActionChangeTestScreenWidth(String oldValue, String newValue) {
 
@@ -674,5 +768,6 @@ public class ConfigurationSceneController {
 	public void tbActionStereoEffectFilterEnabled() {
 		sliderStereoPerspective.setDisable(!stereoEffectFilterEnabled.isSelected());
 	}
+
 
 }
