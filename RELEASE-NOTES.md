@@ -5,5 +5,6 @@
 
 ## Version 0.2 (currently working on)
 - Cam Stream Input (no audio)
+- Network Stream Input (opencv or vlc/file)
 - Video Segment Filters
 
