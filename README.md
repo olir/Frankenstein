@@ -17,18 +17,19 @@ It appears there on a virtual 160-inch curved 3D display.
 I have uploaded some samples to vimeo: <a href="https://vimeo.com/user68089135"><img src="doc/vimeo.png"/></a>
 
 ## Status
-For current or full status see [Release Notes](https://github.com/olir/Frankenstein/blob/master/RELEASE-NOTES.md). 
-
 Latest Release: 0.1 - Windows only (Developed/Tested on a Windows 10 64bit)
+Master branch (0.2): Cam and network stream support.
+For current or full status see [Release Notes](https://github.com/olir/Frankenstein/blob/master/RELEASE-NOTES.md). 
 
 Install Pre-Requisites first (see below), then you have 3 options to start it:
 A) Jar execution: Download and execute the jar file from the release (see section below) 
 B) Java Webstart: You can execute releases with Java Webstart (see section below) 
-C) From Maven: You can also use maven to run it with "mvn clean package exec:exec"
+C) From Maven: For the current version, use maven and run it with "mvn clean package exec:exec"
 
 # Pre-Requisites
 - [FFmpeg 3.1.1+](https://ffmpeg.org) installed. Select path at first startup (is stored in frankenstein.ini at user-home)
 - [Java JRE 1.8+](https://java.com) installed.
+- [VLC 2.2.8](https://mirror.de.leaseweb.net/videolan/vlc/2.2.8/) installed for network stream recording support.
 # Provided (do not install)
 - [OpenCV 3.2.0+](http://www.opencv.org/releases.html)
 
