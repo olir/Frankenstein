@@ -27,16 +27,19 @@ import org.opencv.videoio.VideoWriter;
 import de.screenflow.frankenstein.task.Task;
 import de.screenflow.frankenstein.task.TaskHandler;
 import de.screenflow.frankenstein.task.TimeTaskHandler;
+import de.screenflow.frankenstein.vf.FilterElement;
 import de.screenflow.frankenstein.vf.VideoFilter;
 import de.screenflow.frankenstein.vf.VideoStreamSource;
 import de.screenflow.frankenstein.vf.input.VideoInput;
+import javafx.collections.ObservableList;
 
 public class MovieProcessor {
 
 	private final String ffmpegPath;
 	private final File tempPath;
-	private final List<VideoFilter> filters;
 	private final Configuration configuration;
+	private final List<VideoFilter> filters;
+	private List<FilterElement> localFilters;
 
 	// private final VideoCapture movie = null;
 	private VideoWriter outputVideo;
@@ -111,6 +114,17 @@ public class MovieProcessor {
 		currentPos = 1;
 	}
 
+	public void applyLocalFilters(List<FilterElement> filterListData) {
+		localFilters = filterListData;
+		if (localFilters != null && !localFilters.isEmpty()) {
+			for (FilterElement element : localFilters) {
+				if (element.filter != null) {
+					element.filter.configure(frame);
+				}
+			}
+		}
+	}
+
 	public void processStreamFrame(ProcessingListener l) {
 		currentPos = 1;
 
@@ -120,7 +134,20 @@ public class MovieProcessor {
 			for (VideoFilter filter : filters) {
 				// System.out.println("MovieProcessor processStreamFrame " +
 				// filter.getClass().getName());
-				newFrame = filter.process(newFrame, 1);
+				newFrame = filter.process(newFrame, currentPos);
+			}
+			if (localFilters != null && !localFilters.isEmpty()) {
+				for (FilterElement element : localFilters) {
+					if (element.filter != null) {
+						if (element.r.start <= currentPos && currentPos < element.r.end) {
+							// System.out.println("MovieProcessor
+							// processStreamFrame
+							// " +
+							// element.filter);
+							newFrame = element.filter.process(newFrame, currentPos);
+						}
+					}
+				}
 			}
 			if (l != null)
 				l.nextFrameProcessed(newFrame, currentPos);
@@ -194,6 +221,19 @@ public class MovieProcessor {
 						}
 					} else {
 						newFrame = frame;
+					}
+					if (localFilters != null && !localFilters.isEmpty()) {
+						for (FilterElement element : localFilters) {
+							if (element.filter != null) {
+								if (element.r.start <= i && i < element.r.end) {
+									// System.out.println("MovieProcessor
+									// processStreamFrame
+									// " +
+									// element.filter);
+									newFrame = element.filter.process(newFrame, i);
+								}
+							}
+						}
 					}
 
 					if (configuration.doOutput) {
@@ -342,10 +382,13 @@ public class MovieProcessor {
 				// Store temp Video next to output to avoid SSD must be used for
 				// large files.
 				File tempFile = File.createTempFile("video", "." + tempOutputFormat, tempPath);
-				tempVideoFile = new File(new File(configuration.outputVideo).getParentFile(), tempFile.getName());
 				tempFile.deleteOnExit();
+				tempVideoFile = new File(new File(configuration.outputVideo).getParentFile(), tempFile.getName());
+				tempVideoFile.deleteOnExit();
 				tempAudioFile = File.createTempFile("sound", ".mp3", tempPath);
+				tempAudioFile.deleteOnExit();
 				tempMetadataFile = File.createTempFile("metadata", ".properties", tempPath);
+				tempMetadataFile.deleteOnExit();
 			} catch (IOException e) {
 				e.printStackTrace();
 				return false;
@@ -401,6 +444,19 @@ public class MovieProcessor {
 				// System.out.println("MovieProcessor process
 				// "+filter.getClass().getName());
 				newFrame = filter.process(newFrame, frameId);
+			}
+			if (localFilters != null && !localFilters.isEmpty()) {
+				for (FilterElement element : localFilters) {
+					if (element.filter != null) {
+						if (element.r.start <= currentPos && currentPos < element.r.end) {
+							// System.out.println("MovieProcessor
+							// processStreamFrame
+							// " +
+							// element.filter);
+							newFrame = element.filter.process(newFrame, currentPos);
+						}
+					}
+				}
 			}
 			if (l != null)
 				l.nextFrameProcessed(newFrame, currentPos);
@@ -481,5 +537,4 @@ public class MovieProcessor {
 			return devices;
 		return devices;
 	}
-
 }

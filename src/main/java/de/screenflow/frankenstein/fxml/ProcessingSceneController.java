@@ -33,8 +33,11 @@ import org.opencv.core.Range;
 import de.screenflow.frankenstein.Configuration;
 import de.screenflow.frankenstein.MovieProcessor;
 import de.screenflow.frankenstein.ProcessingListener;
+import de.screenflow.frankenstein.vf.FilterElement;
+import de.screenflow.frankenstein.vf.LocalVideoFilter;
 import de.screenflow.frankenstein.vf.VideoFilter;
 import de.screenflow.frankenstein.vf.VideoStreamSource;
+import de.screenflow.frankenstein.vf.local.BWFilter;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -76,7 +79,7 @@ public class ProcessingSceneController implements ProcessingListener {
 	private int markPosition = -1;
 	private int seekPos;
 
-	private double fps;
+	public double fps;
 	private int frames;
 
 	private FilterElement selectedFilter;
@@ -91,6 +94,11 @@ public class ProcessingSceneController implements ProcessingListener {
 
 	public final ObservableList<FilterElement> filterListData = FXCollections.observableArrayList();
 
+	boolean streamRunning = false;
+
+	private List<LocalVideoFilter> localFilters;
+
+	
 	@FXML
 	BorderPane rootBorder;
 
@@ -208,6 +216,9 @@ public class ProcessingSceneController implements ProcessingListener {
 			}
 		});
 
+		localFilters = new ArrayList<LocalVideoFilter>();
+		localFilters.add(new BWFilter());
+		
 		updateDuration();
 
 		Platform.runLater(() -> {
@@ -525,7 +536,7 @@ public class ProcessingSceneController implements ProcessingListener {
 		}
 	}
 
-	private String time(double t) {
+	public String time(double t) {
 		try {
 			LocalTime lt = LocalTime.ofNanoOfDay((long) (t * 1000000000.0));
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss.SS");
@@ -674,8 +685,6 @@ public class ProcessingSceneController implements ProcessingListener {
 		});
 	}
 
-	boolean streamRunning = false;
-
 	@FXML
 	public void startButtonPressed() {
 		if (streamRunning) {
@@ -815,7 +824,7 @@ public class ProcessingSceneController implements ProcessingListener {
 
 	@FXML
 	public void filterAdd() {
-		FilterElement val = new FilterElement(currentRange());
+		FilterElement val = new FilterElement(currentRange(), this);
 		filterListData.add(val);
 		Platform.runLater(() -> {
 			drawEditCanvas();
@@ -825,18 +834,23 @@ public class ProcessingSceneController implements ProcessingListener {
 	@FXML
 	public void filterSetup() {
 
-		FilterSetupController controller = new FilterSetupController();
 		PropertyResourceBundle bundleConfiguration = (PropertyResourceBundle) ResourceBundle
 				.getBundle("de/screenflow/frankenstein/bundles/filtersetup", FxMain.getLocale());
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("FilterSetupPopup.fxml"), bundleConfiguration);
 		Stage stage = new Stage();
 		try {
 			stage.setScene(new Scene(loader.load()));
+			FilterSetupController controller = (FilterSetupController) loader.getController();
+			controller.configure(this, stage);
 			stage.setTitle("Edit filter " + selectedFilter.toStringRange());
 			stage.initModality(Modality.APPLICATION_MODAL);
 			stage.initOwner(btnListFilter.getScene().getWindow());
 			stage.showAndWait();
+			LocalVideoFilter f = controller.getSelectedFilterType().getInstance();
+			selectedFilter.setType(f);
+			processor.applyLocalFilters(filterListData);
 			Platform.runLater(() -> {
+				listViewFilter.refresh();
 				drawEditCanvas();
 			});
 		} catch (IOException e) {
@@ -851,23 +865,6 @@ public class ProcessingSceneController implements ProcessingListener {
 		Platform.runLater(() -> {
 			drawEditCanvas();
 		});
-	}
-
-	class FilterElement {
-		Range r;
-		VideoFilter filter = null;
-
-		FilterElement(Range r) {
-			FilterElement.this.r = r;
-		}
-
-		public String toString() {
-			return toStringRange() + " " + (filter != null ? filter : "<none>");
-		}
-
-		public String toStringRange() {
-			return "" + time((r.start - 1.0) / fps) + "-" + time((r.end - 1.0) / fps) + " " + r.toString();
-		}
 	}
 
 	@FXML
@@ -925,6 +922,10 @@ public class ProcessingSceneController implements ProcessingListener {
 			}
 		};
 		new Thread(r).start();
+	}
+
+	public List<LocalVideoFilter> getLocalFilters() {
+		return localFilters;
 	}
 
 }
