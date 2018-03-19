@@ -1,10 +1,14 @@
 # Frankenstein VR
 Free Video Converter for Virtual Reality and 3D based on ffmpeg and OpenCV for Java.
-An open source platform for OpenCV-based video filters.
+It's a small open source platform for OpenCV-based video filters, that can be pluged into the processing pipeline:
+
+
 
 Frankenstein VR can e.g. be used to convert anaglyph or side-by-side 3D videos for VR display. 
 The output can be perfectly viewed in 3D with video players like [LittlStar](http://littlstar.info). 
 It appears there on a virtual 160-inch curved 3D display.
+
+<img src="doc/pipeline.png" width="100%">
 
 [![Build Status](https://travis-ci.org/olir/Frankenstein.png)](https://travis-ci.org/olir/Frankenstein/builds) [![Dependency Status](https://www.versioneye.com/user/projects/594a6802368b0800421af505/badge.svg?style=flat-square)](https://www.versioneye.com/user/projects/594a6802368b0800421af505)
 [![Maven Central](https://maven-badges.herokuapp.com/maven-central/de.screenflow/frankenstein/badge.png)](https://maven-badges.herokuapp.com/maven-central/de.screenflow/frankenstein)
@@ -18,7 +22,9 @@ I have uploaded some samples to vimeo: <a href="https://vimeo.com/user68089135">
 
 ## Status
 Latest Release: 0.1 - Windows only (Developed/Tested on a Windows 10 64bit)
+
 Master branch (0.2): Cam and network stream support.
+
 For current or full status see [Release Notes](https://github.com/olir/Frankenstein/blob/master/RELEASE-NOTES.md). 
 
 Install Pre-Requisites first (see below), then you have 3 options to start it:
