@@ -139,13 +139,11 @@ public class MovieProcessor {
 			if (localFilters != null && !localFilters.isEmpty()) {
 				for (FilterElement element : localFilters) {
 					if (element.filter != null) {
-						if (element.r.start <= currentPos && currentPos < element.r.end) {
-							// System.out.println("MovieProcessor
-							// processStreamFrame
-							// " +
-							// element.filter);
-							newFrame = element.filter.process(newFrame, currentPos);
-						}
+						// System.out.println("MovieProcessor
+						// processStreamFrame
+						// " +
+						// element.filter);
+						newFrame = element.filter.process(newFrame, currentPos);
 					}
 				}
 			}

@@ -1,271 +1,281 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-	<modelVersion>4.0.0</modelVersion>
+  <modelVersion>4.0.0</modelVersion>
 
-	<!-- Version Dependency Chaining -->
-	<properties>
-		<version>0.1.1-SNAPSHOT</version>
-		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-		<maven.compiler.source>1.8</maven.compiler.source>
-		<maven.compiler.target>1.8</maven.compiler.target>
-		<manifest.Codebase>*</manifest.Codebase>
-		<jnlp.URL>https://github.com/olir/Frankenstein/releases/download/${version}</jnlp.URL>
-		<mainClass>de.screenflow.frankenstein.Main</mainClass>
-		<jks.keystore>${project.basedir}/src/main/jnlp/dummy-keystore</jks.keystore>
-		<jks.keypass>pass01</jks.keypass>
-		<jks.storePass>pass01</jks.storePass>
-		<jks.alias>webstart</jks.alias>
-	</properties>
+  <!-- Version Dependency Chaining -->
+  <properties>
+    <version>0.1.1-SNAPSHOT</version>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
+    <manifest.Codebase>*</manifest.Codebase>
+    <jnlp.URL>https://github.com/olir/Frankenstein/releases/download/${version}</jnlp.URL>
+    <mainClass>de.screenflow.frankenstein.Main</mainClass>
+    <jks.keystore>${project.basedir}/src/main/jnlp/dummy-keystore</jks.keystore>
+    <jks.keypass>pass01</jks.keypass>
+    <jks.storePass>pass01</jks.storePass>
+    <jks.alias>webstart</jks.alias>
+  </properties>
 
-	<!-- Maven Coordinates -->
-	<groupId>de.screenflow</groupId>
-	<artifactId>frankenstein</artifactId>
-	<version>${version}</version>
-	
+  <!-- Maven Coordinates -->
+  <groupId>de.screenflow</groupId>
+  <artifactId>frankenstein</artifactId>
+  <version>${version}</version>
 
-	<prerequisites>
-		<maven>3.2.5</maven>
-	</prerequisites>
+  <prerequisites>
+    <maven>3.2.5</maven>
+  </prerequisites>
 
-	<scm>
-		<connection>scm:git:https://github.com/olir/frankenstein.git</connection>
-		<developerConnection>scm:git:https://github.com/olir/frankenstein.git</developerConnection>
-		<url>https://github.com/olir/frankenstein.git</url>
-		<tag>HEAD</tag>
-	</scm>
+  <scm>
+    <connection>scm:git:https://github.com/olir/frankenstein.git</connection>
+    <developerConnection>scm:git:https://github.com/olir/frankenstein.git</developerConnection>
+    <url>https://github.com/olir/frankenstein.git</url>
+    <tag>HEAD</tag>
+  </scm>
 
-	<!-- set version then mvn clean deploy, then check at https://oss.sonatype.org/
-		, Select Staging Repositories, select entry, close, release. in case of error
-		check http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22nexus-staging-maven-plugin%22
-		for latest version. -->
-	<distributionManagement>
-		<snapshotRepository>
-			<id>ossrh</id>
-			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
-		</snapshotRepository>
-		<repository>
-			<id>ossrh</id>
-			<url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
-		</repository>
-	</distributionManagement>
+  <!-- set version then mvn clean deploy, then check at https://oss.sonatype.org/
+    , Select Staging Repositories, select entry, close, release. in case of error
+    check http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22nexus-staging-maven-plugin%22
+    for latest version. -->
+  <distributionManagement>
+    <snapshotRepository>
+      <id>ossrh</id>
+      <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+    </snapshotRepository>
+    <repository>
+      <id>ossrh</id>
+      <url>https://oss.sonatype.org/service/local/staging/deploy/maven2</url>
+    </repository>
+  </distributionManagement>
 
-	<!-- More Project Information -->
-	<name>frankenstein</name>
-	<description>Frankenstein VR Video Converter for Virtual Reality and 3D</description>
-	<url>https://github.com/olir/frankenstein</url>
-	<inceptionYear>2017</inceptionYear>
-	<organization>
-		<name>Oliver Rode</name>
-		<url>https://github.com/olir/frankenstein/</url>
-	</organization>
-	<licenses>
-		<license>
-			<name>Apache-2.0</name>
-			<url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-			<distribution>repo</distribution>
-			<comments>
-				Frankenstein VR
-				Copyright 2017 Oliver Rode
-				Licensed under the Apache License, Version 2.0 (the "License");
-			</comments>
-		</license>
-		<license>
-			<name>BSD 3-clause</name>
-			<url>http://www.opencv.org/license.html</url>
-			<distribution>repo</distribution>
-			<comments>
-				license of OpenCV including project	https://github.com/openpnp/opencv
-			</comments>
-		</license>
-		<license>
-			<name>GNU LGPL, Version 2.1</name>
-			<url>http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html</url>
-			<distribution>repo</distribution>
-			<comments>
-				FFmpeg is licensed under the GNU Lesser General Public License (LGPL) version 2.1 or later.
-				On Windows OpenCV uses pre-built ffmpeg binaries, built with proper flags (without GPL components) and
-				wrapped with simple, stable OpenCV-compatible API.
-				The binaries are opencv_ffmpeg.dll (version for 32-bit Windows) and
-				opencv_ffmpeg_64.dll (version for 64-bit Windows).
-			</comments>
-		</license>
-	</licenses>
-	<issueManagement>
-		<url>https://github.com/olir/frankenstein/issues</url>
-		<system>github</system>
-	</issueManagement>
-	<developers>
-		<developer>
-			<id>olir</id>
-			<name>Oliver Rode</name>
-			<url>https://github.com/olir</url>
-			<roles>
-				<role>project administrator</role>
-				<role>architect</role>
-				<role>developer</role>
-			</roles>
-			<timezone>Europe/Berlin</timezone>
-		</developer>
-	</developers>
-	<contributors>
-		<!-- No credits so far. -->
-	</contributors>
+  <!-- More Project Information -->
+  <name>frankenstein</name>
+  <description>Frankenstein VR Video Converter for Virtual Reality and 3D</description>
+  <url>https://github.com/olir/frankenstein</url>
+  <inceptionYear>2017</inceptionYear>
+  <organization>
+    <name>Oliver Rode</name>
+    <url>https://github.com/olir/frankenstein/</url>
+  </organization>
+  <licenses>
+    <license>
+      <name>Apache-2.0</name>
+      <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+      <distribution>repo</distribution>
+      <comments>
+        Frankenstein VR
+        Copyright 2017 Oliver Rode
+        Licensed under the Apache License, Version 2.0 (the "License");
+      </comments>
+    </license>
+    <license>
+      <name>BSD 3-clause</name>
+      <url>http://www.opencv.org/license.html</url>
+      <distribution>repo</distribution>
+      <comments>
+        license of OpenCV including project  https://github.com/openpnp/opencv
+      </comments>
+    </license>
+    <license>
+      <name>GNU LGPL, Version 2.1</name>
+      <url>http://www.gnu.org/licenses/old-licenses/lgpl-2.1.html</url>
+      <distribution>repo</distribution>
+      <comments>
+        FFmpeg is licensed under the GNU Lesser General Public License (LGPL) version 2.1 or later.
+        On Windows OpenCV uses pre-built ffmpeg binaries, built with proper flags (without GPL components) and
+        wrapped with simple, stable OpenCV-compatible API.
+        The binaries are opencv_ffmpeg.dll (version for 32-bit Windows) and
+        opencv_ffmpeg_64.dll (version for 64-bit Windows).
+      </comments>
+    </license>
+  </licenses>
+  <issueManagement>
+    <url>https://github.com/olir/frankenstein/issues</url>
+    <system>github</system>
+  </issueManagement>
+  <developers>
+    <developer>
+      <id>olir</id>
+      <name>Oliver Rode</name>
+      <url>https://github.com/olir</url>
+      <roles>
+        <role>project administrator</role>
+        <role>architect</role>
+        <role>developer</role>
+      </roles>
+      <timezone>Europe/Berlin</timezone>
+    </developer>
+  </developers>
+  <contributors>
+    <!-- No credits so far. -->
+  </contributors>
 
-	<repositories>
-	    <repository>
-		<id>javaopencvbook</id>
-		<url>https://raw.github.com/JavaOpenCVBook/code/maven2/</url>
-	    </repository>
-	</repositories>
+  <repositories>
+      <repository>
+    <id>javaopencvbook</id>
+    <url>https://raw.github.com/JavaOpenCVBook/code/maven2/</url>
+      </repository>
+  </repositories>
 
-	<!-- POM Relationships -->
-	<dependencies>
-		<dependency>
-		    <groupId>org.openpnp</groupId>
-		    <artifactId>opencv</artifactId>
-		    <version>3.2.0-1</version>
-		</dependency>
-		
-	</dependencies>
+  <!-- POM Relationships -->
+  <dependencies>
+    <dependency>
+        <groupId>org.openpnp</groupId>
+        <artifactId>opencv</artifactId>
+        <version>3.2.0-1</version>
+    </dependency>
+    <!-- AI Submodul
+    <dependency>
+      <groupId>ml.dmlc.mxnet</groupId>
+      <artifactId>mxnet-full_2.10-linux-x86_64-gpu</artifactId>
+      <version>0.1.1</version>
+    </dependency>
+    <dependency>
+      <groupId>ml.dmlc.mxnet</groupId>
+      <artifactId>mxnet-core_2.10</artifactId>
+      <version>0.1.1</version>
+    </dependency>
+    -->
+  </dependencies>
 
-	<!-- Build Settings -->
-	<build>
-		<resources>
-			<resource>
-				<filtering>false</filtering>
-				<directory>${basedir}/src/main/java</directory>
-				<includes>
-					<include>**/*.fxml</include>
-				</includes>
-			</resource>
-			<resource>
-				<filtering>false</filtering>
-				<directory>${basedir}/src/main/resources</directory>
-				<includes>
-					<include>**/*.*</include>
-				</includes>
-			</resource>
-		</resources>
+  <!-- Build Settings -->
+  <build>
+    <resources>
+      <resource>
+        <filtering>false</filtering>
+        <directory>${basedir}/src/main/java</directory>
+        <includes>
+          <include>**/*.fxml</include>
+        </includes>
+      </resource>
+      <resource>
+        <filtering>false</filtering>
+        <directory>${basedir}/src/main/resources</directory>
+        <includes>
+          <include>**/*.*</include>
+        </includes>
+      </resource>
+    </resources>
 
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.6.2</version>
-				<configuration>
-					<source>1.8</source>
-					<target>1.8</target>
-					<encoding>UTF-8</encoding><!-- try to force encoding -->
-				</configuration>
-			</plugin>
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.6.2</version>
+        <configuration>
+          <source>1.8</source>
+          <target>1.8</target>
+          <encoding>UTF-8</encoding><!-- try to force encoding -->
+        </configuration>
+      </plugin>
 
-			<plugin>
-			    <groupId>org.apache.maven.plugins</groupId>
-			    <artifactId>maven-jar-plugin</artifactId>
-				<version>3.0.2</version>
-			    <executions>
-				<execution>
-					<id>default-jar</id>
-				    <phase>compile</phase>
-				    <goals>
-					<goal>jar</goal>
-				    </goals>
-				    <configuration>
-						<outputDirectory>
-							${project.basedir}/target/jws
-						</outputDirectory>
-					</configuration>
-				</execution>
-			    </executions>
-			</plugin>
-			
-			<plugin>
-				<artifactId>maven-assembly-plugin</artifactId>
-				<executions>
-				  <execution>
-					<phase>package</phase>
-					<goals>
-					  <goal>single</goal>
-					</goals>
-				  </execution>
-				</executions>
-				<configuration>
-					<descriptorRefs>
-						<descriptorRef>jar-with-dependencies</descriptorRef>
-					</descriptorRefs>
-					<finalName>frankenstein</finalName>
-					<appendAssemblyId>false</appendAssemblyId>
-					<archive>
-						<manifest>
-							<mainClass>
-								${mainClass}
-							</mainClass>
-					    </manifest>
-						<manifestEntries>
-						  <application-name>Frankenstein VR</application-name>
-						  <permissions>all-permissions</permissions>
-						  <codebase>${manifest.Codebase}</codebase>
-						</manifestEntries>
-					</archive>
-				</configuration>
-			</plugin>
-			
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>exec-maven-plugin</artifactId>
-				<version>1.6.0</version>
-				<executions>
-					<execution>
-						<id>default-cli</id>
-						<goals>
-							<goal>exec</goal>
-						</goals>
-						<configuration>
-							<executable>javaw</executable>
-							<!-- ffmpeg dll must be present: -->
-							<workingDirectory>${basedir}/src/main/resources</workingDirectory>
-							<arguments>
-								<argument>-jar</argument>
-								<argument>${basedir}/target/frankenstein.jar</argument>
-							</arguments>
-						</configuration>                        
-					</execution>
-				</executions>
-			</plugin>        
-			
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>webstart-maven-plugin</artifactId> 
-				<version>1.0-beta-7</version>
-				<executions>
-					<execution>
-						<id>package</id>
-						<phase>install</phase>
-						<goals>
-							<goal>jnlp</goal>
-						</goals>
-						<configuration>
-							<codebase>${jnlp.URL}/</codebase>
-							<jnlp>
-								<mainClass>${mainClass}</mainClass>
-							</jnlp>
-							<pack200><enabled>false</enabled></pack200>
-							<sign>
-								<keystore>${jks.keystore}</keystore>
-								<keypass>${jks.keypass}</keypass>
-								<storepass>${jks.storePass}</storepass>
-								<alias>${jks.alias}</alias>
-								<verify>true</verify>
-							</sign>
-							<unsignAlreadySignedJars>true</unsignAlreadySignedJars>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-			
-		</plugins>
-	</build>
+      <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-jar-plugin</artifactId>
+        <version>3.0.2</version>
+          <executions>
+        <execution>
+          <id>default-jar</id>
+            <phase>compile</phase>
+            <goals>
+          <goal>jar</goal>
+            </goals>
+            <configuration>
+            <outputDirectory>
+              ${project.basedir}/target/jws
+            </outputDirectory>
+          </configuration>
+        </execution>
+          </executions>
+      </plugin>
+      
+      <plugin>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <executions>
+          <execution>
+          <phase>package</phase>
+          <goals>
+            <goal>single</goal>
+          </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <descriptorRefs>
+            <descriptorRef>jar-with-dependencies</descriptorRef>
+          </descriptorRefs>
+          <finalName>frankenstein</finalName>
+          <appendAssemblyId>false</appendAssemblyId>
+          <archive>
+            <manifest>
+              <mainClass>
+                ${mainClass}
+              </mainClass>
+              </manifest>
+            <manifestEntries>
+              <application-name>Frankenstein VR</application-name>
+              <permissions>all-permissions</permissions>
+              <codebase>${manifest.Codebase}</codebase>
+            </manifestEntries>
+          </archive>
+        </configuration>
+      </plugin>
+      
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>1.6.0</version>
+        <executions>
+          <execution>
+            <id>default-cli</id>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+            <configuration>
+              <executable>javaw</executable>
+              <!-- ffmpeg dll must be present: -->
+              <workingDirectory>${basedir}/src/main/resources</workingDirectory>
+              <arguments>
+                <argument>-jar</argument>
+                <argument>${basedir}/target/frankenstein.jar</argument>
+              </arguments>
+            </configuration>                        
+          </execution>
+        </executions>
+      </plugin>        
+      
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>webstart-maven-plugin</artifactId> 
+        <version>1.0-beta-7</version>
+        <executions>
+          <execution>
+            <id>package</id>
+            <phase>install</phase>
+            <goals>
+              <goal>jnlp</goal>
+            </goals>
+            <configuration>
+              <codebase>${jnlp.URL}/</codebase>
+              <jnlp>
+                <mainClass>${mainClass}</mainClass>
+              </jnlp>
+              <pack200><enabled>false</enabled></pack200>
+              <sign>
+                <keystore>${jks.keystore}</keystore>
+                <keypass>${jks.keypass}</keypass>
+                <storepass>${jks.storePass}</storepass>
+                <alias>${jks.alias}</alias>
+                <verify>true</verify>
+              </sign>
+              <unsignAlreadySignedJars>true</unsignAlreadySignedJars>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      
+    </plugins>
+  </build>
 
 </project>
