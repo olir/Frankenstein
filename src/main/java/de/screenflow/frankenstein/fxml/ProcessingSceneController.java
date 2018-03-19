@@ -34,11 +34,11 @@ import de.screenflow.frankenstein.Configuration;
 import de.screenflow.frankenstein.MovieProcessor;
 import de.screenflow.frankenstein.ProcessingListener;
 import de.screenflow.frankenstein.vf.FilterElement;
-import de.screenflow.frankenstein.vf.LocalVideoFilter;
+import de.screenflow.frankenstein.vf.SegmentVideoFilter;
 import de.screenflow.frankenstein.vf.VideoFilter;
 import de.screenflow.frankenstein.vf.VideoStreamSource;
-import de.screenflow.frankenstein.vf.local.BWFilter;
-import de.screenflow.frankenstein.vf.local.StereoDistanceFilter;
+import de.screenflow.frankenstein.vf.segment.BWFilter;
+import de.screenflow.frankenstein.vf.segment.StereoDistanceFilter;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -97,7 +97,7 @@ public class ProcessingSceneController implements ProcessingListener {
 
 	boolean streamRunning = false;
 
-	private List<LocalVideoFilter> localFilters;
+	private List<SegmentVideoFilter> localFilters;
 
 	
 	@FXML
@@ -217,7 +217,7 @@ public class ProcessingSceneController implements ProcessingListener {
 			}
 		});
 
-		localFilters = new ArrayList<LocalVideoFilter>();
+		localFilters = new ArrayList<SegmentVideoFilter>();
 		localFilters.add(new BWFilter());
 		localFilters.add(new StereoDistanceFilter());
 		
@@ -848,7 +848,7 @@ public class ProcessingSceneController implements ProcessingListener {
 			stage.initModality(Modality.APPLICATION_MODAL);
 			stage.initOwner(btnListFilter.getScene().getWindow());
 			stage.showAndWait();
-			LocalVideoFilter f = controller.getSelectedFilterInstance();
+			SegmentVideoFilter f = controller.getSelectedFilterInstance();
 			selectedFilter.setType(f);
 			processor.applyLocalFilters(filterListData);
 			Platform.runLater(() -> {
@@ -926,7 +926,7 @@ public class ProcessingSceneController implements ProcessingListener {
 		new Thread(r).start();
 	}
 
-	public List<LocalVideoFilter> getLocalFilters() {
+	public List<SegmentVideoFilter> getLocalFilters() {
 		return localFilters;
 	}
 

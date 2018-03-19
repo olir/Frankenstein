@@ -6,7 +6,7 @@ import de.screenflow.frankenstein.fxml.ProcessingSceneController;
 
 public class FilterElement {
 	public Range r;
-	public LocalVideoFilter filter = null;
+	public SegmentVideoFilter filter = null;
 	ProcessingSceneController psc;
 	
 	public FilterElement(Range r, ProcessingSceneController psc) {
@@ -14,7 +14,7 @@ public class FilterElement {
 		this.psc = psc;
 	}
 
-	public void setType(LocalVideoFilter selectedFilterType) {
+	public void setType(SegmentVideoFilter selectedFilterType) {
 		filter = selectedFilterType;
 	}
 

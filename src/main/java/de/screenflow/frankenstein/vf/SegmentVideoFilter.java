@@ -20,7 +20,7 @@ import java.util.Locale;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 
-public interface LocalVideoFilter extends VideoFilter {
-	LocalVideoFilter createInstance();
+public interface SegmentVideoFilter extends VideoFilter {
+	SegmentVideoFilter createInstance();
 	Scene createConfigurationScene(Locale locale, String stylesheet);
 }

@@ -2,7 +2,7 @@ package de.screenflow.frankenstein.fxml;
 
 import java.net.URL;
 
-import de.screenflow.frankenstein.vf.LocalVideoFilter;
+import de.screenflow.frankenstein.vf.SegmentVideoFilter;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
@@ -17,9 +17,9 @@ public class FilterSetupController {
 
 	private Stage stage;
 
-	private LocalVideoFilter selectedFilter = null;
+	private SegmentVideoFilter selectedFilter = null;
 
-	@FXML ComboBox<LocalVideoFilter> cbFilter;
+	@FXML ComboBox<SegmentVideoFilter> cbFilter;
 
 	@FXML BorderPane bpContainer;
 	
@@ -29,8 +29,8 @@ public class FilterSetupController {
 	
 		cbFilter.getItems().setAll(parent.getLocalFilters());
 		
-		cbFilter.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<LocalVideoFilter>() {
-		      @Override public void changed(ObservableValue<? extends LocalVideoFilter> selected, LocalVideoFilter oldFilter, LocalVideoFilter newFilter) {
+		cbFilter.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<SegmentVideoFilter>() {
+		      @Override public void changed(ObservableValue<? extends SegmentVideoFilter> selected, SegmentVideoFilter oldFilter, SegmentVideoFilter newFilter) {
 		        if (oldFilter != null) {
 		        	bpContainer.setCenter(null);		        	
 		        	selectedFilter = null;
@@ -51,7 +51,7 @@ public class FilterSetupController {
 		stage.close();
 	}
 
-	public LocalVideoFilter getSelectedFilterInstance() {
+	public SegmentVideoFilter getSelectedFilterInstance() {
 		return selectedFilter;
 	}
 

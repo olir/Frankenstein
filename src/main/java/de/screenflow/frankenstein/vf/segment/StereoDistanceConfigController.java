@@ -1,4 +1,4 @@
-package de.screenflow.frankenstein.vf.local;
+package de.screenflow.frankenstein.vf.segment;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Slider;
