@@ -8,9 +8,11 @@ When you work on custom filters, you can concentrate on manipulating images with
 
 The pipeline allows input as video file, camera, network stream or pictures stored as left/right 3D slides (e.g. from nikon camera).
 
-So Frankenstein VR can e.g. be used to convert anaglyph or side-by-side 3D videos for VR display. 
-The output video can be perfectly viewed in 3D with VR Hardware and a video players like [LittlStar](http://littlstar.info). 
+So Frankenstein VR can e.g. be used to convert anaglyph or side-by-side 3D videos for VR display,
+ and the output video can be perfectly viewed in 3D with VR Hardware and a video players like [LittlStar](http://littlstar.info). 
 VR videos appear like displayed on a virtual 160-inch curved 3D display in front of you.
+
+3D is optional.Hence, Frankenstein VR can be used solely for classic video processing. It focuses on filters, that are not part of common tools.
 
 ## Screenshots
 <img src="doc/config.png" width="45%"> <img src="doc/processing.png" width="45%" />
