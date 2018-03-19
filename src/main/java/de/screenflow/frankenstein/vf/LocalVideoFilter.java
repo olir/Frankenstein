@@ -15,6 +15,12 @@
  */
 package de.screenflow.frankenstein.vf;
 
+import java.util.Locale;
+
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+
 public interface LocalVideoFilter extends VideoFilter {
-	LocalVideoFilter getInstance();
+	LocalVideoFilter createInstance();
+	Scene createConfigurationScene(Locale locale, String stylesheet);
 }

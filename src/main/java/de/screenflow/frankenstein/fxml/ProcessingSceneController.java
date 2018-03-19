@@ -38,6 +38,7 @@ import de.screenflow.frankenstein.vf.LocalVideoFilter;
 import de.screenflow.frankenstein.vf.VideoFilter;
 import de.screenflow.frankenstein.vf.VideoStreamSource;
 import de.screenflow.frankenstein.vf.local.BWFilter;
+import de.screenflow.frankenstein.vf.local.StereoDistanceFilter;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -218,6 +219,7 @@ public class ProcessingSceneController implements ProcessingListener {
 
 		localFilters = new ArrayList<LocalVideoFilter>();
 		localFilters.add(new BWFilter());
+		localFilters.add(new StereoDistanceFilter());
 		
 		updateDuration();
 
@@ -846,7 +848,7 @@ public class ProcessingSceneController implements ProcessingListener {
 			stage.initModality(Modality.APPLICATION_MODAL);
 			stage.initOwner(btnListFilter.getScene().getWindow());
 			stage.showAndWait();
-			LocalVideoFilter f = controller.getSelectedFilterType().getInstance();
+			LocalVideoFilter f = controller.getSelectedFilterInstance();
 			selectedFilter.setType(f);
 			processor.applyLocalFilters(filterListData);
 			Platform.runLater(() -> {
