@@ -21,7 +21,6 @@ import java.io.IOException;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
@@ -37,8 +36,6 @@ import de.screenflow.frankenstein.vf.FilterElement;
 import de.screenflow.frankenstein.vf.SegmentVideoFilter;
 import de.screenflow.frankenstein.vf.VideoFilter;
 import de.screenflow.frankenstein.vf.VideoStreamSource;
-import de.screenflow.frankenstein.vf.segment.BWFilter;
-import de.screenflow.frankenstein.vf.segment.StereoDistanceFilter;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -96,8 +93,6 @@ public class ProcessingSceneController implements ProcessingListener {
 	public final ObservableList<FilterElement> filterListData = FXCollections.observableArrayList();
 
 	boolean streamRunning = false;
-
-	private List<SegmentVideoFilter> localFilters;
 
 	
 	@FXML
@@ -217,10 +212,6 @@ public class ProcessingSceneController implements ProcessingListener {
 			}
 		});
 
-		localFilters = new ArrayList<SegmentVideoFilter>();
-		localFilters.add(new BWFilter());
-		localFilters.add(new StereoDistanceFilter());
-		
 		updateDuration();
 
 		Platform.runLater(() -> {
@@ -927,7 +918,8 @@ public class ProcessingSceneController implements ProcessingListener {
 	}
 
 	public List<SegmentVideoFilter> getLocalFilters() {
-		return localFilters;
+		return main.getLocalFilters();
 	}
+	
 
 }

@@ -76,3 +76,8 @@ Soundtrack: "Never Again" by Spender
 LICENSED AS
 
 https://creativecommons.org/licenses/by/3.0/
+
+----------------------
+Some images for docs taken from https://pixabay.com/de/
+licenensed under CC0
+https://creativecommons.org/publicdomain/zero/1.0/deed

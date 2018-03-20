@@ -23,12 +23,7 @@ public class BWFilter extends DefaultSegmentFilter<BWConfigController> {
 	Mat grayFrame;
 
 	public BWFilter() {
-		super("bw", "Black & White");
-	}
-
-	@Override
-	public Mat configure(Mat sourceFrame) {
-		return sourceFrame;
+		super("bw");
 	}
 
 	@Override

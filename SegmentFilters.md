@@ -8,9 +8,121 @@
 
 ## Howto create a new filter
 
+## Overview
 A filter is made of the following parts:
-* filter class - contains the image manipulation
-* filter configuration controller class - a fxml contoller
-* fxml layout file - sub layout for configuration of the filter
+* controller class for the filter configuration editor - a fxml contoller
 * property files with localized text
+* fxml layout file for the filter configuration editor - sub layout for configuration of the filter instances
+* filter class - contains the image manipulation.
+
+The easiest way is to create the filter class is to extend de.screenflow.frankenstein.vf.segment.DefaultSegmentFilter.
+DefaultSegmentFilter expects all the classes and resources to be placed in the same package.
+Look at de.screenflow.frankenstein.vf.segment.BWFilter for an example. 
+
+## Step 1: Create a controller class for the filter configuration editor
+
+Start with an empty class. You can place fxml handling code there later:
+
+__samplefilters/SampleConfigController.java__
+```java
+package samplefilters;
+
+public class SampleConfigController {
+
+}
+```
+
+
+## Step 2: Create property files
+
+The property files are required to store localized text of you Controller Configuration Editor.
+The default property file is mandatory and should contain english text. It *must* contain a property 
+__name__ mapped to the display name of the filter.
+
+The file name is based on an unique identifier for you filter resources.
+In this example i choose __sample__
+Place it the proper resource package with the suffix .properties
+
+
+__samplefilters/sample.properties__
+```java
+name=Sample
+message=No configuration options.
+```
+
+You may add localized versions of the file like this:
+
+__samplefilters/sample_de.properties__
+```
+name=Beispiel
+message=Keine Einstellungenoptionen.
+```
+
+
+## Step 3: Create a new fxml layout file. Notice: Eclipse FX-Editions have a SceneBuilder.
+
+Start by copying the following example and change the controller class reference to yours from step 1.
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.BorderPane?>
+
+<BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="samplefilters.SampleConfigController">
+   <center>
+   </center>
+   <center>
+      <Label text="%message" BorderPane.alignment="CENTER">
+         <font>
+            <Font name="System Italic" size="14.0" />
+         </font></Label>
+   </center>
+</BorderPane>
+```
+
+In the example above the property __message__ from step 2 is used, by using the __%__ operator.
+
+
+## Step 4: Create Filter Class
+
+Now create the filter class:
+
+__samplefilters/SampleFilter.java__
+```java
+package samplefilters;
+
+import org.opencv.core.Mat;
+import de.screenflow.frankenstein.vf.segment.DefaultSegmentFilter;
+
+public class SampleFilter extends DefaultSegmentFilter<SampleConfigController> {
+
+	public SampleFilter() {
+		super("sample");
+	}
+	
+	@Override
+	public Mat process(Mat sourceFrame, int frameId) {
+		// TODO: Your open OpenCV code here ...
+		return sourceFrame;
+	}
+
+	@Override
+	protected void initializeController() {
+		// optional TODO ...
+		
+	}
+}
+```
+
+
+## Step 5: Finally add filter to the list
+
+Append list in FxMain.createSegmentFilters()
+
 

@@ -16,10 +16,12 @@
 package de.screenflow.frankenstein.vf.segment;
 
 import java.io.IOException;
-import java.util.Locale;
 import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 
+import org.opencv.core.Mat;
+
+import de.screenflow.frankenstein.fxml.FxMain;
 import de.screenflow.frankenstein.vf.SegmentVideoFilter;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -28,17 +30,19 @@ public abstract class DefaultSegmentFilter<C> implements SegmentVideoFilter {
 	private C configController = null;
 
 	private final String identifier;
-	private final String displayName;
-	
-	protected DefaultSegmentFilter(String identifier, String displayName) {
+	private final PropertyResourceBundle bundleConfiguration;
+
+	protected DefaultSegmentFilter(String identifier) {
 		this.identifier = identifier;
-		this.displayName = displayName;
+
+		bundleConfiguration = (PropertyResourceBundle) ResourceBundle
+				.getBundle(getClass().getPackage().getName().replace('.', '/') + '/' + identifier, FxMain.getLocale());
 	}
-	
+
 	public final String toString() {
-		return displayName;
+		return bundleConfiguration.getString("name");
 	}
-	
+
 	@Override
 	public final SegmentVideoFilter createInstance() {
 		try {
@@ -48,11 +52,8 @@ public abstract class DefaultSegmentFilter<C> implements SegmentVideoFilter {
 		}
 	}
 
-	
 	@Override
-	public final Scene createConfigurationScene(Locale locale, String stylesheet) {
-		PropertyResourceBundle bundleConfiguration = (PropertyResourceBundle) ResourceBundle
-				.getBundle(getClass().getPackage().getName().replace('.', '/') + '/' + identifier, locale);
+	public final Scene createConfigurationScene(String stylesheet) {
 		FXMLLoader loader = new FXMLLoader(getClass().getResource(identifier + ".fxml"), bundleConfiguration);
 		try {
 			loader.load();
@@ -65,12 +66,15 @@ public abstract class DefaultSegmentFilter<C> implements SegmentVideoFilter {
 		initializeController(); // custom initialization possible here
 		return scene;
 	}
-	
+
 	abstract protected void initializeController();
 
 	protected final C getConfigController() {
 		return configController;
 	}
-	
-	
+
+	@Override
+	public final Mat configure(Mat firstFrame) {
+		return firstFrame;
+	}
 }

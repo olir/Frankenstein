@@ -39,7 +39,7 @@ public class FilterSetupController {
 		        	selectedFilter = newFilter.createInstance();
 		    		URL url = getClass().getResource("application.css");
 		    		String stylesheet = url.toExternalForm();
-		        	Scene scene = selectedFilter.createConfigurationScene(FxMain.getLocale(), stylesheet);
+		        	Scene scene = selectedFilter.createConfigurationScene(stylesheet);
 		        	bpContainer.setCenter(scene.getRoot());		        	
 		        }
 		      }

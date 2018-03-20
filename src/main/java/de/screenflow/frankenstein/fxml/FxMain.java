@@ -16,18 +16,24 @@
 package de.screenflow.frankenstein.fxml;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 
 import de.screenflow.frankenstein.Configuration;
 import de.screenflow.frankenstein.MovieProcessor;
+import de.screenflow.frankenstein.vf.SegmentVideoFilter;
+import de.screenflow.frankenstein.vf.segment.BWFilter;
+import de.screenflow.frankenstein.vf.segment.StereoDistanceFilter;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
+import samplefilters.SampleFilter;
 
 public class FxMain extends Application {
 
@@ -37,6 +43,8 @@ public class FxMain extends Application {
 	private ProcessingSceneController pController;
 	private ConfigurationSceneController cController;
 
+	private List<SegmentVideoFilter> segmentFilters;
+	
 	public static final String APP_NAME = "Frankenstein VR";
 
 	private Configuration configuration;
@@ -94,6 +102,8 @@ public class FxMain extends Application {
 	}
 
 	private void buildUI() {
+		createSegmentFilters();
+		
 		BorderPane sceneRoot = null;
 		FXMLLoader loader;
 
@@ -167,10 +177,19 @@ public class FxMain extends Application {
 			theStage.setTitle(APP_NAME);
 	}
 
-
-
 	public static Locale getLocale() {
 		return locale;
+	}
+
+	public List<SegmentVideoFilter> getLocalFilters() {
+		return segmentFilters;
+	}
+
+	public void createSegmentFilters() {
+		segmentFilters = new ArrayList<SegmentVideoFilter>();
+		segmentFilters.add(new BWFilter());
+		segmentFilters.add(new StereoDistanceFilter());
+		segmentFilters.add(new SampleFilter());
 	}
 
 }

@@ -24,12 +24,7 @@ public class StereoDistanceFilter extends DefaultSegmentFilter<StereoDistanceCon
 	private Mat newFrame = null;
 
 	public StereoDistanceFilter() {
-		super("stereodistance", "Stereo Distance");
-	}
-
-	@Override
-	public Mat configure(Mat sourceFrame) {
-		return sourceFrame;
+		super("stereodistance");
 	}
 
 	@Override

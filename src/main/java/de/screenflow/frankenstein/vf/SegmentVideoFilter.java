@@ -15,12 +15,10 @@
  */
 package de.screenflow.frankenstein.vf;
 
-import java.util.Locale;
-
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 
 public interface SegmentVideoFilter extends VideoFilter {
 	SegmentVideoFilter createInstance();
-	Scene createConfigurationScene(Locale locale, String stylesheet);
+
+	Scene createConfigurationScene(String stylesheet);
 }
