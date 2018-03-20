@@ -23,7 +23,7 @@ Look at de.screenflow.frankenstein.vf.segment.BWFilter for an example.
 
 Start with an empty class. You can place fxml handling code there later:
 
-__samplefilters/SampleConfigController.java__
+__samplefilters/SampleConfigController.java:__
 ```java
 package samplefilters;
 
@@ -44,7 +44,7 @@ In this example i choose __sample__
 Place it the proper resource package with the suffix .properties
 
 
-__samplefilters/sample.properties__
+__samplefilters/sample.properties:__
 ```java
 name=Sample
 message=No configuration options.
@@ -52,17 +52,21 @@ message=No configuration options.
 
 You may add localized versions of the file like this:
 
-__samplefilters/sample_de.properties__
+__samplefilters/sample_de.properties:__
 ```
 name=Beispiel
 message=Keine Einstellungenoptionen.
 ```
 
 
-## Step 3: Create a new fxml layout file. Notice: Eclipse FX-Editions have a SceneBuilder.
+## Step 3: Create a new fxml layout file.
+
+Notice: Eclipse JavaFX-Edition has a SceneBuilder.
 
 Start by copying the following example and change the controller class reference to yours from step 1.
 
+
+__samplefilters/sample.fxml:__
 ```xml
 <?xml version="1.0" encoding="UTF-8"?>
 
@@ -93,7 +97,7 @@ In the example above the property __message__ from step 2 is used, by using the 
 
 Now create the filter class:
 
-__samplefilters/SampleFilter.java__
+__samplefilters/SampleFilter.java__:
 ```java
 package samplefilters;
 
