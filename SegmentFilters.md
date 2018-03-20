@@ -125,8 +125,10 @@ public class SampleFilter extends DefaultSegmentFilter<SampleConfigController> {
 ```
 
 
-## Step 5: Finally add filter to the list
+## Step 5: Add filter to the list and use it
 
-Append list in FxMain.createSegmentFilters()
+finally append list in FxMain.createSegmentFilters()
 
-
+Now you can test the filter, by start Frankenstein VR and configure something, then on the progress scene
+move slider to starting frame, click __M__, move slider to the end frame, add press __add__, select the freshly added segment, click __edit__,
+select you filter from drop down, optionally configure it and press __ok__. Now you can move the slider inside the segment and the frame preview will show it.
