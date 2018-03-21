@@ -135,24 +135,24 @@ select you filter from drop down, optionally configure it and press __ok__. Now 
 
 ## Advanced: Native Development
 
-* Provide a gcc compiler (choose one):
-** windows 64-bit
-*** Download [mingw](https://sourceforge.net/projects/mingw-w64/).
-*** Install with 'Architecture' option 'x86_64' when prompted at settings.
-*** add ~YourMinGWPath/bin to PATH
-** windows 32-bit
-*** [Instructions & Download](http://www.mingw.org/wiki/Getting_Started)
-*** install gcc package with: mingw-get install gcc
-*** add ~YourMinGWPath/bin to PATH
+**Provide a gcc compiler (choose one):**
+* windows 64-bit
+ 1. Download [mingw](https://sourceforge.net/projects/mingw-w64/).
+ 2. Install with 'Architecture' option 'x86_64' when prompted at settings.
+ 3. Add ~YourMinGWPath/bin to PATH
+* windows 32-bit
+ 1. [Instructions & Download](http://www.mingw.org/wiki/Getting_Started)
+ 2. install gcc package with: mingw-get install gcc
+ 3. Add ~YourMinGWPath/bin to PATH
 
 Build with:
-'''
+```
 cd jnilibrary
 mvn clean package
-'''
+```
 
 Test JNI loading with:
-'''
+```
 java -Djava.library.path=target -cp target/frankenstein-jniplugin-java-0.1.1-SNAPSHOT.jar cc0.NativeCode
-'''
+```
 Some message shoud appear: **Hello from C!**
