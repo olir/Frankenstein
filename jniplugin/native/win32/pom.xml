@@ -28,28 +28,33 @@
   
   <build>
         <plugins>
-        
-            <plugin>
+
+              <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>native-maven-plugin</artifactId>
-				<version>1.0-alpha-8</version>
+                <version>1.0-alpha-8</version>
                 <extensions>true</extensions>
                 <configuration>
                   <!--  trigger javah -->
                   <javahOS>win32</javahOS>
           
                   <compilerProvider>generic-classic</compilerProvider>
-                    <compilerExecutable>gcc</compilerExecutable>
-                    <linkerExecutable>gcc</linkerExecutable>
+                    <compilerExecutable>g++</compilerExecutable>
+                    <linkerExecutable>g++</linkerExecutable>
                     <sources>
                         <source>
                             <directory>../src/main/native</directory>
                             <fileNames>
-                                <fileName>jni_example.c</fileName>
+                                <fileName>jni_example.cpp</fileName>
                             </fileNames>
                         </source>
                     </sources>
 
+                    <!-- some systems need compile flag -m32 -->
+                    <compilerStartOptions>
+                     <compilerStartOption>-I..\include</compilerStartOption>
+                    </compilerStartOptions>
+                    <!-- some systems need link flag -m32 -->
                     <linkerStartOptions>
                      <linkerStartOption>-shared -Wl,--add-stdcall-alias</linkerStartOption>
                     </linkerStartOptions>

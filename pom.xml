@@ -24,6 +24,8 @@
   <version>0.1.1-SNAPSHOT</version>
   <packaging>pom</packaging>
 
+  <name>Frankenstein - POM</name>
+  
   <!-- Native Implementation Plugin -->
   <modules>
     <module>jniplugin</module>
@@ -58,7 +60,6 @@
   </distributionManagement>
 
   <!-- More Project Information -->
-  <name>frankenstein</name>
   <description>Frankenstein VR Video Converter for Virtual Reality and 3D</description>
   <url>https://github.com/olir/frankenstein</url>
   <inceptionYear>2017</inceptionYear>

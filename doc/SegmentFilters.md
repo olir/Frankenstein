@@ -137,11 +137,11 @@ select you filter from drop down, optionally configure it and press __ok__. Now 
 
 **Provide a gcc compiler (choose one):**
 * windows 64-bit
- 1. Download [mingw](https://sourceforge.net/projects/mingw-w64/).
+ 1. Download [mingw](https://sourceforge.net/projects/mingw-w64/) or [archive](https://sourceforge.net/p/mingw-w64/mailman/message/32967954/).
  2. Install with 'Architecture' option 'x86_64' when prompted at settings.
  3. Add ~YourMinGWPath/bin to PATH
 * windows 32-bit
- 1. [Instructions & Download](http://www.mingw.org/wiki/Getting_Started)
+ 1. [Instructions & Download](http://www.mingw.org/wiki/Getting_Started) or [archive](https://sourceforge.net/p/mingw-w64/mailman/message/32967954/)
  2. install gcc package with: mingw-get install gcc
  3. Add ~YourMinGWPath/bin to PATH
 
@@ -153,6 +153,6 @@ mvn clean package
 
 Test JNI loading with:
 ```
-java -Djava.library.path=target -cp target/frankenstein-jniplugin-java-0.1.1-SNAPSHOT.jar cc0.NativeCode
+java -Djava.library.path=target -cp target/jniplugin-java-0.1.1-SNAPSHOT.jar cc0.NativeCode
 ```
 Some message shoud appear: **Hello from C!**
