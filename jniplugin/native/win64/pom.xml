@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+      <groupId>de.screenflow</groupId>
+      <artifactId>frankenstein-jniplugin-native</artifactId>
+      <version>0.1.1-SNAPSHOT</version>
+    </parent>
+
+    <groupId>de.screenflow</groupId>
+    <artifactId>frankenstein-jniplugin-64</artifactId>
+    <version>0.1.1-SNAPSHOT</version>
+    <packaging>dll</packaging>
+
+    <name>Native OpenCV Filters - win64</name>
+    <!-- Credits to http://www.tricoder.net/blog/?p=197 -->
+    
+   <dependencies>
+    <dependency>
+    <groupId>de.screenflow</groupId>
+    <artifactId>frankenstein-jniplugin-java</artifactId>
+    <version>0.1.1-SNAPSHOT</version>
+      <type>jar</type>
+      <scope>compile</scope>
+    </dependency>   
+  </dependencies>
+  
+  <build>
+        <plugins>
+        
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<version>1.4</version>
+				<executions>
+				  <execution>
+					<phase>initialize</phase>
+					<configuration>
+
+					  <tasks>
+						<mkdir dir="./target/objs"/>
+					  </tasks>
+
+					</configuration>
+					<goals>
+					  <goal>run</goal>
+					</goals>
+				  </execution>
+				</executions>
+			</plugin>
+	  
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>native-maven-plugin</artifactId>
+                <extensions>true</extensions>
+                <configuration>
+                  <!--  trigger javah with win32 architecture -->
+                  <javahOS>win32</javahOS>
+          
+                  <compilerProvider>generic-classic</compilerProvider>
+                    <compilerExecutable>gcc</compilerExecutable>
+                    <linkerExecutable>gcc</linkerExecutable>
+                    <sources>
+                        <source>
+                            <directory>../src/main/native</directory>
+                            <fileNames>
+                                <fileName>jni_example.c</fileName>
+                            </fileNames>
+                        </source>
+                    </sources>
+
+                    <linkerStartOptions>
+                     <linkerStartOption>-shared -m64 -Wl,--add-stdcall-alias</linkerStartOption>
+                    </linkerStartOptions>
+
+                </configuration>
+                
+                <executions>
+                 <execution>
+                   <id>javah</id>
+                   <phase>generate-sources</phase>
+                   <configuration>
+                <javahOS>win32</javahOS>
+                <javahProvider>default</javahProvider>
+                <javahOutputDirectory>${project.build.directory}/custom-javah</javahOutputDirectory>
+                <workingDirectory>${basedir}</workingDirectory>
+                <javahOutputFileName>nativeCode.h</javahOutputFileName>
+                <javahClassNames>
+                  <javahClassName>cc0.NativeCode</javahClassName>
+                </javahClassNames>
+                   </configuration>
+                   <goals>
+                     <goal>javah</goal>
+                   </goals>
+                 </execution>
+              </executions>               
+            </plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<version>1.4</version>
+				<executions>
+				  <execution>
+					<id>copy</id>
+					<phase>install</phase>
+					<goals>
+					  <goal>run</goal>
+					</goals>
+					<configuration>
+					  <tasks>
+						<copy todir="../../target" flatten="true">
+							<fileset dir="./target">
+								<include name="*.dll"/>
+							</fileset>
+						</copy>
+					  </tasks>
+					</configuration>
+				  </execution>
+				</executions>
+			</plugin>
+        </plugins>
+    </build>
+</project>
+            

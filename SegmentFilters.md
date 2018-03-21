@@ -132,3 +132,25 @@ finally append list in FxMain.createSegmentFilters()
 Now you can test the filter, by start Frankenstein VR and configure something, then on the progress scene
 move slider to starting frame, click __M__, move slider to the end frame, add press __add__, select the freshly added segment, click __edit__,
 select you filter from drop down, optionally configure it and press __ok__. Now you can move the slider inside the segment and the frame preview will show it.
+
+## Advanced: Native Development
+
+* Provide a gcc compiler (choose one):
+** windows 64-bit
+*** Download [mingw](https://sourceforge.net/projects/mingw-w64/).
+*** Install with 'Architecture' option 'x86_64' when prompted at settings.
+*** add ~YourMinGWPath/bin to PATH
+** windows 32-bit
+*** [Instructions & Download](http://www.mingw.org/wiki/Getting_Started)
+*** install gcc package with: mingw-get install gcc
+*** add ~YourMinGWPath/bin to PATH
+
+'''
+cd jnilibrary
+mvn clean install
+'''
+
+Test loading with
+'''
+java -Djava.library.path=target -cp target/frankenstein-jniplugin-java-0.1.1-SNAPSHOT.jar cc0.NativeCode
+'''

@@ -19,6 +19,13 @@
     <jks.alias>webstart</jks.alias>
   </properties>
 
+  <!-- Native Implementation Plugin -->
+  <!-- 
+  <modules>
+    <module>jniplugin</module>
+  </modules>
+  -->
+
   <!-- Maven Coordinates -->
   <groupId>de.screenflow</groupId>
   <artifactId>frankenstein</artifactId>
