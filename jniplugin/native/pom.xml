@@ -3,27 +3,27 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>de.screenflow</groupId>
-        <artifactId>frankenstein-jniplugin-parent</artifactId>
+        <groupId>de.screenflow.frankenstein</groupId>
+        <artifactId>jniplugin-parent</artifactId>
         <version>0.1.1-SNAPSHOT</version>
     </parent>
 
-    <groupId>de.screenflow</groupId>
-    <artifactId>frankenstein-jniplugin-native</artifactId>
+    <groupId>de.screenflow.frankenstein</groupId>
+    <artifactId>jniplugin-native</artifactId>
     <version>0.1.1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>Native OpenCV Filters - native switch</name>
     <!-- Credits to http://www.tricoder.net/blog/?p=197 -->
     
+	<!-- Check activations with: mvn help:system |grep os -->
    <profiles>
     <profile>
       <id>win32</id>
       <activation>
-        <property>
-          <name>platform</name>
-          <value>win32</value>
-        </property>
+        <os>
+			<family>Windows</family>
+		</os>
       </activation>
       <modules>
         <module>win32</module>

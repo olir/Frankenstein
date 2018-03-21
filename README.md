@@ -5,7 +5,7 @@ It's a small, open-source platform for OpenCV-based video filtering, where custo
 <img src="doc/pipeline.png" width="100%">
 
 When you work on custom filters, you can concentrate on manipulating images with the OpenCV library. 
-For a list of available filters and HOWTO see [SegmentFilters.md](https://github.com/olir/Frankenstein/blob/master/SegmentFilters.md).
+For a list of available filters and HOWTO see [SegmentFilters.md](https://github.com/olir/Frankenstein/blob/master/doc/SegmentFilters.md).
 
 The pipeline allows input as video file, camera, network stream or pictures stored as left/right 3D slides (e.g. from nikon camera).
 
@@ -31,12 +31,12 @@ Latest Release: 0.1 - Windows only (Developed/Tested on a Windows 10 64bit)
 
 Master branch (0.2): Cam and network stream support.
 
-For current or full status see [Release Notes](https://github.com/olir/Frankenstein/blob/master/RELEASE-NOTES.md). 
+For current or full status see [Release Notes](https://github.com/olir/Frankenstein/blob/master/doc/RELEASE-NOTES.md). 
 
 Install Pre-Requisites first (see below), then you have 3 options to start it:
-A) Jar execution: Download and execute the jar file from the release (see section below) 
-B) Java Webstart: You can execute releases with Java Webstart (see section below) 
-C) From Maven: For the current version, use maven and run it with "mvn clean package exec:exec"
+* _Jar execution:_ Download and execute the jar file from the release (see section below) 
+* _Java Webstart:_ You can execute releases with Java Webstart (see section below) 
+* _From Maven:_ For the current version, use maven and run it in app folder with "mvn clean package exec:exec"
 
 # Pre-Requisites
 - [FFmpeg 3.1.1+](https://ffmpeg.org) installed. Select path at first startup (is stored in frankenstein.ini at user-home)

@@ -1,0 +1,191 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <!-- Version Dependency Chaining -->
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
+    <manifest.Codebase>*</manifest.Codebase>
+    <jnlp.URL>https://github.com/olir/Frankenstein/releases/download/${version}</jnlp.URL>
+    <mainClass>de.screenflow.frankenstein.Main</mainClass>
+    <jks.keystore>${project.basedir}/src/main/jnlp/dummy-keystore</jks.keystore>
+    <jks.keypass>pass01</jks.keypass>
+    <jks.storePass>pass01</jks.storePass>
+    <jks.alias>webstart</jks.alias>
+  </properties>
+
+  <parent>
+	<groupId>de.screenflow.frankenstein</groupId>
+	<artifactId>root</artifactId>
+	<version>0.1.1-SNAPSHOT</version>
+  </parent>
+
+	<!-- Maven Coordinates -->
+  <groupId>de.screenflow.frankenstein</groupId>
+  <artifactId>app</artifactId>
+  <version>0.1.1-SNAPSHOT</version>
+
+  <!-- POM Relationships -->
+  <dependencies>
+    <dependency>
+        <groupId>org.openpnp</groupId>
+        <artifactId>opencv</artifactId>
+        <version>3.2.0-1</version>
+    </dependency>
+    <!-- AI Submodul
+    <dependency>
+      <groupId>ml.dmlc.mxnet</groupId>
+      <artifactId>mxnet-full_2.10-linux-x86_64-gpu</artifactId>
+      <version>0.1.1</version>
+    </dependency>
+    <dependency>
+      <groupId>ml.dmlc.mxnet</groupId>
+      <artifactId>mxnet-core_2.10</artifactId>
+      <version>0.1.1</version>
+    </dependency>
+    -->
+  </dependencies>
+
+  <!-- Build Settings -->
+  <build>
+    <resources>
+      <resource>
+        <filtering>false</filtering>
+        <directory>${basedir}/src/main/java</directory>
+        <includes>
+          <include>**/*.fxml</include>
+        </includes>
+      </resource>
+      <resource>
+        <filtering>false</filtering>
+        <directory>${basedir}/src/main/resources</directory>
+        <includes>
+          <include>**/*.*</include>
+        </includes>
+      </resource>
+    </resources>
+
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.7.0</version>
+        <configuration>
+          <source>1.8</source>
+          <target>1.8</target>
+          <encoding>UTF-8</encoding><!-- try to force encoding -->
+        </configuration>
+      </plugin>
+
+      <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-jar-plugin</artifactId>
+        <version>3.0.2</version>
+          <executions>
+        <execution>
+          <id>default-jar</id>
+            <phase>compile</phase>
+            <goals>
+          <goal>jar</goal>
+            </goals>
+            <configuration>
+            <outputDirectory>
+              ${project.basedir}/target/jws
+            </outputDirectory>
+          </configuration>
+        </execution>
+          </executions>
+      </plugin>
+      
+      <plugin>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <executions>
+          <execution>
+          <phase>package</phase>
+          <goals>
+            <goal>single</goal>
+          </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <descriptorRefs>
+            <descriptorRef>jar-with-dependencies</descriptorRef>
+          </descriptorRefs>
+          <finalName>frankenstein</finalName>
+          <appendAssemblyId>false</appendAssemblyId>
+          <archive>
+            <manifest>
+              <mainClass>
+                ${mainClass}
+              </mainClass>
+              </manifest>
+            <manifestEntries>
+              <application-name>Frankenstein VR</application-name>
+              <permissions>all-permissions</permissions>
+              <codebase>${manifest.Codebase}</codebase>
+            </manifestEntries>
+          </archive>
+        </configuration>
+      </plugin>
+      
+	  
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>webstart-maven-plugin</artifactId> 
+        <version>1.0-beta-7</version>
+        <executions>
+          <execution>
+            <id>package</id>
+            <phase>install</phase>
+            <goals>
+              <goal>jnlp</goal>
+            </goals>
+            <configuration>
+              <codebase>${jnlp.URL}/</codebase>
+              <jnlp>
+                <mainClass>${mainClass}</mainClass>
+              </jnlp>
+              <pack200><enabled>false</enabled></pack200>
+              <sign>
+                <keystore>${jks.keystore}</keystore>
+                <keypass>${jks.keypass}</keypass>
+                <storepass>${jks.storePass}</storepass>
+                <alias>${jks.alias}</alias>
+                <verify>true</verify>
+              </sign>
+              <unsignAlreadySignedJars>true</unsignAlreadySignedJars>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+      
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>1.6.0</version>
+        <executions>
+          <execution>
+            <id>default-cli</id>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+            <configuration>
+              <executable>javaw</executable>
+              <workingDirectory>${basedir}/src/main/resources</workingDirectory>
+              <arguments>
+                <argument>-jar</argument>
+                <argument>${basedir}/target/frankenstein.jar</argument>
+              </arguments>
+            </configuration>                        
+          </execution>
+        </executions>
+      </plugin>        
+	  
+    </plugins>
+  </build>
+
+</project>

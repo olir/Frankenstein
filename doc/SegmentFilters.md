@@ -145,12 +145,14 @@ select you filter from drop down, optionally configure it and press __ok__. Now 
 *** install gcc package with: mingw-get install gcc
 *** add ~YourMinGWPath/bin to PATH
 
+Build with:
 '''
 cd jnilibrary
-mvn clean install
+mvn clean package
 '''
 
-Test loading with
+Test JNI loading with:
 '''
 java -Djava.library.path=target -cp target/frankenstein-jniplugin-java-0.1.1-SNAPSHOT.jar cc0.NativeCode
 '''
+Some message shoud appear: **Hello from C!**
