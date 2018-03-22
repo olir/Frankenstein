@@ -15,6 +15,8 @@
  */
 package de.screenflow.frankenstein.vf.input;
 
+import java.io.File;
+
 import org.opencv.core.Mat;
 import org.opencv.videoio.VideoCapture;
 import org.opencv.videoio.Videoio;
@@ -50,7 +52,11 @@ public class VideoInput implements VideoSource {
 	public void open(ProcessingListener l) {
 		movie = new VideoCapture(videofile);
 		if (!movie.isOpened()) {
-			throw new RuntimeException("Input Movie Opening Error for " + videofile);
+			String path = System.getProperty("OPENH264_LIBRARY_PATH");
+			if (path==null)
+				System.out.println("Warning: OPENH264_LIBRARY_PATH not set. Input Movie Opening Error for " + videofile);
+
+			throw new RuntimeException("Input Movie Opening Error for " + videofile+". Current path="+new File(".").getAbsolutePath());
 		}
 		currentFrame = new Mat();
 		currentPos = 0;

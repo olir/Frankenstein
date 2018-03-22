@@ -106,7 +106,7 @@
 					</goals>
 					<configuration>
 					  <tasks>
-						<copy todir="../../target" flatten="true">
+						<copy todir="../../java/src/main/resources" flatten="true">
 							<fileset dir="./target">
 								<include name="*.dll"/>
 							</fileset>

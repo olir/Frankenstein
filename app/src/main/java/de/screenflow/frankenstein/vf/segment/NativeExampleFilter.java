@@ -1,12 +1,12 @@
 /*
  * Copyright 2017 Oliver Rode, https://github.com/olir/Frankenstein
- *  
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *     http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -23,24 +23,15 @@ import org.opencv.core.Mat;
 public class NativeExampleFilter extends NativeSegmentFilter<NativeExampleConfigController> {
 
 	private final static String JNI_FILTER_CLASS = "cc0.NativeExample";
-	
-	private final Class jniProxyClass;
-	private final Object jniProxy;
-	private final Method jniProxyInitMethod;
+
 	private final Method jniProxyProcessMethod;
 
 	@SuppressWarnings("unchecked")
 	public NativeExampleFilter() throws UnsatisfiedLinkError {
-		super("native");
+		super("native", JNI_FILTER_CLASS);
 		try {
-			// use reflection when classing jni proxy class from Jar, so app do not depend on it.
-			jniProxyClass = Class.forName(JNI_FILTER_CLASS);
-			jniProxy = jniProxyClass.newInstance();
-			jniProxyInitMethod = jniProxyClass.getMethod("init");
-			jniProxyProcessMethod = jniProxyClass.getMethod("process", Object.class, Integer.class);
-			jniProxyInitMethod.invoke(jniProxy);
-		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | NoSuchMethodException
-				| SecurityException | IllegalArgumentException | InvocationTargetException e) {
+			jniProxyProcessMethod = getJniProxyClass().getMethod("process", Object.class, int.class);
+		} catch (NoSuchMethodException | SecurityException | IllegalArgumentException e) {
 			throw new RuntimeException("jni wrapper creation failed", e);
 		}
 	}
@@ -48,7 +39,7 @@ public class NativeExampleFilter extends NativeSegmentFilter<NativeExampleConfig
 	@Override
 	public Mat process(Mat sourceFrame, int frameId) {
 		try {
-			jniProxyProcessMethod.invoke(jniProxy, sourceFrame, frameId);
+			jniProxyProcessMethod.invoke(getJniProxy(), sourceFrame, frameId);
 		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 			e.printStackTrace();
 		}

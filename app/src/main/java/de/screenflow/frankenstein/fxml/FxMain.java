@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
+import java.net.URLClassLoader;
 
 import de.screenflow.frankenstein.Configuration;
 import de.screenflow.frankenstein.MovieProcessor;
@@ -73,8 +74,7 @@ public class FxMain extends Application {
 				// nu.pattern.OpenCV.loadShared();
 				// nu.pattern.OpenCV.loadLocal();
 			} catch (ClassNotFoundException e) {
-				System.out.println("Warning: nu.pattern.OpenCV not found."); // eclipse
-																				// environment
+				System.out.println("WARNING: nu.pattern.OpenCV not found.");
 			}
 			System.out.println("Loading from " + System.getProperty("java.library.path"));
 			System.loadLibrary(org.opencv.core.Core.NATIVE_LIBRARY_NAME);
@@ -188,6 +188,7 @@ public class FxMain extends Application {
 		segmentFilters.add(new BWFilter());
 		segmentFilters.add(new StereoDistanceFilter());
 		segmentFilters.add(new SampleFilter());
+     
 		try {
 			segmentFilters.add(new NativeExampleFilter()); // try to load from plugin jar
 		}

@@ -147,10 +147,16 @@ Build with:
 ```
 cd jnilibrary
 mvn clean package
+mvn package
 ```
+Comment: The package phase (for jniplugin-java) needs to be executed twice, because the build process is circular.
 
 Test JNI loading with:
 ```
 java -Djava.library.path=target -cp target/jniplugin-java-0.1.1-SNAPSHOT.jar cc0.JniExample
 ```
 Some messages should appear: **Hello from C++!** ...
+
+### Plattform Issues
+*  java.lang.UnsatisfiedLinkError: "Can't load AMD 64-bit .dll on a IA 32-bit platform": In win32/pom.xml set the property gcc.customflags to -m32
+
