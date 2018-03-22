@@ -26,6 +26,7 @@ import de.screenflow.frankenstein.Configuration;
 import de.screenflow.frankenstein.MovieProcessor;
 import de.screenflow.frankenstein.vf.SegmentVideoFilter;
 import de.screenflow.frankenstein.vf.segment.BWFilter;
+import de.screenflow.frankenstein.vf.segment.NativeExampleFilter;
 import de.screenflow.frankenstein.vf.segment.StereoDistanceFilter;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -44,7 +45,7 @@ public class FxMain extends Application {
 	private ConfigurationSceneController cController;
 
 	private List<SegmentVideoFilter> segmentFilters;
-	
+
 	public static final String APP_NAME = "Frankenstein VR";
 
 	private Configuration configuration;
@@ -55,14 +56,11 @@ public class FxMain extends Application {
 
 	private static Locale locale = Locale.getDefault();
 
-
 	public static void fxmain(Configuration c) {
 		initialConfiguration = c;
 		String[] args = {};
 		launch(args);
 	}
-
-
 
 	@Override
 	public void start(Stage primaryStage) {
@@ -78,7 +76,7 @@ public class FxMain extends Application {
 				System.out.println("Warning: nu.pattern.OpenCV not found."); // eclipse
 																				// environment
 			}
-			System.out.println("Loading from "+System.getProperty("java.library.path"));
+			System.out.println("Loading from " + System.getProperty("java.library.path"));
 			System.loadLibrary(org.opencv.core.Core.NATIVE_LIBRARY_NAME);
 
 			theStage = primaryStage;
@@ -103,7 +101,7 @@ public class FxMain extends Application {
 
 	private void buildUI() {
 		createSegmentFilters();
-		
+
 		BorderPane sceneRoot = null;
 		FXMLLoader loader;
 
@@ -190,6 +188,12 @@ public class FxMain extends Application {
 		segmentFilters.add(new BWFilter());
 		segmentFilters.add(new StereoDistanceFilter());
 		segmentFilters.add(new SampleFilter());
+		try {
+			segmentFilters.add(new NativeExampleFilter()); // try to load from plugin jar
+		}
+		catch(Throwable t) {
+			t.printStackTrace();
+		}
 	}
 
 }

@@ -63,7 +63,7 @@ message=Keine Einstellungenoptionen.
 
 Notice: Eclipse JavaFX-Edition has a SceneBuilder.
 
-Start by copying the following example and change the controller class reference to yours from step 1.
+Start by copying the following example and change the controller class reference behind fx:controller= to your class from step 1 (use full-qualified java class name).
 
 
 __samplefilters/sample.fxml:__
@@ -79,8 +79,6 @@ __samplefilters/sample.fxml:__
 <?import javafx.scene.layout.BorderPane?>
 
 <BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="samplefilters.SampleConfigController">
-   <center>
-   </center>
    <center>
       <Label text="%message" BorderPane.alignment="CENTER">
          <font>
@@ -153,6 +151,6 @@ mvn clean package
 
 Test JNI loading with:
 ```
-java -Djava.library.path=target -cp target/jniplugin-java-0.1.1-SNAPSHOT.jar cc0.NativeCode
+java -Djava.library.path=target -cp target/jniplugin-java-0.1.1-SNAPSHOT.jar cc0.JniExample
 ```
-Some message shoud appear: **Hello from C!**
+Some messages should appear: **Hello from C++!** ...

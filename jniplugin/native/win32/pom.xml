@@ -30,56 +30,57 @@
         <plugins>
 
               <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>native-maven-plugin</artifactId>
-                <version>1.0-alpha-8</version>
-                <extensions>true</extensions>
-                <configuration>
-                  <!--  trigger javah -->
-                  <javahOS>win32</javahOS>
-          
-                  <compilerProvider>generic-classic</compilerProvider>
-                    <compilerExecutable>g++</compilerExecutable>
-                    <linkerExecutable>g++</linkerExecutable>
-                    <sources>
-                        <source>
-                            <directory>../src/main/native</directory>
-                            <fileNames>
-                                <fileName>jni_example.cpp</fileName>
-                            </fileNames>
-                        </source>
-                    </sources>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>native-maven-plugin</artifactId>
+				<version>1.0-alpha-8</version>
+				<extensions>true</extensions>
+				<configuration>
+				  <!--  trigger javah -->
+				  <javahOS>win32</javahOS>
+		  
+				  <compilerProvider>generic-classic</compilerProvider>
+					<compilerExecutable>g++</compilerExecutable>
+					<linkerExecutable>g++</linkerExecutable>
+					<sources>
+						<source>
+							<directory>../src/main/native</directory>
+							<includes>
+								<include>**/*.cpp</include>
+							</includes>
+						</source>
+					</sources>
 
-                    <!-- some systems need compile flag -m32 -->
-                    <compilerStartOptions>
-                     <compilerStartOption>-I..\include</compilerStartOption>
-                    </compilerStartOptions>
-                    <!-- some systems need link flag -m32 -->
-                    <linkerStartOptions>
-                     <linkerStartOption>-shared -Wl,--add-stdcall-alias</linkerStartOption>
-                    </linkerStartOptions>
+					<!-- some systems need compile flag -m32 -->
+					<compilerStartOptions>
+					 <compilerStartOption>-I..\include</compilerStartOption>
+					</compilerStartOptions>
+					<!-- some systems need link flag -m32 -->
+					<linkerStartOptions>
+					 <linkerStartOption>-shared -Wl,--add-stdcall-alias</linkerStartOption>
+					</linkerStartOptions>
 
-                </configuration>
-                
-                <executions>
-                 <execution>
-                   <id>javah</id>
-                   <phase>generate-sources</phase>
-                   <configuration>
-                <javahOS>win32</javahOS>
-                <javahProvider>default</javahProvider>
-                <javahOutputDirectory>${project.build.directory}/custom-javah</javahOutputDirectory>
-                <workingDirectory>${basedir}</workingDirectory>
-                <javahOutputFileName>nativeCode.h</javahOutputFileName>
-                <javahClassNames>
-                  <javahClassName>cc0.NativeCode</javahClassName>
-                </javahClassNames>
-                   </configuration>
-                   <goals>
-                     <goal>javah</goal>
-                   </goals>
-                 </execution>
-              </executions>               
+				</configuration>
+				
+				<executions>
+				 <execution>
+				   <id>javah</id>
+				   <phase>generate-sources</phase>
+				   <configuration>
+					<javahOS>win32</javahOS>
+					<javahProvider>default</javahProvider>
+					<javahOutputDirectory>${project.build.directory}/custom-javah</javahOutputDirectory>
+					<workingDirectory>${basedir}</workingDirectory>
+					<javahOutputFileName>nativeCode.h</javahOutputFileName>
+					<javahClassNames>
+					  <javahClassName>cc0.JniExample</javahClassName>
+					  <javahClassName>cc0.NativeExample</javahClassName>
+					</javahClassNames>
+				   </configuration>
+				   <goals>
+					 <goal>javah</goal>
+				   </goals>
+				 </execution>
+			  </executions>               
             </plugin>
 
 			<plugin>
