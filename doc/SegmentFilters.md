@@ -155,7 +155,7 @@ Test JNI loading within project directory:
 ```
 java -Djava.library.path=jniplugin/native/win64/target -cp jniplugin/java/target/classes  cc0.JniExample
 ```
-java -cp jniplugin/target/jniplugin-java-0.1.1-SNAPSHOT.jar cc0.JniExample
+gi
 
 Some messages should appear: **Hello from C++!** ...
 
