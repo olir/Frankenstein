@@ -2,10 +2,6 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <properties>
-      <gcc.customflags></gcc.customflags>
-    </properties>
-    
     <parent>
       <groupId>de.screenflow.frankenstein</groupId>
       <artifactId>jniplugin-native</artifactId>
@@ -29,7 +25,32 @@
       <scope>compile</scope>
     </dependency>   
   </dependencies>
-  
+
+  <profiles> 
+    <profile>
+      <id>GCC32_FLAGS-defined</id>
+      <activation>
+        <property>
+          <name>env.GCC32_FLAGS</name>
+        </property>
+      </activation>
+      <properties>
+        <gcc.customflags>${env.GCC32_FLAGS}</gcc.customflags>
+      </properties>
+    </profile>
+    <profile>
+      <id>GCC32_FLAGS-undefined</id>
+      <activation>
+        <property>
+          <name>!env.GCC32_FLAGS</name>
+        </property>
+      </activation>
+      <properties>
+        <gcc.customflags></gcc.customflags>
+      </properties>
+    </profile>
+  </profiles>
+
   <build>
         <plugins>
 
@@ -60,7 +81,7 @@
 					</compilerStartOptions>
 					<!-- some systems need link flag -m32 -->
 					<linkerStartOptions>
-					 <linkerStartOption>-shared -Wl,--add-stdcall-alias ${gcc.customflags}</linkerStartOption>
+					 <linkerStartOption>-shared -Wl,--add-stdcall-alias,--kill-at ${gcc.customflags}</linkerStartOption>
 					</linkerStartOptions>
 
 				</configuration>

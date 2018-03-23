@@ -22,8 +22,9 @@
       <id>win32</id>
       <activation>
         <os>
-			<family>Windows</family>
-		</os>
+          <family>Windows</family>
+          <arch>amd32</arch>
+        </os>
       </activation>
       <modules>
         <module>win32</module>
@@ -34,9 +35,22 @@
       <id>win64</id>
       <activation>
         <os>
-			<family>Windows</family>
-			<arch>amd64</arch>
-		</os>
+          <family>Windows</family>
+          <arch>amd64</arch>
+        </os>
+      </activation>
+      <modules>
+        <module>win64</module>
+      </modules>
+    </profile>
+
+    <profile>
+      <id>win64X</id>
+      <activation>
+        <os>
+          <name>Windows 10</name>
+          <arch>amd64</arch>
+        </os>
       </activation>
       <modules>
         <module>win64</module>

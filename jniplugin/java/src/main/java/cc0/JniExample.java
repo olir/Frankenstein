@@ -1,7 +1,8 @@
 package cc0;
 
-public class JniExample extends NativeFilter {
+public class JniExample {
 	public JniExample() throws UnsatisfiedLinkError {
+    NativeFilter.loadLibrary();
 	}
 
 	public static void main(String[] args) {

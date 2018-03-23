@@ -7,9 +7,9 @@
 
 #include <iostream>
 
-
 using namespace std;
 using namespace cv;
+
 
 JNIEXPORT void JNICALL Java_cc0_JniExample_helloNative
   (JNIEnv * env, jobject obj)

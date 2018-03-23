@@ -52,30 +52,30 @@
     -->
   </dependencies>
 
-	<profiles> 
-		<profile>
-			<id>OPENH264_LIBRARY_PATH-defined</id>
-			<activation>
-				<property>
-					<name>env.OPENH264_LIBRARY_PATH</name>
-				</property>
-			</activation>
-			<properties>
-				<openh264opt>-DOPENH264_LIBRARY_PATH=${env.OPENH264_LIBRARY_PATH}</openh264opt>
-			</properties>
-		</profile>
-		<profile>
-			<id>OPENH264_LIBRARY_PATH-undefined</id>
-			<activation>
-				<property>
-					<name>!env.OPENH264_LIBRARY_PATH</name>
-				</property>
-			</activation>
-			<properties>
-				<openh264opt>-DOPENH264_LIBRARY_PATH_UNSET</openh264opt>
-			</properties>
-		</profile>
-	</profiles>
+  <profiles> 
+    <profile>
+      <id>OPENH264_LIBRARY_PATH-defined</id>
+      <activation>
+        <property>
+          <name>env.OPENH264_LIBRARY_PATH</name>
+        </property>
+      </activation>
+      <properties>
+        <openh264opt>-DOPENH264_LIBRARY_PATH=${env.OPENH264_LIBRARY_PATH}</openh264opt>
+      </properties>
+    </profile>
+    <profile>
+      <id>OPENH264_LIBRARY_PATH-undefined</id>
+      <activation>
+        <property>
+          <name>!env.OPENH264_LIBRARY_PATH</name>
+        </property>
+      </activation>
+      <properties>
+        <openh264opt>-DOPENH264_LIBRARY_PATH_UNSET</openh264opt>
+      </properties>
+    </profile>
+  </profiles>
   
   <!-- Build Settings -->
   <build>
@@ -205,8 +205,6 @@
               <workingDirectory>${basedir}/src/main/resources</workingDirectory><!-- opencv_ffmpeg320 dll location -->
               <arguments>
                 <argument>${openh264opt}</argument>
-                <argument>-cp</argument>
-                <argument>${basedir}/../jniplugin/target/jniplugin-java-0.1.1-SNAPSHOT.jar;${basedir}/target/frankenstein.jar</argument>
                 <argument>-jar</argument>
                 <argument>${basedir}/target/frankenstein.jar</argument>
               </arguments>

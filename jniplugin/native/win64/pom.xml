@@ -53,7 +53,7 @@
 					 <compilerStartOption>-m64 -I..\include</compilerStartOption>
 					</compilerStartOptions>
 					<linkerStartOptions>
-					 <linkerStartOption>-shared -m64 -Wl,--add-stdcall-alias</linkerStartOption>
+					 <linkerStartOption>-shared -m64 -Wl,--add-stdcall-alias -static-libgcc -static-libstdc++</linkerStartOption>
 					</linkerStartOptions>
 
                 </configuration>

@@ -1,6 +1,7 @@
-.classpath
-.project
-.settings/
+**/.classpath
+**/.project
+**/.settings/
 **/target/
-velocity.log
+**/velocity.log
 **/Thumbs.db
+**/*.dll
