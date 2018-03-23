@@ -71,6 +71,7 @@
 					<javahClassNames>
 					  <javahClassName>cc0.JniExample</javahClassName>
 					  <javahClassName>cc0.NativeExample</javahClassName>
+					  <javahClassName>de.screenflow.frankenstein.vf.jni.VideoEqualizer</javahClassName>
 					</javahClassNames>
 				   </configuration>
 				   <goals>

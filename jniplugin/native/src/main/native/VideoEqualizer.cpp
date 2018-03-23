@@ -12,23 +12,19 @@
 using namespace std;
 using namespace cv;
 
-JNIEXPORT void JNICALL Java_cc0_NativeExample_init
+JNIEXPORT void JNICALL Java_de_screenflow_frankenstein_vf_jni_VideoEqualizer_init
   (JNIEnv* env, jobject obj)
 {
   JwMat* mat = JwMat::matptr;
-  cout << "Java_cc0_NativeExample_init START" << endl;
   if (mat == NULL) {
-	 cout << "Java_cc0_NativeExample_init Mat-Wrapper created" << endl;
 	 JwMat::matptr = new JwMat(env);
   }
-  cout << "Java_cc0_NativeExample_init END" << endl;
 }
 
-JNIEXPORT void JNICALL Java_cc0_NativeExample_process
+JNIEXPORT void JNICALL Java_de_screenflow_frankenstein_vf_jni_VideoEqualizer_process
   (JNIEnv* env, jobject obj,
    jobject matobj, jint frameId)
 {
-  cout << "Java_cc0_NativeExample_process CALLED " << frameId << endl;
   JwMat* mat = JwMat::matptr;
   int cols = mat->cols(env, matobj);
   int rows = mat->rows(env, matobj);

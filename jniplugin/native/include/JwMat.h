@@ -13,6 +13,7 @@ class JwMat                    // begin declaration of the class
     int channels(JNIEnv* env, jobject matobj);
     long dataAddr(JNIEnv* env, jobject matobj);
     long step1(JNIEnv* env, jobject matobj);
+    static JwMat* matptr;
  private:                      // begin private section
     jclass clsMat;
     jmethodID m_rows;

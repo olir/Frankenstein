@@ -3,6 +3,7 @@
 **/.settings/
 **/target/
 **/velocity.log
+**/*.log
 **/Thumbs.db
 **/*.dll
 **/.externalToolBuilders/

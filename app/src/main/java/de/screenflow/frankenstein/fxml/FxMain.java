@@ -29,6 +29,7 @@ import de.screenflow.frankenstein.vf.SegmentVideoFilter;
 import de.screenflow.frankenstein.vf.segment.BWFilter;
 import de.screenflow.frankenstein.vf.segment.NativeExampleFilter;
 import de.screenflow.frankenstein.vf.segment.StereoDistanceFilter;
+import de.screenflow.frankenstein.vf.segment.VideoEqualizerFilter;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -191,6 +192,7 @@ public class FxMain extends Application {
      
 		try {
 			segmentFilters.add(new NativeExampleFilter()); // try to load from plugin jar
+			segmentFilters.add(new VideoEqualizerFilter()); // try to load from plugin jar
 		}
 		catch(Throwable t) {
 			t.printStackTrace();

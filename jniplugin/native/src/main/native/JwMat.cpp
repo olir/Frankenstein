@@ -5,6 +5,8 @@
 
 using namespace std;
 
+JwMat* JwMat::matptr = NULL;
+
 JwMat::JwMat(JNIEnv* env)
 {
 	cout << "JwMat() START" << endl;

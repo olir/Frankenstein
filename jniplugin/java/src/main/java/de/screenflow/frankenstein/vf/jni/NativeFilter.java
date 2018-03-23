@@ -1,4 +1,4 @@
-package cc0;
+package de.screenflow.frankenstein.vf.jni;
 
 import java.io.File;
 import java.io.IOException;

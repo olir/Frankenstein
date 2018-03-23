@@ -1,8 +1,10 @@
 package cc0;
 
+import de.screenflow.frankenstein.vf.jni.NativeFilter;
+
 public class JniExample {
 	public JniExample() throws UnsatisfiedLinkError {
-    NativeFilter.loadLibrary();
+		NativeFilter.loadLibrary();
 	}
 
 	public static void main(String[] args) {
