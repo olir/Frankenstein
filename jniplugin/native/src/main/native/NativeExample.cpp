@@ -6,23 +6,45 @@
 
 #include "opencv2/core/core.hpp"
 #include "JwMat.h"
+#include "jni_helper.h"
+#include "cv_helper.h"
 
 using namespace std;
 using namespace cv;
+
+JwMat* mat;
 
 JNIEXPORT void JNICALL Java_cc0_NativeExample_init
   (JNIEnv* env, jobject obj)
 {
   cout << "Java_cc0_NativeExample_init START" << endl;
-  JwMat mat(env);
+  if (mat == NULL) {
+	 cout << "Java_cc0_NativeExample_init Mat-Wrapper created" << endl;
+	 mat = new JwMat(env);
+  }
   cout << "Java_cc0_NativeExample_init END" << endl;
 }
-
 
 JNIEXPORT void JNICALL Java_cc0_NativeExample_process
   (JNIEnv* env, jobject obj,
    jobject matobj, jint frameId)
 {
   cout << "Java_cc0_NativeExample_process CALLED " << frameId << endl;
+  int cols = mat->cols(env, matobj);
+  int rows = mat->rows(env, matobj);
+  cout << "rows=" << rows << ", cols=" << cols << endl;
+
+  int channels = mat->channels(env, matobj);
+  if (channels<3) {
+	  J_THROW("java/lang/Error", "channels < 3: "+mat->channels(env, matobj));
+      return;
+  }
+
+  int c0 = (unsigned char)POINT_CHANNEL_VALUE((cols>>1),(rows>>1),0,mat);
+  int c1 = (unsigned char)POINT_CHANNEL_VALUE((cols>>1),(rows>>1),1,mat);
+  int c2 = (unsigned char)POINT_CHANNEL_VALUE((cols>>1),(rows>>1),2,mat);
+  cout << "RGB-values at " << (rows>>1) << "," << (cols>>1) << ": " <<
+		  c2 << "/" << c1 << "/" << c0 << endl ;
+
 }
 
