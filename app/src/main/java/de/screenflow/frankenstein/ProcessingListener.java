@@ -17,7 +17,9 @@ package de.screenflow.frankenstein;
 
 import org.opencv.core.Mat;
 
+import de.screenflow.frankenstein.vf.SegmentVideoFilter;
 import de.screenflow.frankenstein.vf.VideoStreamSource;
+import de.screenflow.frankenstein.vf.segment.SegmentConfigController;
 
 public interface ProcessingListener {
 	void videoStarted(int frames, double fps);
@@ -28,4 +30,5 @@ public interface ProcessingListener {
 	void prematureEnd(int realFrameCount);
 	void taskUpdate(String timeStamp, String message);
 	void taskError(String errorMessage);
+	void configChanged(SegmentConfigController segmentConfigController, SegmentVideoFilter selectedFilter);
 }

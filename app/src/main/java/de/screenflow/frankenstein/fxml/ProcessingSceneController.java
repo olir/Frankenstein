@@ -36,6 +36,7 @@ import de.screenflow.frankenstein.vf.FilterElement;
 import de.screenflow.frankenstein.vf.SegmentVideoFilter;
 import de.screenflow.frankenstein.vf.VideoFilter;
 import de.screenflow.frankenstein.vf.VideoStreamSource;
+import de.screenflow.frankenstein.vf.segment.SegmentConfigController;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -842,6 +843,13 @@ public class ProcessingSceneController implements ProcessingListener {
 			SegmentVideoFilter f = controller.getSelectedFilterInstance();
 			selectedFilter.setType(f);
 			processor.applyLocalFilters(filterListData);
+			Runnable r = new Runnable() {
+				public void run() {
+					processor.setPreviewFilter(null);
+					processor.seek(ProcessingSceneController.this, position);
+				}
+			};
+			new Thread(r).start();
 			Platform.runLater(() -> {
 				listViewFilter.refresh();
 				drawEditCanvas();
@@ -919,6 +927,17 @@ public class ProcessingSceneController implements ProcessingListener {
 
 	public List<SegmentVideoFilter> getLocalFilters() {
 		return main.getLocalFilters();
+	}
+
+	@Override
+	public void configChanged(SegmentConfigController segmentConfigController, SegmentVideoFilter selectedFilter) {
+		Runnable r = new Runnable() {
+			public void run() {
+				processor.setPreviewFilter(selectedFilter);
+				processor.seek(ProcessingSceneController.this, position);
+			}
+		};
+		new Thread(r).start();
 	}
 	
 

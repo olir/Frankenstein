@@ -3,6 +3,8 @@ package de.screenflow.frankenstein.fxml;
 import java.net.URL;
 
 import de.screenflow.frankenstein.vf.SegmentVideoFilter;
+import de.screenflow.frankenstein.vf.segment.NativeSegmentFilter;
+import de.screenflow.frankenstein.vf.segment.SegmentConfigController;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
@@ -40,7 +42,10 @@ public class FilterSetupController {
 		    		URL url = getClass().getResource("application.css");
 		    		String stylesheet = url.toExternalForm();
 		        	Scene scene = selectedFilter.createConfigurationScene(stylesheet);
-		        	bpContainer.setCenter(scene.getRoot());		        	
+		        	bpContainer.setCenter(scene.getRoot());
+		        	SegmentConfigController c = ((SegmentVideoFilter)selectedFilter).getConfigController();
+		        	c.bind(parent, selectedFilter);
+		        	c.fireChange();
 		        }
 		      }
 		    });

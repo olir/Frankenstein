@@ -53,10 +53,12 @@ public class VideoInput implements VideoSource {
 		movie = new VideoCapture(videofile);
 		if (!movie.isOpened()) {
 			String path = System.getProperty("OPENH264_LIBRARY_PATH");
-			if (path==null)
-				System.out.println("Warning: OPENH264_LIBRARY_PATH not set. Input Movie Opening Error for " + videofile);
+			if (path == null)
+				System.out
+						.println("Warning: OPENH264_LIBRARY_PATH not set. Input Movie Opening Error for " + videofile);
 
-			throw new RuntimeException("Input Movie Opening Error for " + videofile+". Current path="+new File(".").getAbsolutePath());
+			throw new RuntimeException(
+					"Input Movie Opening Error for " + videofile + ". Current path=" + new File(".").getAbsolutePath());
 		}
 		currentFrame = new Mat();
 		currentPos = 0;
@@ -106,12 +108,25 @@ public class VideoInput implements VideoSource {
 		return currentFrame;
 	}
 
+	private Mat currentFrameCopy = null;
+
 	@Override
 	public int seek(int pos, ProcessingListener l) {
+		if (pos == currentPos) {
+			if (currentFrameCopy==null)
+				currentFrameCopy = currentFrame.clone();
+			else
+				currentFrame = currentFrameCopy.clone();
+			return currentPos;
+		}
+		
 		if (pos < currentPos) {
 			reopen(l);
+			currentFrameCopy = null;
 		}
+		
 		if (pos > currentPos) {
+			currentFrameCopy = null;
 			for (int i = currentPos + 1; i <= pos; i++) {
 				if (l != null)
 					l.seeking(i);
@@ -124,6 +139,7 @@ public class VideoInput implements VideoSource {
 			}
 			currentFrame = retrieve(currentFrame, l);
 		}
+
 		return currentPos;
 	}
 

@@ -1,5 +1,5 @@
 package de.screenflow.frankenstein.vf.segment;
 
-public class BWConfigController {
+public class BWConfigController extends SegmentConfigController {
 
 }

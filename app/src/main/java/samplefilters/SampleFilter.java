@@ -3,7 +3,7 @@ package samplefilters;
 import org.opencv.core.Mat;
 import de.screenflow.frankenstein.vf.segment.DefaultSegmentFilter;
 
-public class SampleFilter extends DefaultSegmentFilter<SampleConfigController> {
+public class SampleFilter extends DefaultSegmentFilter {
 
 	public SampleFilter() {
 		super("sample");

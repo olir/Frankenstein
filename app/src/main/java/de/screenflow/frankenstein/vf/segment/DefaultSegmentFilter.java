@@ -26,8 +26,8 @@ import de.screenflow.frankenstein.vf.SegmentVideoFilter;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 
-public abstract class DefaultSegmentFilter<C> implements SegmentVideoFilter {
-	private C configController = null;
+public abstract class DefaultSegmentFilter implements SegmentVideoFilter {
+	private SegmentConfigController configController = null;
 
 	private final String identifier;
 	private final PropertyResourceBundle bundleConfiguration;
@@ -69,7 +69,7 @@ public abstract class DefaultSegmentFilter<C> implements SegmentVideoFilter {
 
 	abstract protected void initializeController();
 
-	protected final C getConfigController() {
+	public SegmentConfigController getConfigController() {
 		return configController;
 	}
 

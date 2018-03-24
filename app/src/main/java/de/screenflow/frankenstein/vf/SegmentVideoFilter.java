@@ -15,10 +15,13 @@
  */
 package de.screenflow.frankenstein.vf;
 
+import de.screenflow.frankenstein.vf.segment.SegmentConfigController;
 import javafx.scene.Scene;
 
 public interface SegmentVideoFilter extends VideoFilter {
 	SegmentVideoFilter createInstance();
 
 	Scene createConfigurationScene(String stylesheet);
+	
+	SegmentConfigController getConfigController();
 }

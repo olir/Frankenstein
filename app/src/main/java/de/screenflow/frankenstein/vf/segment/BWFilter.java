@@ -18,7 +18,7 @@ package de.screenflow.frankenstein.vf.segment;
 import org.opencv.core.Mat;
 import org.opencv.imgproc.Imgproc;
 
-public class BWFilter extends DefaultSegmentFilter<BWConfigController> {
+public class BWFilter extends DefaultSegmentFilter {
 
 	Mat grayFrame;
 

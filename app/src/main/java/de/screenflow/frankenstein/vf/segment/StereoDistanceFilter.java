@@ -19,7 +19,7 @@ import org.opencv.core.Mat;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 
-public class StereoDistanceFilter extends DefaultSegmentFilter<StereoDistanceConfigController> {
+public class StereoDistanceFilter extends DefaultSegmentFilter {
 
 	private Mat newFrame = null;
 
@@ -31,10 +31,10 @@ public class StereoDistanceFilter extends DefaultSegmentFilter<StereoDistanceCon
 	public Mat process(Mat sourceFrame, int frameId) {
 		if (newFrame == null || newFrame.cols() != sourceFrame.cols() || newFrame.rows() != sourceFrame.rows()) {
 			newFrame = sourceFrame.clone();
-			newFrame.setTo(new Scalar(0, 0, 0)); // left/right borders are not
-													// repainted.
 		}
 
+		newFrame.setTo(new Scalar(0, 0, 0));
+		
 		Rect roi = new Rect(val(0, perspective(), 0, -1), 0, (sourceFrame.cols() >> 1) - Math.abs(perspective()),
 				sourceFrame.rows());
 		sourceFrame.submat(new Rect((Math.abs(perspective()) >> 1), 0,
@@ -66,12 +66,12 @@ public class StereoDistanceFilter extends DefaultSegmentFilter<StereoDistanceCon
 	 * for closer
 	 */
 	private int perspective() {
-		return getConfigController().getPerspective();
+		return ((StereoDistanceConfigController)getConfigController()).getPerspective();
 	}
 
 	@Override
 	protected void initializeController() {
-		getConfigController().initialize();
+		((StereoDistanceConfigController)getConfigController()).initialize();
 	}
 
 }

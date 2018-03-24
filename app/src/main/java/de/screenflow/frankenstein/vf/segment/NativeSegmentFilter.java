@@ -16,7 +16,6 @@
 package de.screenflow.frankenstein.vf.segment;
 
 import java.io.File;
-import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.MalformedURLException;
@@ -25,29 +24,18 @@ import java.net.URLClassLoader;
 import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 
-import org.opencv.core.Mat;
-
 import de.screenflow.frankenstein.fxml.FxMain;
 import de.screenflow.frankenstein.vf.SegmentVideoFilter;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 
-public abstract class NativeSegmentFilter<C> implements SegmentVideoFilter {
+public abstract class NativeSegmentFilter<C> extends DefaultSegmentFilter implements SegmentVideoFilter {
 	private static URLClassLoader loader = null;
 
-	private C configController = null;
-
-	private final String identifier;
-	private final PropertyResourceBundle bundleConfiguration;
 	private final Class jniProxyClass;
 	private final Object jniProxy;
 	private final Method jniProxyInitMethod;
 
 	protected NativeSegmentFilter(String identifier, String proxyClassName) {
-		this.identifier = identifier;
-
-		bundleConfiguration = (PropertyResourceBundle) ResourceBundle
-				.getBundle(getClass().getPackage().getName().replace('.', '/') + '/' + identifier, FxMain.getLocale());
+		super(identifier);
 
 		try {
 			// use dynamic loading and reflection when loading jni proxy class
@@ -59,7 +47,9 @@ public abstract class NativeSegmentFilter<C> implements SegmentVideoFilter {
 			jniProxyInitMethod.invoke(jniProxy);
 		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | NoSuchMethodException
 				| SecurityException | IllegalArgumentException | InvocationTargetException | MalformedURLException e) {
-			throw new RuntimeException("jni wrapper creation failed. Bug-Mining: Ensure the wrapper was added to the javahClassNames in pom.xml. Check NativeCode.h for existing and proper signatures.", e);
+			throw new RuntimeException(
+					"jni wrapper creation failed. Bug-Mining: Ensure the wrapper was added to the javahClassNames in pom.xml. Check NativeCode.h for existing and proper signatures.",
+					e);
 		}
 	}
 
@@ -72,45 +62,6 @@ public abstract class NativeSegmentFilter<C> implements SegmentVideoFilter {
 			loader = new URLClassLoader(urls, NativeSegmentFilter.class.getClassLoader());
 		}
 		return loader;
-	}
-
-	public final String toString() {
-		return bundleConfiguration.getString("name");
-	}
-
-	@Override
-	public final SegmentVideoFilter createInstance() {
-		try {
-			return getClass().newInstance();
-		} catch (InstantiationException | IllegalAccessException e) {
-			throw new RuntimeException(e);
-		}
-	}
-
-	@Override
-	public final Scene createConfigurationScene(String stylesheet) {
-		FXMLLoader loader = new FXMLLoader(getClass().getResource(identifier + ".fxml"), bundleConfiguration);
-		try {
-			loader.load();
-		} catch (IOException e) {
-			throw new RuntimeException("Failed to create configuration scene for video filter '" + this + "'", e);
-		}
-		Scene scene = new Scene(loader.getRoot());
-		scene.getStylesheets().add(stylesheet);
-		configController = loader.getController();
-		initializeController(); // custom initialization possible here
-		return scene;
-	}
-
-	abstract protected void initializeController();
-
-	protected final C getConfigController() {
-		return configController;
-	}
-
-	@Override
-	public final Mat configure(Mat firstFrame) {
-		return firstFrame;
 	}
 
 	protected Class getJniProxyClass() {
