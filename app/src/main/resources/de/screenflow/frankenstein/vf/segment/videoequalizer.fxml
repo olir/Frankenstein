@@ -8,7 +8,6 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.BorderPane?>
 
-
 <BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.screenflow.frankenstein.vf.segment.VideoEqualizerConfigController">
    <top>
       <GridPane BorderPane.alignment="CENTER">
@@ -26,9 +25,9 @@
             <Label text="%lBRIGHTNESS" />
             <Label text="%lSATURATION" GridPane.rowIndex="1" />
             <Label text="%lCONTRAST" GridPane.rowIndex="2" />
-            <Slider fx:id="slBrightness" majorTickUnit="10.0" minorTickCount="1" showTickMarks="true" snapToTicks="true" value="50.0" GridPane.columnIndex="1" />
-            <Slider fx:id="slSaturation" majorTickUnit="10.0" minorTickCount="1" showTickMarks="true" snapToTicks="true" value="50.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
-            <Slider fx:id="slContrast" majorTickUnit="10.0" minorTickCount="1" showTickMarks="true" snapToTicks="true" value="50.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+            <Slider fx:id="slBrightness" majorTickUnit="10.0" minorTickCount="1" showTickMarks="true" value="50.0" GridPane.columnIndex="1" />
+            <Slider fx:id="slSaturation" majorTickUnit="10.0" minorTickCount="1" showTickMarks="true" value="50.0" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <Slider fx:id="slContrast" majorTickUnit="10.0" minorTickCount="1" showTickMarks="true" value="50.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
          </children>
       </GridPane>
    </top>

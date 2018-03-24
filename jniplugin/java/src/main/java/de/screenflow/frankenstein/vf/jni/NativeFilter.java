@@ -111,6 +111,4 @@ public abstract class NativeFilter {
     loadLibrary();
   }
 
-  public abstract void process(Object mat, int frameId);
-
 }

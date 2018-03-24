@@ -19,6 +19,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import org.opencv.core.Mat;
+import org.opencv.imgproc.Imgproc;
 
 public class VideoEqualizerFilter extends NativeSegmentFilter<VideoEqualizerConfigController> {
 
@@ -26,28 +27,40 @@ public class VideoEqualizerFilter extends NativeSegmentFilter<VideoEqualizerConf
 
 	private final Method jniProxyProcessMethod;
 
+	private Mat mHsvMat = new Mat();
+	
 	@SuppressWarnings("unchecked")
 	public VideoEqualizerFilter() throws UnsatisfiedLinkError {
 		super("videoequalizer", JNI_FILTER_CLASS);
 		try {
-			jniProxyProcessMethod = getJniProxyClass().getMethod("process", Object.class, int.class);
+			jniProxyProcessMethod = getJniProxyClass().getMethod("process", Object.class, int.class, int.class, int.class, int.class);
 		} catch (NoSuchMethodException | SecurityException | IllegalArgumentException e) {
 			throw new RuntimeException("jni wrapper creation failed", e);
 		}
 	}
 
 	@Override
-	public Mat process(Mat sourceFrame, int frameId) {
+	public Mat process(Mat rgbaImage, int frameId) {
+        Imgproc.cvtColor(rgbaImage, mHsvMat, Imgproc.COLOR_RGB2HSV_FULL);
+
+		VideoEqualizerConfigController c = ((VideoEqualizerConfigController)getConfigController());
 		try {
-			jniProxyProcessMethod.invoke(getJniProxy(), sourceFrame, frameId);
+			jniProxyProcessMethod.invoke(getJniProxy(), mHsvMat, frameId, c.getBrightness(), c.getContrast(), c.getSaturation());
 		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 			e.printStackTrace();
 		}
-		return sourceFrame;
+		
+		Imgproc.cvtColor(mHsvMat, rgbaImage, Imgproc.COLOR_HSV2RGB_FULL);
+		
+		return rgbaImage;
 	}
 
 	@Override
 	protected void initializeController() {
-		// getConfigController(). ...
+		VideoEqualizerConfigController c = ((VideoEqualizerConfigController)getConfigController());
+		c.setBrightness(50);
+		c.setContrast(50);
+		c.setSaturation(50);
+		c.initialize();
 	}
 }

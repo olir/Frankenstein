@@ -458,8 +458,8 @@ public class MovieProcessor {
 				}
 			}
 			if (previewFilter!=null) {
-				System.out.println("MovieProcessor processStreamFrame " +
-						previewFilter);
+//				System.out.println("MovieProcessor processStreamFrame " +
+//						previewFilter);
 						newFrame = previewFilter.process(newFrame, currentPos);
 			}
 			if (l != null)
