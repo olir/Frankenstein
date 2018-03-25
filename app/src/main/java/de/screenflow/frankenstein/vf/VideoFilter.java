@@ -18,6 +18,6 @@ package de.screenflow.frankenstein.vf;
 import org.opencv.core.Mat;
 
 public interface VideoFilter {
-	Mat process(Mat sourceFrame, int frameId);
+	Mat process(Mat sourceFrame, int frameId, FilterContext context);
 	Mat configure(Mat firstFrame);	
 }

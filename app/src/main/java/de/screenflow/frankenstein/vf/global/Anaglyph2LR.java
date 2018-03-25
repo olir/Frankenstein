@@ -24,6 +24,7 @@ import org.opencv.core.Rect;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 
+import de.screenflow.frankenstein.vf.FilterContext;
 import de.screenflow.frankenstein.vf.VideoFilter;
 
 public class Anaglyph2LR implements VideoFilter {
@@ -63,7 +64,7 @@ public class Anaglyph2LR implements VideoFilter {
 	}
 
 	@Override
-	public Mat process(Mat sourceFrame, int frameId) {
+	public Mat process(Mat sourceFrame, int frameId, FilterContext context) {
 
 		List<Mat> sourcePlanes = new ArrayList<Mat>();
 		Core.split(sourceFrame, sourcePlanes); // planes[2] is the red channel

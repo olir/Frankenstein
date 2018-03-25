@@ -20,6 +20,8 @@ import java.lang.reflect.Method;
 
 import org.opencv.core.Mat;
 
+import de.screenflow.frankenstein.vf.FilterContext;
+
 public class NativeExampleFilter extends NativeSegmentFilter<NativeExampleConfigController> {
 
 	private final static String JNI_FILTER_CLASS = "cc0.NativeExample";
@@ -30,16 +32,16 @@ public class NativeExampleFilter extends NativeSegmentFilter<NativeExampleConfig
 	public NativeExampleFilter() throws UnsatisfiedLinkError {
 		super("native", JNI_FILTER_CLASS);
 		try {
-			jniProxyProcessMethod = getJniProxyClass().getMethod("process", Object.class, int.class);
+			jniProxyProcessMethod = getJniProxyClass().getMethod("process", Object.class, int.class, Object.class);
 		} catch (NoSuchMethodException | SecurityException | IllegalArgumentException e) {
 			throw new RuntimeException("jni wrapper creation failed", e);
 		}
 	}
 
 	@Override
-	public Mat process(Mat sourceFrame, int frameId) {
+	public Mat process(Mat sourceFrame, int frameId, FilterContext context) {
 		try {
-			jniProxyProcessMethod.invoke(getJniProxy(), sourceFrame, frameId);
+			jniProxyProcessMethod.invoke(getJniProxy(), sourceFrame, frameId, context);
 		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 			e.printStackTrace();
 		}

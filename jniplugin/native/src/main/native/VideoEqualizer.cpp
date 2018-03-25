@@ -23,7 +23,7 @@ JNIEXPORT void JNICALL Java_de_screenflow_frankenstein_vf_jni_VideoEqualizer_ini
 
 JNIEXPORT void JNICALL Java_de_screenflow_frankenstein_vf_jni_VideoEqualizer_process
   (JNIEnv* env, jobject obj,
-   jobject matobj, jint frameId, jint brightness, jint contrast, jint saturation)
+   jobject matobj, jint frameId, jobject context, jint brightness, jint contrast, jint saturation)
 {
   JwMat* mat = JwMat::matptr;
   int cols = mat->cols(env, matobj);
@@ -35,6 +35,7 @@ JNIEXPORT void JNICALL Java_de_screenflow_frankenstein_vf_jni_VideoEqualizer_pro
 	  J_THROW("java/lang/Error", "Expecting HSV Mat. channels < 3: "+mat->channels(env, matobj));
       return;
   }
+
 
   for(int y = 0; y < rows; y++)
   {
@@ -70,7 +71,7 @@ JNIEXPORT void JNICALL Java_de_screenflow_frankenstein_vf_jni_VideoEqualizer_pro
 		  }
 		  else if (co<0)
 		  {
-			  vm = vm * 255 / (255-co*dynamic);
+			  vm = vm * 255 / (255-co*cdynamic);
 		  }
 		  v = vm + 128;
 	      v = CLAMP(v, 0, 255);

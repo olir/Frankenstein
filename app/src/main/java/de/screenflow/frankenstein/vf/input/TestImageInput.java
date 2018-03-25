@@ -24,6 +24,7 @@ import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 
 import de.screenflow.frankenstein.ProcessingListener;
+import de.screenflow.frankenstein.vf.FilterContext;
 import de.screenflow.frankenstein.vf.VideoFilter;
 import de.screenflow.frankenstein.vf.VideoSource;
 
@@ -60,7 +61,7 @@ public class TestImageInput implements VideoFilter, VideoSource {
 	}
 
 	@Override
-	public Mat process(Mat sourceFrame, int frameId) {
+	public Mat process(Mat sourceFrame, int frameId, FilterContext context) {
 		testFrame.copyTo(newFrame);
 		System.out.println("process Frame #" + frameId);
 		Imgproc.putText(newFrame, "Frame #" + frameId, new Point(10, smallHeight - 10), Core.FONT_HERSHEY_PLAIN, 3.0,

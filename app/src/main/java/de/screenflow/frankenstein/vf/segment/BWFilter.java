@@ -18,6 +18,8 @@ package de.screenflow.frankenstein.vf.segment;
 import org.opencv.core.Mat;
 import org.opencv.imgproc.Imgproc;
 
+import de.screenflow.frankenstein.vf.FilterContext;
+
 public class BWFilter extends DefaultSegmentFilter {
 
 	Mat grayFrame;
@@ -27,7 +29,7 @@ public class BWFilter extends DefaultSegmentFilter {
 	}
 
 	@Override
-	public Mat process(Mat sourceFrame, int frameId) {
+	public Mat process(Mat sourceFrame, int frameId, FilterContext context) {
 		if (grayFrame == null || grayFrame.cols() != sourceFrame.cols() || grayFrame.rows() != sourceFrame.rows()) {
 			grayFrame = sourceFrame.clone();
 		}

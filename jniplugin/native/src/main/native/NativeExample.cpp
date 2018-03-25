@@ -26,7 +26,7 @@ JNIEXPORT void JNICALL Java_cc0_NativeExample_init
 
 JNIEXPORT void JNICALL Java_cc0_NativeExample_process
   (JNIEnv* env, jobject obj,
-   jobject matobj, jint frameId)
+   jobject matobj, jint frameId, jobject context)
 {
   cout << "Java_cc0_NativeExample_process CALLED " << frameId << endl;
   JwMat* mat = JwMat::matptr;

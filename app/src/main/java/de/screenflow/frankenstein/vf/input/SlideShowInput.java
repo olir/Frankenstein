@@ -29,6 +29,7 @@ import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
 import de.screenflow.frankenstein.ProcessingListener;
+import de.screenflow.frankenstein.vf.FilterContext;
 import de.screenflow.frankenstein.vf.VideoFilter;
 import de.screenflow.frankenstein.vf.VideoSource;
 
@@ -67,7 +68,7 @@ public class SlideShowInput implements VideoFilter, VideoSource {
 	}
 
 	@Override
-	public Mat process(Mat sourceFrame, int frameId) {
+	public Mat process(Mat sourceFrame, int frameId, FilterContext context) {
 		int sid = (frameId - 1) / (fps * fpSlide);
 
 		if (sid < slides.size()) {

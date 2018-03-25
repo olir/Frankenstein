@@ -20,6 +20,7 @@ import org.opencv.core.Rect;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 
+import de.screenflow.frankenstein.vf.FilterContext;
 import de.screenflow.frankenstein.vf.VideoFilter;
 
 public class CloneLR implements VideoFilter {
@@ -42,7 +43,7 @@ public class CloneLR implements VideoFilter {
 	}
 
 	@Override
-	public Mat process(Mat sourceFrame, int frameId) {
+	public Mat process(Mat sourceFrame, int frameId, FilterContext context) {
 //		System.out.println("???");
 
 		Rect roi = new Rect(0, 0, sourceFrame.cols(), sourceFrame.rows());

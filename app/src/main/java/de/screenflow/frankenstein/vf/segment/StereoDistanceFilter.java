@@ -19,6 +19,8 @@ import org.opencv.core.Mat;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 
+import de.screenflow.frankenstein.vf.FilterContext;
+
 public class StereoDistanceFilter extends DefaultSegmentFilter {
 
 	private Mat newFrame = null;
@@ -28,7 +30,7 @@ public class StereoDistanceFilter extends DefaultSegmentFilter {
 	}
 
 	@Override
-	public Mat process(Mat sourceFrame, int frameId) {
+	public Mat process(Mat sourceFrame, int frameId, FilterContext context) {
 		if (newFrame == null || newFrame.cols() != sourceFrame.cols() || newFrame.rows() != sourceFrame.rows()) {
 			newFrame = sourceFrame.clone();
 		}

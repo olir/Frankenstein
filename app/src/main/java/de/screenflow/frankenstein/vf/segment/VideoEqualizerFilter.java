@@ -21,6 +21,8 @@ import java.lang.reflect.Method;
 import org.opencv.core.Mat;
 import org.opencv.imgproc.Imgproc;
 
+import de.screenflow.frankenstein.vf.FilterContext;
+
 public class VideoEqualizerFilter extends NativeSegmentFilter<VideoEqualizerConfigController> {
 
 	private final static String JNI_FILTER_CLASS = "de.screenflow.frankenstein.vf.jni.VideoEqualizer";
@@ -33,14 +35,14 @@ public class VideoEqualizerFilter extends NativeSegmentFilter<VideoEqualizerConf
 	public VideoEqualizerFilter() throws UnsatisfiedLinkError {
 		super("videoequalizer", JNI_FILTER_CLASS);
 		try {
-			jniProxyProcessMethod = getJniProxyClass().getMethod("process", Object.class, int.class, int.class, int.class, int.class);
+			jniProxyProcessMethod = getJniProxyClass().getMethod("process", Object.class, int.class, Object.class, int.class, int.class, int.class);
 		} catch (NoSuchMethodException | SecurityException | IllegalArgumentException e) {
 			throw new RuntimeException("jni wrapper creation failed", e);
 		}
 	}
 
 	@Override
-	public Mat process(Mat rgbaImage, int frameId) {
+	public Mat process(Mat rgbaImage, int frameId, FilterContext context) {
         Imgproc.cvtColor(rgbaImage, mHsvMat, Imgproc.COLOR_RGB2HSV_FULL);
 
 		VideoEqualizerConfigController c = ((VideoEqualizerConfigController)getConfigController());

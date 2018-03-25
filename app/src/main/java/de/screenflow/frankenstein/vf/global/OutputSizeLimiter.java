@@ -19,6 +19,7 @@ import org.opencv.core.Mat;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 
+import de.screenflow.frankenstein.vf.FilterContext;
 import de.screenflow.frankenstein.vf.VideoFilter;
 
 public class OutputSizeLimiter implements VideoFilter {
@@ -49,7 +50,7 @@ public class OutputSizeLimiter implements VideoFilter {
 	}
 
 	@Override
-	public Mat process(Mat sourceFrame, int frameId) {
+	public Mat process(Mat sourceFrame, int frameId, FilterContext context) {
 
 		if (newFrame == null)
 			return sourceFrame;

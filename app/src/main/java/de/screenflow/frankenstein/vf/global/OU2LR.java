@@ -21,6 +21,7 @@ import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 
+import de.screenflow.frankenstein.vf.FilterContext;
 import de.screenflow.frankenstein.vf.VideoFilter;
 
 public class OU2LR implements VideoFilter {
@@ -60,7 +61,7 @@ public class OU2LR implements VideoFilter {
 	}
 
 	@Override
-	public Mat process(Mat sourceFrame, int frameId) {
+	public Mat process(Mat sourceFrame, int frameId, FilterContext context) {
 
 		Rect roi = new Rect(0, 0, smallWidth, smallHeight);
 		sourceFrame.submat(new Rect(0, 0, sourceFrame.cols(), sourceFrame.rows() >> 1)).copyTo(upperFrame);

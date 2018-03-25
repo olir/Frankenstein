@@ -18,6 +18,7 @@ package de.screenflow.frankenstein.vf.global;
 import org.opencv.core.Mat;
 import org.opencv.core.Rect;
 
+import de.screenflow.frankenstein.vf.FilterContext;
 import de.screenflow.frankenstein.vf.VideoFilter;
 
 public class RL2LR implements VideoFilter {
@@ -34,7 +35,7 @@ public class RL2LR implements VideoFilter {
 	}
 
 	@Override
-	public Mat process(Mat sourceFrame, int frameId) {
+	public Mat process(Mat sourceFrame, int frameId, FilterContext context) {
 
 		Rect roi = new Rect(0, 0, sourceFrame.cols() >> 1, sourceFrame.rows());
 		sourceFrame.submat(new Rect(sourceFrame.cols() >> 1, 0, sourceFrame.cols() >> 1, sourceFrame.rows()))

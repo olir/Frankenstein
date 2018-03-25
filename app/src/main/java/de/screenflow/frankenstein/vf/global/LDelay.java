@@ -18,6 +18,7 @@ package de.screenflow.frankenstein.vf.global;
 import org.opencv.core.Mat;
 import org.opencv.core.Rect;
 
+import de.screenflow.frankenstein.vf.FilterContext;
 import de.screenflow.frankenstein.vf.VideoFilter;
 
 public class LDelay implements VideoFilter {
@@ -50,7 +51,7 @@ public class LDelay implements VideoFilter {
 	}
 
 	@Override
-	public Mat process(Mat sourceFrame, int frameId) {
+	public Mat process(Mat sourceFrame, int frameId, FilterContext context) {
 
 		int x1 = 0;
 		int x2 = sourceFrame.cols() >> 1;
