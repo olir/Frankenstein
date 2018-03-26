@@ -40,9 +40,9 @@ JNIEXPORT void JNICALL Java_cc0_NativeExample_process
       return;
   }
 
-  int c0 = (unsigned char)POINT_CHANNEL_VALUE((cols>>1),(rows>>1),0,mat);
-  int c1 = (unsigned char)POINT_CHANNEL_VALUE((cols>>1),(rows>>1),1,mat);
-  int c2 = (unsigned char)POINT_CHANNEL_VALUE((cols>>1),(rows>>1),2,mat);
+  int c0 = (unsigned char)POINT_CHANNEL_VALUE(env,matobj,mat,(rows>>1),(cols>>1),0);
+  int c1 = (unsigned char)POINT_CHANNEL_VALUE(env,matobj,mat,(rows>>1),(cols>>1),1);
+  int c2 = (unsigned char)POINT_CHANNEL_VALUE(env,matobj,mat,(rows>>1),(cols>>1),2);
   cout << "RGB-values at " << (rows>>1) << "," << (cols>>1) << ": " <<
 		  c2 << "/" << c1 << "/" << c0 << endl ;
 

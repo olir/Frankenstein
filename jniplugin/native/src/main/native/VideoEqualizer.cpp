@@ -39,7 +39,7 @@ JNIEXPORT void JNICALL Java_de_screenflow_frankenstein_vf_jni_VideoEqualizer_pro
 
   for(int y = 0; y < rows; y++)
   {
-	  jbyte * rowaddr = ROW_ADDR(y,mat);
+	  jbyte * rowaddr = ROW_ADDR(env, matobj,mat,y);
 
 	  for (int x = 0; x < cols; x++)
 	  {

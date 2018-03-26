@@ -47,7 +47,7 @@ public class VideoEqualizerFilter extends NativeSegmentFilter<VideoEqualizerConf
 
 		VideoEqualizerConfigController c = ((VideoEqualizerConfigController)getConfigController());
 		try {
-			jniProxyProcessMethod.invoke(getJniProxy(), mHsvMat, frameId, c.getBrightness(), c.getContrast(), c.getSaturation());
+			jniProxyProcessMethod.invoke(getJniProxy(), mHsvMat, frameId, context, c.getBrightness(), c.getContrast(), c.getSaturation());
 		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 			e.printStackTrace();
 		}

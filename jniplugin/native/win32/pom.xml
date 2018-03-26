@@ -99,6 +99,8 @@
 					<javahClassNames>
 					  <javahClassName>cc0.JniExample</javahClassName>
 					  <javahClassName>cc0.NativeExample</javahClassName>
+					  <javahClassName>de.screenflow.frankenstein.vf.jni.VideoEqualizer</javahClassName>
+					  <javahClassName>de.screenflow.frankenstein.vf.jni.MatBlender</javahClassName>
 					</javahClassNames>
 				   </configuration>
 				   <goals>

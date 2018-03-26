@@ -21,19 +21,18 @@ import java.lang.reflect.Method;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.PropertyResourceBundle;
-import java.util.ResourceBundle;
 
-import de.screenflow.frankenstein.fxml.FxMain;
 import de.screenflow.frankenstein.vf.SegmentVideoFilter;
 
 public abstract class NativeSegmentFilter<C> extends DefaultSegmentFilter implements SegmentVideoFilter {
 	private static URLClassLoader loader = null;
 
+	@SuppressWarnings("rawtypes")
 	private final Class jniProxyClass;
 	private final Object jniProxy;
 	private final Method jniProxyInitMethod;
 
+	@SuppressWarnings("unchecked")
 	protected NativeSegmentFilter(String identifier, String proxyClassName) {
 		super(identifier);
 
@@ -64,6 +63,7 @@ public abstract class NativeSegmentFilter<C> extends DefaultSegmentFilter implem
 		return loader;
 	}
 
+	@SuppressWarnings("rawtypes")
 	protected Class getJniProxyClass() {
 		return jniProxyClass;
 	}

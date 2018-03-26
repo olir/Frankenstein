@@ -1,10 +1,13 @@
 # Frankenstein VR
-Free Video Converter for Virtual Reality and 3D based on [FFmpeg](https://ffmpeg.org) and [OpenCV](http://www.opencv.org/releases.html) for Java.
-It's a small, open-source platform for OpenCV-based video filtering, where custom filters can be simply added into the processing pipeline:
+Video Stream Analysis and Manipulation Framework for Java, where custom filters can be simply added into the processing pipeline.
+
+The Tool supports 
+* [OpenCV](http://www.opencv.org/releases.html) - computer vision and machine learning
+* [JogAmp (OpenGL, OpenCL, and OpenAL)](http://jogamp.org) - 3D Graphics, Multimedia and Processing
+* [FFmpeg](https://ffmpeg.org) - record, convert and stream audio and video.
+* [VLC](https://www.videolan.org/vlc/) - video stream recording
 
 <img src="doc/pipeline.png" width="100%">
-
-For developers: When you work on custom filters, you can concentrate on manipulating images with the OpenCV library.  A list of available filters see:  [SegmentFilters](https://github.com/olir/Frankenstein/blob/master/doc/SegmentFilters.md).
 
 The pipeline allows input as video file, camera, network stream or pictures stored as left/right 3D slides (e.g. from nikon camera).
 
@@ -14,6 +17,7 @@ VR videos appear like displayed on a virtual 160-inch curved 3D display in front
 
 3D is optional. Hence, Frankenstein VR can be used solely for classic video processing. It focuses on filters, that are not part of common tools.
 
+
 ## Screenshots
 <img src="doc/config.png" width="45%"> <img src="doc/processing.png" width="45%" />
 
@@ -21,7 +25,7 @@ VR videos appear like displayed on a virtual 160-inch curved 3D display in front
 ## Samples
 I have uploaded some samples to vimeo: <a href="https://vimeo.com/user68089135"><img src="doc/vimeo.png"/></a>
 
-## Features
+## Basic Features
 Frankenstein VR is an experimental video converter with some video filters/features:
 - Virtual Reality side-by-side converter (projection, padding, shrinking)
 - Anaglyph (e.g. red/blue) to grayscale side-by-side converter
@@ -40,9 +44,9 @@ For current or full status see [Release Notes](https://github.com/olir/Frankenst
 
 # HOWTO run it
 Install Pre-Requisites first (see below), then you have 3 options to start it:
+* _From Maven:_ For the current version, use maven and run it in app folder with **mvn -pl .,app clean package exec:exec**
 * _Jar execution:_ Download and execute the jar file from the release (see section below) 
 * _Java Webstart:_ You can execute releases with Java Webstart (see section below) 
-* _From Maven:_ For the current version, use maven and run it in app folder with **mvn -pl .,app clean package exec:exec**
 
 ## Pre-Requisites
 - [FFmpeg 3.1.1+](https://ffmpeg.org) installed. Select path at first startup (is stored in frankenstein.ini at user-home)
@@ -65,6 +69,9 @@ FFMPEG build contains H264 encoder based on the OpenH264 library, that should be
 2. Download & Open jnlp file from release:
   - e.g.: [Pre-Release 0.1](https://github.com/olir/Frankenstein/releases/download/0.1/launch.jnlp)
 3. Accept warnings and execute.
+
+##For developers##
+When you work on custom filters, you can concentrate on manipulating images with the OpenCV library.  For more details read   [SegmentFilters](https://github.com/olir/Frankenstein/blob/master/doc/SegmentFilters.md).
 
 
 

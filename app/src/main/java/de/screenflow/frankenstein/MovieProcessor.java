@@ -28,6 +28,7 @@ import org.opencv.videoio.VideoWriter;
 import de.screenflow.frankenstein.task.Task;
 import de.screenflow.frankenstein.task.TaskHandler;
 import de.screenflow.frankenstein.task.TimeTaskHandler;
+import de.screenflow.frankenstein.vf.DefaultFilterContext;
 import de.screenflow.frankenstein.vf.FilterContext;
 import de.screenflow.frankenstein.vf.FilterElement;
 import de.screenflow.frankenstein.vf.SegmentVideoFilter;
@@ -65,7 +66,7 @@ public class MovieProcessor {
 	private File ffmpeg;
 
 	private SegmentVideoFilter previewFilter=null;
-	
+
 	public MovieProcessor(Configuration configuration) {
 		this.ffmpegPath = configuration.getFFmpegPath();
 		this.tempPath = new File(configuration.getTempPath());
@@ -92,13 +93,7 @@ public class MovieProcessor {
 				}
 			}
 
-			FilterContext context = new FilterContext() {
-				HashMap<String,Object> valMap = new HashMap<String,Object>();
-				@Override
-				public Object getValue(String key) {
-					return valMap.get(key);
-				}
-			};
+			FilterContext context = new DefaultFilterContext();
 			newFrame = frame;
 			for (VideoFilter filter : filters) {
 				System.out.println("MovieProcessor process " + filter.getClass().getName());
@@ -142,13 +137,7 @@ public class MovieProcessor {
 
 		frame = configuration.getSource().getFrame();
 		if (frame != null && !frame.empty()) {
-			FilterContext context = new FilterContext() {
-				HashMap<String,Object> valMap = new HashMap<String,Object>();
-				@Override
-				public Object getValue(String key) {
-					return valMap.get(key);
-				}
-			};
+			FilterContext context = new DefaultFilterContext();
 			Mat newFrame = frame;
 			for (VideoFilter filter : filters) {
 				// System.out.println("MovieProcessor processStreamFrame " +
@@ -230,13 +219,7 @@ public class MovieProcessor {
 				}
 				if (frame != null && !frame.empty()) {
 					if (!filters.isEmpty()) {
-						FilterContext context = new FilterContext() {
-							HashMap<String,Object> valMap = new HashMap<String,Object>();
-							@Override
-							public Object getValue(String key) {
-								return valMap.get(key);
-							}
-						};
+						FilterContext context = new DefaultFilterContext();
 						newFrame = frame;
 						for (VideoFilter filter : filters) {
 							// System.out.println("MovieProcessor
@@ -247,13 +230,7 @@ public class MovieProcessor {
 						newFrame = frame;
 					}
 					if (localFilters != null && !localFilters.isEmpty()) {
-						FilterContext context = new FilterContext() {
-							HashMap<String,Object> valMap = new HashMap<String,Object>();
-							@Override
-							public Object getValue(String key) {
-								return valMap.get(key);
-							}
-						};
+						FilterContext context = new DefaultFilterContext();
 						for (FilterElement element : localFilters) {
 							if (element.filter != null) {
 								if (element.r.start <= i && i < element.r.end) {
@@ -471,13 +448,7 @@ public class MovieProcessor {
 		currentPos = configuration.getSource().seek(frameId, l);
 		frame = configuration.getSource().getFrame();
 		if (frame != null && !frame.empty()) {
-			FilterContext context = new FilterContext() {
-				HashMap<String,Object> valMap = new HashMap<String,Object>();
-				@Override
-				public Object getValue(String key) {
-					return valMap.get(key);
-				}
-			};
+			FilterContext context = new DefaultFilterContext();
 			Mat newFrame = frame;
 			for (VideoFilter filter : filters) {
 //				System.out.println("MovieProcessor process "+filter.getClass().getName());
@@ -580,6 +551,6 @@ public class MovieProcessor {
 	}
 
 	public void setPreviewFilter(SegmentVideoFilter selectedFilter) {
-		previewFilter = selectedFilter;		
+		previewFilter = selectedFilter;
 	}
 }
