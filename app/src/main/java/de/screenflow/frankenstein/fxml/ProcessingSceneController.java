@@ -95,7 +95,6 @@ public class ProcessingSceneController implements ProcessingListener {
 
 	boolean streamRunning = false;
 
-	
 	@FXML
 	BorderPane rootBorder;
 
@@ -274,33 +273,33 @@ public class ProcessingSceneController implements ProcessingListener {
 					gc.fillText("Processing Video", 10, 16, 900);
 				}
 			} else {
-				// Show Cuttings
-				if (!seeking) {
-					// Base color
-					gc.setFill(Color.LIGHTGRAY);
-					gc.fillRect(0, 3, editCanvas.getWidth(), 6);
+				// Show Segments
 
-					// Visualize Filter ranges
-					gc.setFill(Color.CADETBLUE.deriveColor(1.0, 1.0, 1.0, 0.5));
-					for (FilterElement fe : filterListData) {
-						int x = (int) ((editCanvas.getWidth() - 1) * (fe.r.start - 1) / (frames - 1));
-						int w = (int) ((editCanvas.getWidth() - 1) * (fe.r.end - fe.r.start) / (frames - 1));
-						if (w < 2)
-							w = 2;
-						gc.fillRect(x, 3, w, 6);
-					}
+				// Base color
+				gc.setFill(Color.LIGHTGRAY);
+				gc.fillRect(0, 3, editCanvas.getWidth(), 6);
 
-					// Visualize selectedFilter
-					if (selectedFilter != null) {
-						gc.setFill(Color.DODGERBLUE);
-						int x = (int) ((editCanvas.getWidth() - 1) * (selectedFilter.r.start - 1) / (frames - 1));
-						int w = (int) ((editCanvas.getWidth() - 1) * (selectedFilter.r.end - selectedFilter.r.start)
-								/ (frames - 1));
-						if (w < 2)
-							w = 2;
-						gc.fillRect(x, 3, w, 6);
-					}
+				// Visualize Filter ranges
+				gc.setFill(Color.CADETBLUE.deriveColor(1.0, 1.0, 1.0, 0.5));
+				for (FilterElement fe : filterListData) {
+					int x = (int) ((editCanvas.getWidth() - 1) * (fe.r.start - 1) / (frames - 1));
+					int w = (int) ((editCanvas.getWidth() - 1) * (fe.r.end - fe.r.start) / (frames - 1));
+					if (w < 2)
+						w = 2;
+					gc.fillRect(x, 3, w, 6);
 				}
+
+				// Visualize selectedFilter
+				if (selectedFilter != null) {
+					gc.setFill(Color.DODGERBLUE);
+					int x = (int) ((editCanvas.getWidth() - 1) * (selectedFilter.r.start - 1) / (frames - 1));
+					int w = (int) ((editCanvas.getWidth() - 1) * (selectedFilter.r.end - selectedFilter.r.start)
+							/ (frames - 1));
+					if (w < 2)
+						w = 2;
+					gc.fillRect(x, 3, w, 6);
+				}
+
 			}
 			if (seeking && seekPos > 0) {
 				// Seek running
@@ -538,7 +537,7 @@ public class ProcessingSceneController implements ProcessingListener {
 			String text = lt.format(formatter);
 			return text;
 		} catch (java.time.DateTimeException e) {
-			System.err.println(e.getLocalizedMessage()+": t="+t );
+			System.err.println(e.getLocalizedMessage() + ": t=" + t);
 			return "<invalid>";
 		}
 	}
@@ -582,14 +581,14 @@ public class ProcessingSceneController implements ProcessingListener {
 	@Override
 	public void nextFrameLoaded(VideoStreamSource s) {
 		Mat frame = s.getFrame();
-		int frameId = s.getCurrentPos()+1;
+		int frameId = s.getCurrentPos() + 1;
 		this.frames = s.getFrames();
 		processor.processStreamFrame(this);
 		Platform.runLater(() -> {
 			// System.out.println("nextFrameProcessed "+frameId);
 			this.currentFrameIndex.setText("" + frameId);
 			this.currentTime.setText("" + time((frameId - 1) / fps));
-					drawEditCanvas();
+			drawEditCanvas();
 		});
 		adjustVideoLengthDisplay();
 	}
@@ -786,7 +785,8 @@ public class ProcessingSceneController implements ProcessingListener {
 		seekPos = -1;
 		System.err.println("Warning: Premature end of source at frame " + realFrameCount);
 		if (realFrameCount == 1) {
-			System.err.println("Fatal: If video source is a cam, close other instances first. If video source is a stream, try recording.");
+			System.err.println(
+					"Fatal: If video source is a cam, close other instances first. If video source is a stream, try recording.");
 			System.exit(-1);
 		}
 		Platform.runLater(() -> {
@@ -939,6 +939,5 @@ public class ProcessingSceneController implements ProcessingListener {
 		};
 		new Thread(r).start();
 	}
-	
 
 }
