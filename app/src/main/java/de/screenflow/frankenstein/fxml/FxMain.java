@@ -15,12 +15,17 @@
  */
 package de.screenflow.frankenstein.fxml;
 
+import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.net.URLClassLoader;
 
 import de.screenflow.frankenstein.Configuration;
@@ -29,6 +34,7 @@ import de.screenflow.frankenstein.vf.SegmentVideoFilter;
 import de.screenflow.frankenstein.vf.segment.BWFilter;
 import de.screenflow.frankenstein.vf.segment.GLExampleFilter;
 import de.screenflow.frankenstein.vf.segment.NativeExampleFilter;
+import de.screenflow.frankenstein.vf.segment.NativeSegmentFilter;
 import de.screenflow.frankenstein.vf.segment.StereoDistanceFilter;
 import de.screenflow.frankenstein.vf.segment.VideoEqualizerFilter;
 import javafx.application.Application;
@@ -187,18 +193,64 @@ public class FxMain extends Application {
 
 	public void createSegmentFilters() {
 		segmentFilters = new ArrayList<SegmentVideoFilter>();
-		segmentFilters.add(new BWFilter());
-		segmentFilters.add(new StereoDistanceFilter());
-		segmentFilters.add(new SampleFilter());
-		segmentFilters.add(new GLExampleFilter());
-		
+
 		try {
-			segmentFilters.add(new NativeExampleFilter()); // try to load from plugin jar
-			segmentFilters.add(new VideoEqualizerFilter()); // try to load from plugin jar
-		}
-		catch(Throwable t) {
+			segmentFilters.add(new BWFilter());
+			segmentFilters.add(new StereoDistanceFilter());
+			segmentFilters.add(new SampleFilter());
+			segmentFilters.add(new GLExampleFilter());
+		} catch (Throwable t) {
 			t.printStackTrace();
 		}
+
+		// Filters with native proxy in jar
+		try {
+			segmentFilters.add(new NativeExampleFilter()); // try to load from
+															// plugin jar
+			segmentFilters.add(new VideoEqualizerFilter()); // try to load from
+															// plugin jar
+		} catch (Throwable t) {
+			t.printStackTrace();
+		}
+
+		// Filters completly in jar
+		try {
+			segmentFilters.add(loadExternalFilterInstance("de.screenflow.frankenstein.vf.external.ExternalSampleFilter"));
+		} catch (Throwable t) {
+			t.printStackTrace();
+		}
+
+	}
+
+	private SegmentVideoFilter loadExternalFilterInstance(String filterClassName) {
+		try {
+			// use dynamic loading and reflection when loading jni proxy class
+			// from jar, so app do not depend on it.
+			URLClassLoader childLoader = getLoader();
+			Class filterClass = Class.forName(filterClassName, true, childLoader);
+			SegmentVideoFilter filter = (SegmentVideoFilter) filterClass.newInstance();
+			Method filterInitMethod = filterClass.getMethod("init");
+			filterInitMethod.invoke(filter);
+			return filter;
+		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | NoSuchMethodException
+				| SecurityException | IllegalArgumentException | InvocationTargetException | MalformedURLException e) {
+			throw new RuntimeException(
+					"jni wrapper creation failed. Bug-Mining: Ensure the wrapper was added to the javahClassNames in pom.xml. Check NativeCode.h for existing and proper signatures.",
+					e);
+		}
+	}
+
+	static URLClassLoader loader = null;
+
+	static synchronized URLClassLoader getLoader() throws MalformedURLException {
+		if (loader == null) {
+			final String RELEATIVE_TO_MAVEN_EXEC_CWD = "../../../../jniplugin/target";
+			String pluginpath = System.getProperty("pluginpath", RELEATIVE_TO_MAVEN_EXEC_CWD);
+			File myJar = new File(new File(pluginpath), "jniplugin-java-0.1.1-SNAPSHOT.jar");
+			URL[] urls = new URL[] { myJar.toURI().toURL() };
+			loader = new URLClassLoader(urls, NativeSegmentFilter.class.getClassLoader());
+		}
+		return loader;
 	}
 
 }

@@ -1,14 +1,14 @@
 package cc0;
 
-import de.screenflow.frankenstein.vf.jni.NativeFilter;
+import de.screenflow.frankenstein.vf.NativeFilter;
 
-public class JniExample {
-	public JniExample() throws UnsatisfiedLinkError {
+public class JniTest {
+	public JniTest() throws UnsatisfiedLinkError {
 		NativeFilter.loadLibrary();
 	}
 
 	public static void main(String[] args) {
-		new JniExample().helloNative();
+		new JniTest().helloNative();
 	}
 
 	public native void helloNative();

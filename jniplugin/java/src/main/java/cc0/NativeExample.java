@@ -1,6 +1,6 @@
 package cc0;
 
-import de.screenflow.frankenstein.vf.jni.NativeFilter;
+import de.screenflow.frankenstein.vf.NativeFilter;
 
 public class NativeExample extends NativeFilter {
 	public NativeExample() throws UnsatisfiedLinkError {

@@ -17,6 +17,8 @@ public class Main {
 
 		if (args.length==0 || c.isVisual()) {
 
+			de.screenflow.frankenstein.fxml.FxMain.fxmain(c);
+			/*
 			Class<?> fxMain;
 			try {
 				fxMain = Class.forName("de.screenflow.frankenstein.fxml.FxMain");
@@ -28,7 +30,7 @@ public class Main {
 					| InvocationTargetException | NoSuchMethodException | SecurityException e) {
 				e.printStackTrace();
 			}
-
+			 */
 		}
 	}
 }

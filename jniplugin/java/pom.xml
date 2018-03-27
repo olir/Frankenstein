@@ -2,6 +2,13 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
+  </properties>
+    
     <parent>
         <groupId>de.screenflow.frankenstein</groupId>
         <artifactId>jniplugin-parent</artifactId>
@@ -14,6 +21,14 @@
 
     <name>Native OpenCV Filters - Java Part</name>
     <!-- Credits to http://www.tricoder.net/blog/?p=197 -->
+    
+  <dependencies>
+    <dependency>
+      <groupId>de.screenflow.frankenstein</groupId>
+      <artifactId>app</artifactId>
+      <version>0.1.1-SNAPSHOT</version>
+    </dependency>
+  </dependencies>
     
    <build>
     <plugins>

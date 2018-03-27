@@ -1,5 +1,5 @@
 # Frankenstein VR
-Video Stream Analysis and Manipulation Framework for Java, where custom filters can be simply added into the processing pipeline.
+Video Stream Analysis and Manipulation Framework for Java and C++, where custom filters can be simply added into the processing pipeline.
 
 The Tool supports 
 * [OpenCV](http://www.opencv.org/releases.html) - computer vision and machine learning
@@ -9,15 +9,6 @@ The Tool supports
 
 <img src="doc/pipeline.png" width="100%">
 
-The pipeline allows input as video file, camera, network stream or pictures stored as left/right 3D slides (e.g. from nikon camera).
-
-Frankenstein VR can e.g. be used to convert anaglyph or side-by-side 3D videos for VR display,
- and the output video can be perfectly viewed in 3D with VR Hardware and a video players like [LittlStar](http://littlstar.info). 
-VR videos appear like displayed on a virtual 160-inch curved 3D display in front of you.
-
-3D is optional. Hence, Frankenstein VR can be used solely for classic video processing. It focuses on filters, that are not part of common tools.
-
-
 ## Screenshots
 <img src="doc/config.png" width="45%"> <img src="doc/processing.png" width="45%" />
 
@@ -25,15 +16,16 @@ VR videos appear like displayed on a virtual 160-inch curved 3D display in front
 ## Samples
 I have uploaded some samples to vimeo: <a href="https://vimeo.com/user68089135"><img src="doc/vimeo.png"/></a>
 
-## Basic Features
-Frankenstein VR is an experimental video converter with some video filters/features:
+## Features and video filters in the main pipeline
 - Virtual Reality side-by-side converter (projection, padding, shrinking)
 - Anaglyph (e.g. red/blue) to grayscale side-by-side converter
 - 3D Slideshow (SBS Video from 3D image pairs; see [samples](doc/slides) )
 - Over/Under to Left/Right (side-by-side) converter
 - Left/Right side swapper
 - Test Image (good for calibrating configurations on a VR display)
-Some filters can be chained together.
+
+### 3D / VR Features
+The pipeline allows input as video file, camera, network stream or pictures stored as left/right 3D slides (e.g. from nikon camera). Frames can be converted tp anaglyph or side-by-side 3D videos for VR display, and the output video can be perfectly viewed in 3D with VR Hardware and a video players like [LittlStar](http://littlstar.info). VR videos appear in this viewer like displayed on a virtual 160-inch curved 3D display in front of you.
 
 ## Status
 
@@ -70,8 +62,8 @@ FFMPEG build contains H264 encoder based on the OpenH264 library, that should be
   - e.g.: [Pre-Release 0.1](https://github.com/olir/Frankenstein/releases/download/0.1/launch.jnlp)
 3. Accept warnings and execute.
 
-##For developers##
-When you work on custom filters, you can concentrate on manipulating images with the OpenCV library.  For more details read   [SegmentFilters](https://github.com/olir/Frankenstein/blob/master/doc/SegmentFilters.md).
+## For developers ##
+When you work on custom filters, you can concentrate on manipulating images with the OpenCV or JogAmp libraries.  For more details read   [SegmentFilters](https://github.com/olir/Frankenstein/blob/master/doc/SegmentFilters.md).
 
 
 

@@ -11,7 +11,7 @@ using namespace std;
 using namespace cv;
 
 
-JNIEXPORT void JNICALL Java_cc0_JniExample_helloNative
+JNIEXPORT void JNICALL Java_cc0_JniTest_helloNative
   (JNIEnv * env, jobject obj)
 {
     puts("Hello from C++!");

@@ -153,9 +153,8 @@ Comment: The package phase (for jniplugin-java) needs to be executed twice, beca
 
 Test JNI loading within project directory:
 ```
-java -Djava.library.path=jniplugin/native/win64/target -cp jniplugin/java/target/classes  cc0.JniExample
+java -Djava.library.path=jniplugin/native/win64/target -cp jniplugin/java/target/classes  cc0.JniTest
 ```
-gi
 
 Some messages should appear: **Hello from C++!** ...
 

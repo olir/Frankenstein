@@ -1,5 +1,7 @@
 package de.screenflow.frankenstein.vf.jni;
 
+import de.screenflow.frankenstein.vf.NativeFilter;
+
 public class MatBlender extends NativeFilter {
 	public MatBlender() throws UnsatisfiedLinkError {
 	}

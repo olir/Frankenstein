@@ -97,10 +97,11 @@
 					<workingDirectory>${basedir}</workingDirectory>
 					<javahOutputFileName>nativeCode.h</javahOutputFileName>
 					<javahClassNames>
-					  <javahClassName>cc0.JniExample</javahClassName>
+					  <javahClassName>cc0.JniTest</javahClassName>
 					  <javahClassName>cc0.NativeExample</javahClassName>
 					  <javahClassName>de.screenflow.frankenstein.vf.jni.VideoEqualizer</javahClassName>
 					  <javahClassName>de.screenflow.frankenstein.vf.jni.MatBlender</javahClassName>
+					  <javahClassName>de.screenflow.frankenstein.vf.external.ExternalSample</javahClassName>
 					</javahClassNames>
 				   </configuration>
 				   <goals>

@@ -1,4 +1,4 @@
-package de.screenflow.frankenstein.vf.jni;
+package de.screenflow.frankenstein.vf;
 
 import java.io.File;
 import java.io.IOException;
@@ -40,7 +40,7 @@ public abstract class NativeFilter {
         throw error; // throw again
     }
   }
-  
+
   private static void loadLibrary(String libraryName) throws UnsatisfiedLinkError {
     synchronized (loadedLibraries) {
 
@@ -67,7 +67,7 @@ public abstract class NativeFilter {
           Path tmpDir = Files.createTempDirectory("frankenstein");
           tmpDir.toFile().deleteOnExit();
           Path destination = tmpDir.resolve("./" + location).normalize();
-        
+
           try {
             Files.createDirectories(destination.getParent());
             Files.copy(binary, destination);
@@ -88,7 +88,7 @@ public abstract class NativeFilter {
           } catch (NoSuchFieldException x) {
             throw new Error("NoSuchFieldException!?", x);
           }
-        
+
           try {
             System.loadLibrary(libraryName);
           } catch (UnsatisfiedLinkError x) {
@@ -97,9 +97,9 @@ public abstract class NativeFilter {
                   "!!! [2] UnsatisfiedLinkError @ libraryName='" + libraryName + " message: "+x.getMessage());
              throw x;
           }
-          
+
           loadedLibraries.add(libraryName.intern());
-          
+
         } catch (final IOException x) {
           throw new Error("Error writing native library", x);
         }
