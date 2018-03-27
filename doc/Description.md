@@ -7,19 +7,19 @@ The Tool supports
 * [FFmpeg](https://ffmpeg.org) - record, convert and stream audio and video.
 * [VLC](https://www.videolan.org/vlc/) - video stream recording
 
-<img src="doc/pipeline.png" width="100%">
+<img src="pipeline.png" width="100%">
 
 ## Screenshots
-<img src="doc/config.png" width="45%"> <img src="doc/processing.png" width="45%" />
+<img src="config.png" width="45%"> <img src="processing.png" width="45%" />
 
 
 ## Samples
-I have uploaded some samples to vimeo: <a href="https://vimeo.com/user68089135"><img src="doc/vimeo.png"/></a>
+I have uploaded some samples to vimeo: <a href="https://vimeo.com/user68089135"><img src="vimeo.png"/></a>
 
 ## Features and video filters in the main pipeline
 - Virtual Reality side-by-side converter (projection, padding, shrinking)
 - Anaglyph (e.g. red/blue) to grayscale side-by-side converter
-- 3D Slideshow (SBS Video from 3D image pairs; see [samples](doc/slides) )
+- 3D Slideshow (SBS Video from 3D image pairs; see [samples](https://github.com/olir/Frankenstein/tree/master/doc/slides) )
 - Over/Under to Left/Right (side-by-side) converter
 - Left/Right side swapper
 - Test Image (good for calibrating configurations on a VR display)
