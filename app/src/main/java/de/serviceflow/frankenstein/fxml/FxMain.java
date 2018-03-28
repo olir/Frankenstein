@@ -92,13 +92,13 @@ public class FxMain extends Application implements ConfigManager {
 						(Object[]) null);
 				// nu.pattern.OpenCV.loadShared();
 				// nu.pattern.OpenCV.loadLocal();
+        System.out.println("Loading from " + System.getProperty("java.library.path"));
+        System.loadLibrary(org.opencv.core.Core.NATIVE_LIBRARY_NAME);
 			} catch (ClassNotFoundException e) {
 				System.out.println("WARNING: nu.pattern.OpenCV not found.");
 			} catch (Throwable t) {
 				System.out.println("WARNING: nu.pattern.OpenCV not loaded.");
 			}
-			System.out.println("Loading from " + System.getProperty("java.library.path"));
-			System.loadLibrary(org.opencv.core.Core.NATIVE_LIBRARY_NAME);
 
 			theStage = primaryStage;
 
