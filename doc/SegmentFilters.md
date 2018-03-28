@@ -6,7 +6,7 @@
 * Stereo Distance - Manipulates the stereo effect distance of side by side videos
 ** Distance slider: frame can appear farer or closer
 
-## Howto create a new filter
+## Howto create a new filter (!!! UNDER CONSTRUCTION !!!)
 
 ## Overview
 A filter is made of the following parts:
