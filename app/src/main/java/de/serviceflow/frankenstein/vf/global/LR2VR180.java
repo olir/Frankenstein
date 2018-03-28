@@ -21,7 +21,7 @@ import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 
-import de.serviceflow.frankenstein.vf.FilterContext;
+import de.serviceflow.frankenstein.plugin.api.FilterContext;
 import de.serviceflow.frankenstein.vf.VideoFilter;
 
 public class LR2VR180 implements VideoFilter {

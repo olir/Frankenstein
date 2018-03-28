@@ -17,18 +17,23 @@ package de.serviceflow.frankenstein;
 
 import org.opencv.core.Mat;
 
-import de.serviceflow.frankenstein.vf.SegmentVideoFilter;
+import de.serviceflow.frankenstein.plugin.api.SegmentFilterConfigListener;
 import de.serviceflow.frankenstein.vf.VideoStreamSource;
-import de.serviceflow.frankenstein.vf.segment.SegmentConfigController;
 
-public interface ProcessingListener {
+public interface ProcessingListener extends SegmentFilterConfigListener {
 	void videoStarted(int frames, double fps);
+
 	void nextFrameLoaded(VideoStreamSource s);
+
 	void nextFrameProcessed(Mat frame, int frameId);
+
 	void seekDone(int frameId);
+
 	void seeking(int i);
+
 	void prematureEnd(int realFrameCount);
+
 	void taskUpdate(String timeStamp, String message);
+
 	void taskError(String errorMessage);
-	void configChanged(SegmentConfigController segmentConfigController, SegmentVideoFilter selectedFilter);
 }

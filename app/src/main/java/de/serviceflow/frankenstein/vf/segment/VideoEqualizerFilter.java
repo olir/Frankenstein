@@ -21,7 +21,8 @@ import java.lang.reflect.Method;
 import org.opencv.core.Mat;
 import org.opencv.imgproc.Imgproc;
 
-import de.serviceflow.frankenstein.vf.FilterContext;
+import de.serviceflow.frankenstein.plugin.api.FilterContext;
+import de.serviceflow.frankenstein.plugin.api.NativeSegmentFilter;
 
 public class VideoEqualizerFilter extends NativeSegmentFilter<VideoEqualizerConfigController> {
 

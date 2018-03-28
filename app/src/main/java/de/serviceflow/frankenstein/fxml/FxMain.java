@@ -19,22 +19,23 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLClassLoader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLClassLoader;
 
 import de.serviceflow.frankenstein.Configuration;
 import de.serviceflow.frankenstein.MovieProcessor;
-import de.serviceflow.frankenstein.vf.SegmentVideoFilter;
+import de.serviceflow.frankenstein.plugin.api.ConfigManager;
+import de.serviceflow.frankenstein.plugin.api.NativeSegmentFilter;
+import de.serviceflow.frankenstein.plugin.api.SegmentVideoFilter;
 import de.serviceflow.frankenstein.vf.segment.BWFilter;
 import de.serviceflow.frankenstein.vf.segment.GLExampleFilter;
 import de.serviceflow.frankenstein.vf.segment.NativeExampleFilter;
-import de.serviceflow.frankenstein.vf.segment.NativeSegmentFilter;
 import de.serviceflow.frankenstein.vf.segment.StereoDistanceFilter;
 import de.serviceflow.frankenstein.vf.segment.VideoEqualizerFilter;
 import javafx.application.Application;
@@ -45,7 +46,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import samplefilters.SampleFilter;
 
-public class FxMain extends Application {
+public class FxMain extends Application implements ConfigManager {
 
 	private Stage theStage;
 	private Scene configurationScene, processingScene;
@@ -56,6 +57,8 @@ public class FxMain extends Application {
 	private List<SegmentVideoFilter> segmentFilters;
 
 	public static final String APP_NAME = "Frankenstein VR";
+
+	public static ConfigManager configManager = null;
 
 	private Configuration configuration;
 	private static Configuration initialConfiguration;
@@ -69,6 +72,14 @@ public class FxMain extends Application {
 		initialConfiguration = c;
 		String[] args = {};
 		launch(args);
+	}
+
+	public static ConfigManager getInstance() {
+		return configManager;
+	}
+
+	public FxMain() {
+		configManager = this;
 	}
 
 	@Override
@@ -183,7 +194,7 @@ public class FxMain extends Application {
 			theStage.setTitle(APP_NAME);
 	}
 
-	public static Locale getLocale() {
+	public Locale getLocale() {
 		return locale;
 	}
 
@@ -212,14 +223,15 @@ public class FxMain extends Application {
 		} catch (Throwable t) {
 			t.printStackTrace();
 		}
-
+/*
 		// Filters completly in jar
 		try {
-			segmentFilters.add(loadExternalFilterInstance("de.serviceflow.frankenstein.vf.external.ExternalSampleFilter"));
+			segmentFilters
+					.add(loadExternalFilterInstance("de.serviceflow.frankenstein.vf.external.ExternalSampleFilter"));
 		} catch (Throwable t) {
 			t.printStackTrace();
 		}
-
+*/
 	}
 
 	private SegmentVideoFilter loadExternalFilterInstance(String filterClassName) {
@@ -244,9 +256,9 @@ public class FxMain extends Application {
 
 	static synchronized URLClassLoader getLoader() throws MalformedURLException {
 		if (loader == null) {
-			final String RELEATIVE_TO_MAVEN_EXEC_CWD = "../../../../jniplugin/target";
+			final String RELEATIVE_TO_MAVEN_EXEC_CWD = "../../../target";
 			String pluginpath = System.getProperty("pluginpath", RELEATIVE_TO_MAVEN_EXEC_CWD);
-			File myJar = new File(new File(pluginpath), "jniplugin-java-0.1.1-SNAPSHOT.jar");
+			File myJar = new File(new File(pluginpath), "plugin-opencv-0.3.1-SNAPSHOT.jar");
 			URL[] urls = new URL[] { myJar.toURI().toURL() };
 			loader = new URLClassLoader(urls, NativeSegmentFilter.class.getClassLoader());
 		}

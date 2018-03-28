@@ -3,6 +3,7 @@ package de.serviceflow.frankenstein.vf;
 import org.opencv.core.Range;
 
 import de.serviceflow.frankenstein.fxml.ProcessingSceneController;
+import de.serviceflow.frankenstein.plugin.api.SegmentVideoFilter;
 
 public class FilterElement {
 	public Range r;

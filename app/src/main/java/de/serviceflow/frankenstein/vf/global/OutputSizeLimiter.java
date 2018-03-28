@@ -19,7 +19,7 @@ import org.opencv.core.Mat;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 
-import de.serviceflow.frankenstein.vf.FilterContext;
+import de.serviceflow.frankenstein.plugin.api.FilterContext;
 import de.serviceflow.frankenstein.vf.VideoFilter;
 
 public class OutputSizeLimiter implements VideoFilter {

@@ -32,11 +32,11 @@ import org.opencv.core.Range;
 import de.serviceflow.frankenstein.Configuration;
 import de.serviceflow.frankenstein.MovieProcessor;
 import de.serviceflow.frankenstein.ProcessingListener;
+import de.serviceflow.frankenstein.plugin.api.SegmentConfigController;
+import de.serviceflow.frankenstein.plugin.api.SegmentVideoFilter;
 import de.serviceflow.frankenstein.vf.FilterElement;
-import de.serviceflow.frankenstein.vf.SegmentVideoFilter;
 import de.serviceflow.frankenstein.vf.VideoFilter;
 import de.serviceflow.frankenstein.vf.VideoStreamSource;
-import de.serviceflow.frankenstein.vf.segment.SegmentConfigController;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -829,7 +829,7 @@ public class ProcessingSceneController implements ProcessingListener {
 	public void filterSetup() {
 
 		PropertyResourceBundle bundleConfiguration = (PropertyResourceBundle) ResourceBundle
-				.getBundle("de/serviceflow/frankenstein/bundles/filtersetup", FxMain.getLocale());
+				.getBundle("de/serviceflow/frankenstein/bundles/filtersetup", FxMain.getInstance().getLocale());
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("FilterSetupPopup.fxml"), bundleConfiguration);
 		Stage stage = new Stage();
 		try {

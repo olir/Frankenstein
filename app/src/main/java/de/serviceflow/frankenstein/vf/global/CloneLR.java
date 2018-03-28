@@ -20,7 +20,7 @@ import org.opencv.core.Rect;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 
-import de.serviceflow.frankenstein.vf.FilterContext;
+import de.serviceflow.frankenstein.plugin.api.FilterContext;
 import de.serviceflow.frankenstein.vf.VideoFilter;
 
 public class CloneLR implements VideoFilter {

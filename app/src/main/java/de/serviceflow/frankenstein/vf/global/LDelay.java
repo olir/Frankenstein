@@ -18,7 +18,7 @@ package de.serviceflow.frankenstein.vf.global;
 import org.opencv.core.Mat;
 import org.opencv.core.Rect;
 
-import de.serviceflow.frankenstein.vf.FilterContext;
+import de.serviceflow.frankenstein.plugin.api.FilterContext;
 import de.serviceflow.frankenstein.vf.VideoFilter;
 
 public class LDelay implements VideoFilter {

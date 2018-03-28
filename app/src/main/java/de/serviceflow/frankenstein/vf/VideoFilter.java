@@ -17,6 +17,8 @@ package de.serviceflow.frankenstein.vf;
 
 import org.opencv.core.Mat;
 
+import de.serviceflow.frankenstein.plugin.api.FilterContext;
+
 public interface VideoFilter {
 	Mat process(Mat sourceFrame, int frameId, FilterContext context);
 	Mat configure(Mat firstFrame);	

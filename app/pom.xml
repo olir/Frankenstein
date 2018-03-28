@@ -21,7 +21,7 @@
   <parent>
 	<groupId>de.serviceflow.frankenstein</groupId>
 	<artifactId>root</artifactId>
-	<version>0.2.0</version>
+	<version>0.3.1-SNAPSHOT</version>
   </parent>
 
 	<!-- Maven Coordinates -->
@@ -38,41 +38,11 @@
         <artifactId>opencv</artifactId>
         <version>3.2.0-1</version>
     </dependency>
-    <!-- AI Submodul
     <dependency>
-      <groupId>ml.dmlc.mxnet</groupId>
-      <artifactId>mxnet-full_2.10-linux-x86_64-gpu</artifactId>
-      <version>0.1.1</version>
+      <groupId>de.serviceflow.frankenstein.plugin</groupId>
+      <artifactId>api</artifactId>
+      <version>0.3.1-SNAPSHOT</version>
     </dependency>
-    <dependency>
-      <groupId>ml.dmlc.mxnet</groupId>
-      <artifactId>mxnet-core_2.10</artifactId>
-      <version>0.1.1</version>
-    </dependency>
-    -->
-    <!-- jogamp
-    <dependency>
-      <groupId>org.jogamp.gluegen</groupId>
-      <artifactId>gluegen-rt-main</artifactId>
-      <version>2.3.1</version>
-    </dependency>
-    <dependency>
-      <groupId>org.jogamp.jogl</groupId>
-      <artifactId>jogl-all-main</artifactId>
-      <version>2.3.1</version>
-    </dependency>
-    <dependency>
-      <groupId>org.jogamp.jocl</groupId>
-      <artifactId>jocl-main</artifactId>
-      <version>2.3.1</version>
-    </dependency>
-    <dependency>
-      <groupId>org.jogamp.joal</groupId>
-      <artifactId>joal-main</artifactId>
-      <version>2.3.1</version>
-    </dependency>
-    -->
-
   </dependencies>
 
   <profiles> 
@@ -181,8 +151,33 @@
           </archive>
         </configuration>
       </plugin>
+
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>1.6.0</version>
+        <configuration>
+          <skip>false</skip>
+          <executable>javaw</executable>
+          <workingDirectory>${basedir}/src/main/resources</workingDirectory><!-- opencv_ffmpeg320 dll location -->
+          <arguments>
+            <argument>${openh264opt}</argument>
+            <argument>-jar</argument>
+            <argument>${basedir}/target/frankenstein.jar</argument>
+          </arguments>
+        </configuration>
+        <!--
+        <executions>
+          <execution>
+            <id>default-cli</id>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+          </execution>
+        </executions>
+        -->
+      </plugin>        
       
-	  
     <!--
       <plugin>
         <groupId>org.codehaus.mojo</groupId>
@@ -215,29 +210,6 @@
       </plugin>
       -->
       
-      <plugin>
-        <groupId>org.codehaus.mojo</groupId>
-        <artifactId>exec-maven-plugin</artifactId>
-        <version>1.6.0</version>
-        <executions>
-          <execution>
-            <id>default-cli</id>
-            <goals>
-              <goal>exec</goal>
-            </goals>
-            <configuration>
-              <executable>javaw</executable>
-              <workingDirectory>${basedir}/src/main/resources</workingDirectory><!-- opencv_ffmpeg320 dll location -->
-              <arguments>
-                <argument>${openh264opt}</argument>
-                <argument>-jar</argument>
-                <argument>${basedir}/target/frankenstein.jar</argument>
-              </arguments>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>        
-	  
       <!-- Java Documentation -->
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

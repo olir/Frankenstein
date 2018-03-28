@@ -2,6 +2,8 @@ package de.serviceflow.frankenstein.vf;
 
 import java.util.HashMap;
 
+import de.serviceflow.frankenstein.plugin.api.FilterContext;
+
 public class DefaultFilterContext implements FilterContext {
 	private HashMap<String,Object> valMap = new HashMap<String,Object>();
 

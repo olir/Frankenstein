@@ -21,15 +21,17 @@
   <!-- Maven Coordinates -->
   <groupId>de.serviceflow.frankenstein</groupId>
   <artifactId>root</artifactId>
-  <version>0.2.1-SNAPSHOT</version>
+  <version>0.3.1-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>Frankenstein - POM</name>
   
   <!-- Native Implementation Plugin -->
   <modules>
-    <module>jniplugin</module>
     <module>app</module>
+    <module>plugin-api</module>
+    <module>plugin-opencv</module>
+    <module>plugin-jogamp</module>
   </modules>
 
   
@@ -129,6 +131,20 @@
   </repositories>
   
   <build>
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.codehaus.mojo</groupId>
+          <artifactId>exec-maven-plugin</artifactId>
+          <version>1.6.0</version>
+          <configuration>
+            <skip>true</skip>
+            <executable>javaw</executable>
+          </configuration>
+        </plugin>        
+      </plugins>
+    </pluginManagement>
+    
     <plugins>
     <!--
       <plugin>
@@ -171,6 +187,8 @@
 				</executions>
       </plugin>
       -->
+      
+	  
       
     </plugins>
   </build>

@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+      <groupId>de.serviceflow.frankenstein.plugin.opencv</groupId>
+      <artifactId>jniplugin-native</artifactId>
+      <version>0.3.1-SNAPSHOT</version>
+    </parent>
+
+    <groupId>de.serviceflow.frankenstein.plugin.opencv</groupId>
+    <artifactId>jniplugin-32</artifactId>
+    <version>0.3.1-SNAPSHOT</version>
+    <packaging>dll</packaging>
+
+    <name>OpenCV Filters - Native parts - win32</name>
+    <!-- Credits to http://www.tricoder.net/blog/?p=197 -->
+    
+   <dependencies>
+    <dependency>
+    <groupId>de.serviceflow.frankenstein.plugin.opencv</groupId>
+    <artifactId>plugin-opencv</artifactId>
+    <version>0.3.1-SNAPSHOT</version>
+      <type>jar</type>
+      <scope>compile</scope>
+    </dependency>   
+  </dependencies>
+
+  <profiles> 
+    <profile>
+      <id>GCC32_FLAGS-defined</id>
+      <activation>
+        <property>
+          <name>env.GCC32_FLAGS</name>
+        </property>
+      </activation>
+      <properties>
+        <gcc.customflags>${env.GCC32_FLAGS}</gcc.customflags>
+      </properties>
+    </profile>
+    <profile>
+      <id>GCC32_FLAGS-undefined</id>
+      <activation>
+        <property>
+          <name>!env.GCC32_FLAGS</name>
+        </property>
+      </activation>
+      <properties>
+        <gcc.customflags></gcc.customflags>
+      </properties>
+    </profile>
+  </profiles>
+
+  <build>
+        <plugins>
+
+              <plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>native-maven-plugin</artifactId>
+				<version>1.0-alpha-8</version>
+				<extensions>true</extensions>
+				<configuration>
+				  <!--  trigger javah -->
+				  <javahOS>win32</javahOS>
+		  
+				  <compilerProvider>generic-classic</compilerProvider>
+					<compilerExecutable>g++</compilerExecutable>
+					<linkerExecutable>g++</linkerExecutable>
+					<sources>
+						<source>
+							<directory>../src/main/native</directory>
+							<includes>
+								<include>**/*.cpp</include>
+							</includes>
+						</source>
+					</sources>
+
+					<!-- some systems need compile flag -m32 -->
+					<compilerStartOptions>
+					 <compilerStartOption>-I..\include ${gcc.customflags}</compilerStartOption>
+					</compilerStartOptions>
+					<!-- some systems need link flag -m32 -->
+					<linkerStartOptions>
+					 <linkerStartOption>-shared -Wl,--add-stdcall-alias,--kill-at ${gcc.customflags} -static-libgcc -static-libstdc++</linkerStartOption>
+					</linkerStartOptions>
+
+				</configuration>
+				
+				<executions>
+				 <execution>
+				   <id>javah</id>
+				   <phase>generate-sources</phase>
+				   <configuration>
+					<javahOS>win32</javahOS>
+					<javahProvider>default</javahProvider>
+					<javahOutputDirectory>${project.build.directory}/custom-javah</javahOutputDirectory>
+					<workingDirectory>${basedir}</workingDirectory>
+					<javahOutputFileName>nativeCode.h</javahOutputFileName>
+					<javahClassNames>
+					  <javahClassName>cc0.JniTest</javahClassName>
+					  <javahClassName>cc0.NativeExample</javahClassName>
+					  <javahClassName>de.serviceflow.frankenstein.vf.jni.VideoEqualizer</javahClassName>
+					  <javahClassName>de.serviceflow.frankenstein.vf.external.ExternalSample</javahClassName>
+					</javahClassNames>
+				   </configuration>
+				   <goals>
+					 <goal>javah</goal>
+				   </goals>
+				 </execution>
+			  </executions>               
+            </plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-antrun-plugin</artifactId>
+				<version>1.4</version>
+				<executions>
+				  <execution>
+					<phase>generate-test-resources</phase>
+					<configuration>
+
+					  <tasks>
+						<mkdir dir="./target/objs"/>
+					  </tasks>
+
+					</configuration>
+					<goals>
+					  <goal>run</goal>
+					</goals>
+				  </execution>
+				  <execution>
+					<id>copy</id>
+					<phase>package</phase>
+					<goals>
+					  <goal>run</goal>
+					</goals>
+					<configuration>
+					  <tasks>
+						<copy todir="../../java/src/main/resources" flatten="true">
+							<fileset dir="./target">
+								<include name="*.dll"/>
+							</fileset>
+						</copy>
+					  </tasks>
+					</configuration>
+				  </execution>
+				</executions>
+			</plugin>
+        </plugins>
+    </build>
+</project>
+            

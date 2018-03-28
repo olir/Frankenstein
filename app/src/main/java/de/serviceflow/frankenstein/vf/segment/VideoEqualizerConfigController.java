@@ -1,5 +1,6 @@
 package de.serviceflow.frankenstein.vf.segment;
 
+import de.serviceflow.frankenstein.plugin.api.SegmentConfigController;
 import javafx.fxml.FXML;
 import javafx.scene.control.Slider;
 

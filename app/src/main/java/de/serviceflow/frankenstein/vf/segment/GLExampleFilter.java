@@ -13,18 +13,9 @@ import java.util.Random;
 
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
-/*
-import com.jogamp.opengl.DefaultGLCapabilitiesChooser;
-import com.jogamp.opengl.GL2;
-import com.jogamp.opengl.GLAutoDrawable;
-import com.jogamp.opengl.GLCapabilities;
-import com.jogamp.opengl.GLDrawableFactory;
-import com.jogamp.opengl.GLProfile;
-import com.jogamp.opengl.fixedfunc.GLMatrixFunc;
-import com.jogamp.opengl.util.awt.AWTGLReadBufferUtil;
-import com.jogamp.opengl.util.gl2.GLUT;
-*/
-import de.serviceflow.frankenstein.vf.FilterContext;
+
+import de.serviceflow.frankenstein.plugin.api.FilterContext;
+import de.serviceflow.frankenstein.plugin.api.NativeSegmentFilter;
 
 public class GLExampleFilter extends NativeSegmentFilter<GLExampleConfigController> {
 

@@ -1,0 +1,131 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+
+  <modelVersion>4.0.0</modelVersion>
+
+  <!-- Version Dependency Chaining -->
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+    <maven.compiler.source>1.8</maven.compiler.source>
+    <maven.compiler.target>1.8</maven.compiler.target>
+    <manifest.Codebase>*</manifest.Codebase>
+  </properties>
+
+  <parent>
+	<groupId>de.serviceflow.frankenstein</groupId>
+	<artifactId>root</artifactId>
+	<version>0.3.1-SNAPSHOT</version>
+  </parent>
+
+	<!-- Maven Coordinates -->
+  <groupId>de.serviceflow.frankenstein.plugin</groupId>
+  <artifactId>api</artifactId>
+  <version>0.3.1-SNAPSHOT</version>
+
+  <name>Filter Plugin API</name>
+  
+  <!-- POM Relationships -->
+  <dependencies>
+    <dependency>
+        <groupId>org.openpnp</groupId>
+        <artifactId>opencv</artifactId>
+        <version>3.2.0-1</version>
+    </dependency>
+  </dependencies>
+
+  <!-- Build Settings -->
+  <build>
+    <resources>
+      <resource>
+        <filtering>false</filtering>
+        <directory>${basedir}/src/main/resources</directory>
+        <includes>
+          <include>**/*.*</include>
+        </includes>
+      </resource>
+    </resources>
+
+    <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-compiler-plugin</artifactId>
+        <version>3.7.0</version>
+        <configuration>
+          <source>1.8</source>
+          <target>1.8</target>
+          <encoding>UTF-8</encoding><!-- try to force encoding -->
+        </configuration>
+      </plugin>
+
+      <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-jar-plugin</artifactId>
+        <version>3.0.2</version>
+          <executions>
+        <execution>
+          <id>default-jar</id>
+            <phase>compile</phase>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+        </execution>
+          </executions>
+      </plugin>
+      
+    
+	  
+      <!-- Java Documentation -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>3.0.0</version>
+				<executions>
+					<execution>
+					  <id>attach-javadocs</id>
+					  <goals>
+						<goal>jar</goal>
+					  </goals>
+					</execution>
+				</executions>
+      </plugin>
+      
+      <plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>2.2.1</version>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<goals>
+							<goal>jar-no-fork</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+      
+      <!-- release . gpg required -->
+      <!--
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-gpg-plugin</artifactId>
+				<version>1.5</version>
+				<configuration>
+					<skip>false</skip>
+				</configuration>
+				<executions>
+					<execution>
+						<id>sign-artifacts</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>sign</goal>
+						</goals>
+					</execution>
+				</executions>
+      </plugin>
+      -->
+      
+    </plugins>
+  </build>
+
+</project>

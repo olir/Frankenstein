@@ -18,24 +18,21 @@ package de.serviceflow.frankenstein;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import org.opencv.core.Mat;
 import org.opencv.core.Size;
 import org.opencv.videoio.VideoWriter;
 
+import de.serviceflow.frankenstein.plugin.api.FilterContext;
+import de.serviceflow.frankenstein.plugin.api.SegmentVideoFilter;
 import de.serviceflow.frankenstein.task.Task;
 import de.serviceflow.frankenstein.task.TaskHandler;
 import de.serviceflow.frankenstein.task.TimeTaskHandler;
 import de.serviceflow.frankenstein.vf.DefaultFilterContext;
-import de.serviceflow.frankenstein.vf.FilterContext;
 import de.serviceflow.frankenstein.vf.FilterElement;
-import de.serviceflow.frankenstein.vf.SegmentVideoFilter;
 import de.serviceflow.frankenstein.vf.VideoFilter;
 import de.serviceflow.frankenstein.vf.VideoStreamSource;
-import de.serviceflow.frankenstein.vf.input.VideoInput;
-import javafx.collections.ObservableList;
 
 public class MovieProcessor {
 
@@ -65,7 +62,7 @@ public class MovieProcessor {
 
 	private File ffmpeg;
 
-	private SegmentVideoFilter previewFilter=null;
+	private SegmentVideoFilter previewFilter = null;
 
 	public MovieProcessor(Configuration configuration) {
 		this.ffmpegPath = configuration.getFFmpegPath();
@@ -124,9 +121,10 @@ public class MovieProcessor {
 	public void applyLocalFilters(List<FilterElement> filterListData) {
 		localFilters = filterListData;
 		if (localFilters != null && !localFilters.isEmpty()) {
+			FilterContext context = new DefaultFilterContext();
 			for (FilterElement element : localFilters) {
 				if (element.filter != null) {
-					element.filter.configure(frame);
+					element.filter.process(frame, 1, context);
 				}
 			}
 		}
@@ -437,7 +435,7 @@ public class MovieProcessor {
 	}
 
 	public void seek(final ProcessingListener l, int frameId) {
-//		System.out.println("MovieProcessor.seek @"+frameId);
+		// System.out.println("MovieProcessor.seek @"+frameId);
 		if (configuration.doInput && frameId < currentPos) {
 			if (l != null)
 				l.seeking(0);
@@ -451,24 +449,26 @@ public class MovieProcessor {
 			FilterContext context = new DefaultFilterContext();
 			Mat newFrame = frame;
 			for (VideoFilter filter : filters) {
-//				System.out.println("MovieProcessor process "+filter.getClass().getName());
+				// System.out.println("MovieProcessor process
+				// "+filter.getClass().getName());
 				newFrame = filter.process(newFrame, frameId, context);
 			}
 			if (localFilters != null && !localFilters.isEmpty()) {
 				for (FilterElement element : localFilters) {
 					if (element.filter != null) {
 						if (element.r.start <= currentPos && currentPos < element.r.end) {
-//							System.out.println("MovieProcessor processStreamFrame " +
-//							 element.filter);
+							// System.out.println("MovieProcessor
+							// processStreamFrame " +
+							// element.filter);
 							newFrame = element.filter.process(newFrame, currentPos, context);
 						}
 					}
 				}
 			}
-			if (previewFilter!=null) {
-//				System.out.println("MovieProcessor processStreamFrame " +
-//						previewFilter);
-						newFrame = previewFilter.process(newFrame, currentPos, context);
+			if (previewFilter != null) {
+				// System.out.println("MovieProcessor processStreamFrame " +
+				// previewFilter);
+				newFrame = previewFilter.process(newFrame, currentPos, context);
 			}
 			if (l != null)
 				l.nextFrameProcessed(newFrame, currentPos);

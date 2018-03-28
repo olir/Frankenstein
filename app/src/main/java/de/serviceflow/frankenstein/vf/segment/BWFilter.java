@@ -18,7 +18,8 @@ package de.serviceflow.frankenstein.vf.segment;
 import org.opencv.core.Mat;
 import org.opencv.imgproc.Imgproc;
 
-import de.serviceflow.frankenstein.vf.FilterContext;
+import de.serviceflow.frankenstein.plugin.api.DefaultSegmentFilter;
+import de.serviceflow.frankenstein.plugin.api.FilterContext;
 
 public class BWFilter extends DefaultSegmentFilter {
 

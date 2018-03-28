@@ -19,7 +19,8 @@ import org.opencv.core.Mat;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 
-import de.serviceflow.frankenstein.vf.FilterContext;
+import de.serviceflow.frankenstein.plugin.api.DefaultSegmentFilter;
+import de.serviceflow.frankenstein.plugin.api.FilterContext;
 
 public class StereoDistanceFilter extends DefaultSegmentFilter {
 
