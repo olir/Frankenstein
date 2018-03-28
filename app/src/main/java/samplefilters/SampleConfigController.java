@@ -1,6 +1,6 @@
 package samplefilters;
 
-import de.screenflow.frankenstein.vf.segment.SegmentConfigController;
+import de.serviceflow.frankenstein.vf.segment.SegmentConfigController;
 
 public class SampleConfigController extends SegmentConfigController {
 

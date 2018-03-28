@@ -3,14 +3,14 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-      <groupId>de.screenflow.frankenstein</groupId>
+      <groupId>de.serviceflow.frankenstein</groupId>
       <artifactId>jniplugin-native</artifactId>
-      <version>0.1.1-SNAPSHOT</version>
+      <version>0.2.0</version>
     </parent>
 
-    <groupId>de.screenflow.frankenstein</groupId>
+    <groupId>de.serviceflow.frankenstein</groupId>
     <artifactId>jniplugin-32</artifactId>
-    <version>0.1.1-SNAPSHOT</version>
+    <version>0.2.0</version>
     <packaging>dll</packaging>
 
     <name>Native OpenCV Filters - win32</name>
@@ -18,9 +18,9 @@
     
    <dependencies>
     <dependency>
-    <groupId>de.screenflow.frankenstein</groupId>
+    <groupId>de.serviceflow.frankenstein</groupId>
     <artifactId>jniplugin-java</artifactId>
-    <version>0.1.1-SNAPSHOT</version>
+    <version>0.2.0</version>
       <type>jar</type>
       <scope>compile</scope>
     </dependency>   
@@ -99,9 +99,9 @@
 					<javahClassNames>
 					  <javahClassName>cc0.JniTest</javahClassName>
 					  <javahClassName>cc0.NativeExample</javahClassName>
-					  <javahClassName>de.screenflow.frankenstein.vf.jni.VideoEqualizer</javahClassName>
-					  <javahClassName>de.screenflow.frankenstein.vf.jni.MatBlender</javahClassName>
-					  <javahClassName>de.screenflow.frankenstein.vf.external.ExternalSample</javahClassName>
+					  <javahClassName>de.serviceflow.frankenstein.vf.jni.VideoEqualizer</javahClassName>
+					  <javahClassName>de.serviceflow.frankenstein.vf.jni.MatBlender</javahClassName>
+					  <javahClassName>de.serviceflow.frankenstein.vf.external.ExternalSample</javahClassName>
 					</javahClassNames>
 				   </configuration>
 				   <goals>

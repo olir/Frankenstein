@@ -1,6 +1,6 @@
 package cc0;
 
-import de.screenflow.frankenstein.vf.NativeFilter;
+import de.serviceflow.frankenstein.vf.NativeFilter;
 
 public class JniTest {
 	public JniTest() throws UnsatisfiedLinkError {

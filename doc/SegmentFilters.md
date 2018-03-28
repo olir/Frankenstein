@@ -15,9 +15,9 @@ A filter is made of the following parts:
 * fxml layout file for the filter configuration editor - sub layout for configuration of the filter instances
 * filter class - contains the image manipulation.
 
-The easiest way is to create the filter class is to extend de.screenflow.frankenstein.vf.segment.DefaultSegmentFilter.
+The easiest way is to create the filter class is to extend de.serviceflow.frankenstein.vf.segment.DefaultSegmentFilter.
 DefaultSegmentFilter expects all the classes and resources to be placed in the same package.
-Look at de.screenflow.frankenstein.vf.segment.BWFilter for an example. 
+Look at de.serviceflow.frankenstein.vf.segment.BWFilter for an example. 
 
 ## Step 1: Create a controller class for the filter configuration editor
 
@@ -100,7 +100,7 @@ __samplefilters/SampleFilter.java__:
 package samplefilters;
 
 import org.opencv.core.Mat;
-import de.screenflow.frankenstein.vf.segment.DefaultSegmentFilter;
+import de.serviceflow.frankenstein.vf.segment.DefaultSegmentFilter;
 
 public class SampleFilter extends DefaultSegmentFilter<SampleConfigController> {
 

@@ -1,0 +1,572 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.BorderPane?>
+
+<BorderPane maxHeight="750.0" maxWidth="1024.0" prefHeight="750.0" prefWidth="1024.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.serviceflow.frankenstein.fxml.ConfigurationSceneController">
+   <top>
+      <Label text="%scene.title" textAlignment="CENTER" BorderPane.alignment="CENTER">
+         <font>
+            <Font name="System Bold" size="18.0" />
+         </font>
+         <padding>
+            <Insets bottom="16.0" top="16.0" />
+         </padding>
+      </Label>
+   </top>
+   <center>
+      <GridPane maxHeight="-Infinity" minHeight="400.0" minWidth="640.0" BorderPane.alignment="TOP_CENTER">
+        <columnConstraints>
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+            <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints fillHeight="false" minHeight="260.0" prefHeight="30.0" valignment="TOP" vgrow="NEVER" />
+            <RowConstraints fillHeight="false" minHeight="350.0" prefHeight="30.0" valignment="TOP" vgrow="NEVER" />
+            <RowConstraints fillHeight="false" minHeight="50.0" prefHeight="30.0" valignment="TOP" vgrow="NEVER" />
+        </rowConstraints>
+         <children>
+            <VBox spacing="8.0">
+               <children>
+                  <Label text="Input Action">
+                     <font>
+                        <Font name="System Bold" size="16.0" />
+                     </font>
+                  </Label>
+                  <RadioButton fx:id="rVideoFileInput" onAction="#rActionVideoFileInput" text="Video File">
+                     <toggleGroup>
+                        <ToggleGroup fx:id="InputGroup" />
+                     </toggleGroup>
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </RadioButton>
+                  <RadioButton fx:id="rTestVideoGenerator" onAction="#rActionTestVideoGenerator" text="Test Video Generator" toggleGroup="$InputGroup">
+                     <font>
+                        <Font size="16.0" />
+                     </font></RadioButton>
+                  <RadioButton fx:id="rSlideshowGenerator" onAction="#rActionSlideshowGenerator" text="Slideshow" toggleGroup="$InputGroup">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </RadioButton>
+                  <RadioButton fx:id="rCameraInput" onAction="#rActionCameraInput" text="Camera (no audio)" toggleGroup="$InputGroup">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </RadioButton>
+                  <RadioButton fx:id="rStreamInput" onAction="#rActionStreamInput" text="Stream" toggleGroup="$InputGroup">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </RadioButton>
+                  <Label />
+                  <CheckBox disable="true" mnemonicParsing="false" text="Pre-Processing">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </CheckBox>
+               </children>
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
+            </VBox>
+            <VBox minWidth="-Infinity" prefWidth="213.0" spacing="8.0" GridPane.columnIndex="1">
+               <children>
+                  <Label text="Normalization Action">
+                     <font>
+                        <Font name="System Bold" size="16.0" />
+                     </font>
+                  </Label>
+                  <RadioButton fx:id="rNoNormalization" mnemonicParsing="false" onAction="#rActionNoNormalization" text="None">
+                     <toggleGroup>
+                        <ToggleGroup fx:id="NormalizationGroup" />
+                     </toggleGroup>
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </RadioButton>
+                  <RadioButton fx:id="rAnaglyph" mnemonicParsing="false" onAction="#rActionAnaglyph" text="Anaglyph to Left/Right" toggleGroup="$NormalizationGroup">
+                     <font>
+                        <Font size="16.0" />
+                     </font></RadioButton>
+                  <RadioButton fx:id="rOverUnder" mnemonicParsing="false" onAction="#rActionOverUnder" text="Over/Under to Left/Right" toggleGroup="$NormalizationGroup">
+                     <font>
+                        <Font size="16.0" />
+                     </font></RadioButton>
+                  <RadioButton fx:id="rCloneLR" mnemonicParsing="false" onAction="#rActionCloneLR" text="Clone to Left/Right" toggleGroup="$NormalizationGroup">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </RadioButton>
+                  <RadioButton fx:id="rDelay" mnemonicParsing="false" onAction="#rActionDelay" text="Delay Side" toggleGroup="$NormalizationGroup">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </RadioButton>
+                  <RadioButton fx:id="r3DConverter" disable="true" mnemonicParsing="false" text="2D to 3D" toggleGroup="$NormalizationGroup">
+                     <font>
+                        <Font size="16.0" />
+                     </font></RadioButton>
+               </children>
+            </VBox>
+            <VBox spacing="8.0" GridPane.columnIndex="2">
+               <children>
+                  <Label text="Alignment Action">
+                     <font>
+                        <Font name="System Bold" size="16.0" />
+                     </font>
+                  </Label>
+                  <RadioButton fx:id="rNoAlignment" mnemonicParsing="false" onAction="#rActionNoAlignment" text="None">
+                     <toggleGroup>
+                        <ToggleGroup fx:id="AlignmentGroup" />
+                     </toggleGroup>
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </RadioButton>
+                  <RadioButton fx:id="rSwapLR" mnemonicParsing="false" onAction="#rActionSwapLR" text="Swap Left/Right" toggleGroup="$AlignmentGroup">
+                     <font>
+                        <Font size="16.0" />
+                     </font></RadioButton>
+               </children>
+            </VBox>
+            <VBox spacing="8.0" GridPane.columnIndex="3">
+               <children>
+                  <Label text="Virtual Reality Action">
+                     <font>
+                        <Font name="System Bold" size="16.0" />
+                     </font>
+                  </Label>
+                  <RadioButton fx:id="rNoVR" mnemonicParsing="false" onAction="#rActionNoVR" text="None">
+                     <toggleGroup>
+                        <ToggleGroup fx:id="VirtualRealityGroup" />
+                     </toggleGroup>
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </RadioButton>
+                  <RadioButton fx:id="rVRConverter" mnemonicParsing="false" onAction="#rActionVRConverter" text="VR 180° Converter" toggleGroup="$VirtualRealityGroup">
+                     <font>
+                        <Font size="16.0" />
+                     </font></RadioButton>
+               </children>
+            </VBox>
+            <VBox spacing="8.0" GridPane.columnIndex="4">
+               <children>
+                  <Label text="Output Action">
+                     <font>
+                        <Font name="System Bold" size="16.0" />
+                     </font>
+                  </Label>
+                  <RadioButton fx:id="rNoOutput" mnemonicParsing="false" onAction="#rActionNoOutput" text="None">
+                     <toggleGroup>
+                        <ToggleGroup fx:id="OutputGroup" />
+                     </toggleGroup>
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </RadioButton>
+                  <RadioButton fx:id="rVideoFileOutput" mnemonicParsing="false" onAction="#rActionVideoFileOutput" text="Video File Output" toggleGroup="$OutputGroup">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </RadioButton>
+               </children>
+            </VBox>
+            <Button fx:id="doneButton" alignment="CENTER" mnemonicParsing="false" onAction="#doneButtonPressed" text="%button.done" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2">
+               <GridPane.margin>
+                  <Insets top="16.0" />
+               </GridPane.margin></Button>
+            <TabPane fx:id="tabPane" maxHeight="-Infinity" prefHeight="350.0" tabClosingPolicy="UNAVAILABLE" GridPane.columnSpan="2147483647" GridPane.rowIndex="1" GridPane.vgrow="ALWAYS">
+               <tabs>
+                  <Tab fx:id="tabVideoFileInput" closable="false" text="Video File Input">
+                    <content>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <GridPane hgap="8.0" vgap="8.0">
+                                <columnConstraints>
+                                  <ColumnConstraints fillWidth="false" halignment="LEFT" hgrow="NEVER" minWidth="10.0" prefWidth="100.0" />
+                                  <ColumnConstraints halignment="LEFT" hgrow="ALWAYS" minWidth="10.0" prefWidth="750.0" />
+                                    <ColumnConstraints fillWidth="false" halignment="LEFT" hgrow="NEVER" minWidth="10.0" prefWidth="100.0" />
+                                </columnConstraints>
+                                <rowConstraints>
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                  <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                </rowConstraints>
+                                 <children>
+                                    <Label text="Input File:" />
+                                    <Button mnemonicParsing="false" onAction="#btnActionChangeInputFile" text="..." GridPane.columnIndex="2">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Button>
+                                    <TextField fx:id="tfPropertyInputFile" editable="false" GridPane.columnIndex="1">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </TextField>
+                                 </children>
+                                 <padding>
+                                    <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
+                                 </padding>
+                              </GridPane>
+                           </children>
+                        </AnchorPane>
+                    </content>
+                  </Tab>
+                  <Tab fx:id="tabTestVideoGenerator" closable="false" text="Test Video Generator">
+                    <content>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <GridPane hgap="8.0" vgap="8.0">
+                                 <children>
+                                    <Label text="Dimension:" />
+                                    <TextField fx:id="tfPropertyTestScreenWidth" editable="true" promptText="Width" text="1280" GridPane.columnIndex="1">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </TextField>
+                                    <TextField fx:id="tfPropertyTestScreenHeight" editable="true" promptText="Height" text="768" GridPane.columnIndex="3">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </TextField>
+                                    <Label text="x" GridPane.columnIndex="2">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                                 <columnConstraints>
+                                    <ColumnConstraints fillWidth="false" halignment="LEFT" hgrow="NEVER" minWidth="10.0" prefWidth="100.0" />
+                                    <ColumnConstraints fillWidth="false" halignment="LEFT" hgrow="NEVER" minWidth="10.0" prefWidth="64.0" />
+                                    <ColumnConstraints fillWidth="false" halignment="LEFT" hgrow="NEVER" minWidth="10.0" prefWidth="1.0" />
+                                    <ColumnConstraints fillWidth="false" halignment="LEFT" hgrow="NEVER" minWidth="10.0" prefWidth="64.0" />
+                                 </columnConstraints>
+                                 <padding>
+                                    <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
+                                 </padding>
+                                 <rowConstraints>
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                 </rowConstraints>
+                              </GridPane>
+                           </children></AnchorPane>
+                    </content>
+                  </Tab>
+                  <Tab fx:id="tabSlideshow" closable="false" text="Slideshow">
+                    <content>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <GridPane hgap="8.0" vgap="8.0">
+                                 <columnConstraints>
+                                    <ColumnConstraints fillWidth="false" halignment="LEFT" hgrow="NEVER" minWidth="10.0" prefWidth="100.0" />
+                                    <ColumnConstraints halignment="LEFT" hgrow="ALWAYS" minWidth="10.0" prefWidth="750.0" />
+                                    <ColumnConstraints fillWidth="false" halignment="LEFT" hgrow="NEVER" minWidth="10.0" prefWidth="100.0" />
+                                 </columnConstraints>
+                                 <padding>
+                                    <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
+                                 </padding>
+                                 <rowConstraints>
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                 </rowConstraints>
+                                 <children>
+                                    <Label text="Slides Dir:" />
+                                    <Button mnemonicParsing="false" onAction="#btnActionChangeInputDir" text="..." GridPane.columnIndex="2">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Button>
+                                    <TextField fx:id="tfPropertyInputDir" editable="false" GridPane.columnIndex="1">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </TextField>
+                                 </children>
+                              </GridPane>
+                           </children></AnchorPane>
+                    </content>
+                  </Tab>
+                  <Tab fx:id="tabVideoStreamInput" closable="false" text="Stream Input">
+                     <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <GridPane hgap="8.0" vgap="8.0">
+                                 <children>
+                                    <Label text="Input Stream URL:" />
+                                    <TextField fx:id="tfPropertyInputStream" text="rtsp://184.72.239.149/vod/mp4:BigBuckBunny_175k.mov" GridPane.columnIndex="1">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </TextField>
+                                    <TextField fx:id="tfPropertyRecordingFile" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </TextField>
+                                    <Button mnemonicParsing="false" onAction="#btnActionChangeRecordingFile" text="..." GridPane.columnIndex="2" GridPane.rowIndex="1">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </Button>
+                                    <Label text="Recording File:" GridPane.rowIndex="1" />
+                                    <Label text="Recording is optional and requires VLC 2.2.8 installed. But it is also more compatible." GridPane.columnIndex="1" GridPane.rowIndex="2">
+                                       <font>
+                                          <Font name="System Italic" size="14.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                                 <columnConstraints>
+                                    <ColumnConstraints fillWidth="false" halignment="LEFT" hgrow="NEVER" minWidth="10.0" prefWidth="150.0" />
+                                    <ColumnConstraints halignment="LEFT" hgrow="ALWAYS" minWidth="10.0" prefWidth="750.0" />
+                                    <ColumnConstraints fillWidth="false" halignment="LEFT" hgrow="NEVER" minWidth="10.0" prefWidth="100.0" />
+                                 </columnConstraints>
+                                 <padding>
+                                    <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
+                                 </padding>
+                                 <rowConstraints>
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                 </rowConstraints>
+                              </GridPane>
+                           </children>
+                        </AnchorPane>
+                     </content>
+                  </Tab>
+                  <Tab fx:id="tabAnaglyph" closable="false" text="Anaglyph to LR">
+                    <content>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <GridPane hgap="8.0" vgap="8.0">
+                                 <children>
+                                    <Label text="Resize mode:" GridPane.columnIndex="0" />
+                                    <RadioButton fx:id="rPropertyAnaglyphKeepWidth" mnemonicParsing="false" onAction="#rActionAnaglyphKeepWidth" selected="true" text="Keep width" GridPane.columnIndex="1">
+                                       <toggleGroup>
+                                          <ToggleGroup fx:id="AnaglyphResizeModeGroup" />
+                                       </toggleGroup>
+                                    </RadioButton>
+                                    <RadioButton fx:id="rPropertyAnaglyphDoubleWidth" mnemonicParsing="false" onAction="#rActionAnaglyphDoubleWidth" text="Double width" toggleGroup="$AnaglyphResizeModeGroup" GridPane.columnIndex="2" />
+                                 </children>
+                                 <columnConstraints>
+                                    <ColumnConstraints fillWidth="false" halignment="LEFT" hgrow="NEVER" minWidth="10.0" prefWidth="120.0" />
+                                    <ColumnConstraints fillWidth="false" halignment="LEFT" hgrow="NEVER" minWidth="10.0" prefWidth="150.0" />
+                                    <ColumnConstraints fillWidth="false" halignment="LEFT" hgrow="NEVER" minWidth="10.0" prefWidth="150.0" />
+                                 </columnConstraints>
+                                 <padding>
+                                    <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
+                                 </padding>
+                                 <rowConstraints>
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                 </rowConstraints>
+                              </GridPane>
+                           </children></AnchorPane>
+                    </content>
+                  </Tab>
+                  <Tab fx:id="tabOverUnder" closable="false" text="OverUnder to LR">
+                    <content>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <GridPane hgap="8.0" vgap="8.0">
+                                 <children>
+                                    <Label text="Resize mode:" GridPane.columnIndex="0" />
+                                    <RadioButton fx:id="rPropertyOUAdjustSize" mnemonicParsing="false" onAction="#rActionrOUAdjustSize" selected="true" text="Adjust size" GridPane.columnIndex="1">
+                                       <toggleGroup>
+                                          <ToggleGroup fx:id="OUResizeModeGroup" />
+                                       </toggleGroup>
+                                    </RadioButton>
+                                    <RadioButton fx:id="rPropertyOUReduceSize" mnemonicParsing="false" onAction="#rActionrOUReduceSize" text="Reduce size" toggleGroup="$OUResizeModeGroup" GridPane.columnIndex="2" />
+                                 </children>
+                                 <columnConstraints>
+                                    <ColumnConstraints fillWidth="false" halignment="LEFT" hgrow="NEVER" minWidth="10.0" prefWidth="120.0" />
+                                    <ColumnConstraints fillWidth="false" halignment="LEFT" hgrow="NEVER" minWidth="10.0" prefWidth="150.0" />
+                                    <ColumnConstraints fillWidth="false" halignment="LEFT" hgrow="NEVER" minWidth="10.0" prefWidth="150.0" />
+                                 </columnConstraints>
+                                 <padding>
+                                    <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
+                                 </padding>
+                                 <rowConstraints>
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                 </rowConstraints>
+                              </GridPane>
+                           </children></AnchorPane>
+                    </content>
+                  </Tab>
+                  <Tab fx:id="tabClone" closable="false" text="Clone to LR">
+                    <content>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <GridPane hgap="8.0" vgap="8.0">
+                                 <children>
+                                    <Label text="no options">
+                                       <font>
+                                          <Font name="System Italic" size="18.0" />
+                                       </font></Label>
+                                 </children>
+                                 <columnConstraints>
+                                    <ColumnConstraints fillWidth="false" halignment="LEFT" hgrow="NEVER" minWidth="10.0" prefWidth="100.0" />
+                                    <ColumnConstraints halignment="LEFT" hgrow="ALWAYS" minWidth="10.0" prefWidth="750.0" />
+                                    <ColumnConstraints fillWidth="false" halignment="LEFT" hgrow="NEVER" minWidth="10.0" prefWidth="100.0" />
+                                 </columnConstraints>
+                                 <padding>
+                                    <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
+                                 </padding>
+                                 <rowConstraints>
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                 </rowConstraints>
+                              </GridPane>
+                           </children></AnchorPane>
+                    </content>
+                  </Tab>
+                  <Tab fx:id="tabDelay" closable="false" text="Delay Side">
+                    <content>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <GridPane hgap="8.0" vgap="8.0">
+                                 <children>
+                                    <Label text="Side to delay:" GridPane.columnIndex="0" />
+                                    <RadioButton fx:id="rDelayLeft" mnemonicParsing="false" onAction="#rActionrDelayLeft" selected="true" text="left" GridPane.columnIndex="1">
+                                       <toggleGroup>
+                                          <ToggleGroup fx:id="DelaySideGroup" />
+                                       </toggleGroup>
+                                    </RadioButton>
+                                    <RadioButton fx:id="rDelayRight" mnemonicParsing="false" onAction="#rActionrDelayRight" text="right" toggleGroup="$DelaySideGroup" GridPane.columnIndex="2" />
+                                 </children>
+                                 <columnConstraints>
+                                    <ColumnConstraints fillWidth="false" halignment="LEFT" hgrow="NEVER" minWidth="10.0" prefWidth="120.0" />
+                                    <ColumnConstraints fillWidth="false" halignment="LEFT" hgrow="NEVER" minWidth="10.0" prefWidth="150.0" />
+                                    <ColumnConstraints fillWidth="false" halignment="LEFT" hgrow="NEVER" minWidth="10.0" prefWidth="150.0" />
+                                 </columnConstraints>
+                                 <padding>
+                                    <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
+                                 </padding>
+                                 <rowConstraints>
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                 </rowConstraints>
+                              </GridPane>
+                           </children></AnchorPane>
+                    </content>
+                  </Tab>
+                  <Tab fx:id="tabSwap" closable="false" text="Swap LR">
+                    <content>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <GridPane hgap="8.0" vgap="8.0">
+                                 <columnConstraints>
+                                    <ColumnConstraints fillWidth="false" halignment="LEFT" hgrow="NEVER" minWidth="10.0" prefWidth="100.0" />
+                                    <ColumnConstraints halignment="LEFT" hgrow="ALWAYS" minWidth="10.0" prefWidth="750.0" />
+                                    <ColumnConstraints fillWidth="false" halignment="LEFT" hgrow="NEVER" minWidth="10.0" prefWidth="100.0" />
+                                 </columnConstraints>
+                                 <padding>
+                                    <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
+                                 </padding>
+                                 <rowConstraints>
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                 </rowConstraints>
+                                 <children>
+                                    <Label text="no options">
+                                       <font>
+                                          <Font name="System Italic" size="18.0" />
+                                       </font>
+                                    </Label>
+                                 </children>
+                              </GridPane>
+                           </children></AnchorPane>
+                    </content>
+                  </Tab>
+                  <Tab fx:id="tabVRConverter" closable="false" text="VR 180°">
+                    <content>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <GridPane hgap="8.0" vgap="8.0">
+                                 <children>
+                                    <Label text="Shrink factor:" GridPane.columnIndex="0" />
+                                    <Slider fx:id="sliderVRShrink" majorTickUnit="10.0" min="40.0" minorTickCount="1" snapToTicks="true" value="80.0" GridPane.columnIndex="2" />
+                                    <Label fx:id="lVRShrinkDisplay" alignment="CENTER_RIGHT" contentDisplay="RIGHT" text="80%" textAlignment="RIGHT" GridPane.columnIndex="3" />
+                                    <Label text="Mode:" GridPane.rowIndex="1" />
+                                    <RadioButton fx:id="vrModeFromSBS" mnemonicParsing="false" onAction="#rActionVRModeFromSBS" text="SBS to 180°VR" GridPane.columnIndex="2" GridPane.rowIndex="1">
+										<toggleGroup>
+                                          <ToggleGroup fx:id="VRModeGroup" />
+                                    	</toggleGroup>
+                                    </RadioButton>
+                                    <RadioButton fx:id="vrModeFromVR" mnemonicParsing="false" onAction="#rActionVRModeFromVR" text="Just Shrink" toggleGroup="$VRModeGroup" GridPane.columnIndex="3" GridPane.rowIndex="1" />
+                                 </children>
+                                 <columnConstraints>
+                                    <ColumnConstraints fillWidth="false" halignment="LEFT" hgrow="NEVER" minWidth="10.0" prefWidth="120.0" />
+                                    <ColumnConstraints halignment="LEFT" hgrow="ALWAYS" />
+                                    <ColumnConstraints halignment="LEFT" hgrow="ALWAYS" minWidth="10.0" prefWidth="170.0" />
+                                    <ColumnConstraints fillWidth="false" halignment="LEFT" hgrow="NEVER" minWidth="10.0" prefWidth="170.0" />
+                                 </columnConstraints>
+                                 <padding>
+                                    <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
+                                 </padding>
+                                 <rowConstraints>
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                 </rowConstraints>
+                              </GridPane>
+                           </children></AnchorPane>
+                    </content>
+                  </Tab>
+                  <Tab fx:id="tabVideoFileOutput" closable="false" text="Video File Output">
+                    <content>
+                      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                           <children>
+                              <GridPane hgap="8.0" vgap="8.0">
+                                 <children>
+                                    <Label text="Output File:" />
+                                    <TextField fx:id="tfPropertyOutputFile" editable="false" GridPane.columnIndex="1">
+                                       <font>
+                                          <Font size="14.0" />
+                                       </font>
+                                    </TextField>
+                                 </children>
+                                 <columnConstraints>
+                                    <ColumnConstraints fillWidth="false" halignment="LEFT" hgrow="NEVER" minWidth="10.0" prefWidth="100.0" />
+                                    <ColumnConstraints halignment="LEFT" hgrow="ALWAYS" minWidth="10.0" prefWidth="750.0" />
+                                    <ColumnConstraints fillWidth="false" halignment="LEFT" hgrow="NEVER" minWidth="10.0" prefWidth="100.0" />
+                                 </columnConstraints>
+                                 <padding>
+                                    <Insets bottom="16.0" left="16.0" right="16.0" top="16.0" />
+                                 </padding>
+                                 <rowConstraints>
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                    <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                                 </rowConstraints>
+                              </GridPane>
+                           </children></AnchorPane>
+                    </content>
+                  </Tab>
+               </tabs></TabPane>
+         </children>
+         <BorderPane.margin>
+            <Insets bottom="8.0" left="8.0" right="8.0" top="8.0" />
+         </BorderPane.margin>
+      </GridPane>
+   </center>
+</BorderPane>

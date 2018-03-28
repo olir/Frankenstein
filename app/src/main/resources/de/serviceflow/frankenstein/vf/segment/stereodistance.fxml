@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.BorderPane?>
+
+<BorderPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.serviceflow.frankenstein.vf.segment.StereoDistanceConfigController">
+   <center>
+   </center>
+   <center>
+	   <FlowPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="1">
+	      <children>
+	         <Label text="farer" />
+	         <Slider fx:id="sliderStereoPerspective" blockIncrement="2.0" majorTickUnit="2.0" max="32.0" maxWidth="200.0" min="-32.0" minWidth="200.0" minorTickCount="1" prefWidth="200.0" snapToTicks="true" />
+	         <Label text="closer" />
+	      </children>
+	   </FlowPane>
+   </center>
+</BorderPane>

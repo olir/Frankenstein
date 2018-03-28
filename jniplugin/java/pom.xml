@@ -10,23 +10,23 @@
   </properties>
     
     <parent>
-        <groupId>de.screenflow.frankenstein</groupId>
+        <groupId>de.serviceflow.frankenstein</groupId>
         <artifactId>jniplugin-parent</artifactId>
-        <version>0.1.1-SNAPSHOT</version>
+        <version>0.2.0</version>
     </parent>
 
-    <groupId>de.screenflow.frankenstein</groupId>
+    <groupId>de.serviceflow.frankenstein</groupId>
     <artifactId>jniplugin-java</artifactId>
-    <version>0.1.1-SNAPSHOT</version>
+    <version>0.2.0</version>
 
     <name>Native OpenCV Filters - Java Part</name>
     <!-- Credits to http://www.tricoder.net/blog/?p=197 -->
     
   <dependencies>
     <dependency>
-      <groupId>de.screenflow.frankenstein</groupId>
+      <groupId>de.serviceflow.frankenstein</groupId>
       <artifactId>app</artifactId>
-      <version>0.1.1-SNAPSHOT</version>
+      <version>0.2.0</version>
     </dependency>
   </dependencies>
     
@@ -41,30 +41,79 @@
         </configuration>
       </plugin> 
 
-		<plugin>
-			<groupId>org.apache.maven.plugins</groupId>
-			<artifactId>maven-antrun-plugin</artifactId>
-			<version>1.4</version>
-			<executions>
-			  <execution>
-			    <id>copy</id>
-				<phase>package</phase>
-				<goals>
-				  <goal>run</goal>
-				</goals>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-antrun-plugin</artifactId>
+        <version>1.4</version>
+        <executions>
+          <execution>
+            <id>copy</id>
+          <phase>package</phase>
+          <goals>
+            <goal>run</goal>
+          </goals>
+          <configuration>
+            <tasks>
+            <copy todir="../target" flatten="true">
+              <fileset dir="./target">
+                <include name="*.jar"/>
+              </fileset>
+            </copy>
+            </tasks>
+          </configuration>
+          </execution>
+        </executions>
+      </plugin>
+
+      <!-- Java Documentation -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>2.10.4</version>
+				<executions>
+					<execution>
+					  <id>attach-javadocs</id>
+					  <goals>
+						<goal>jar</goal>
+					  </goals>
+					</execution>
+				</executions>
 				<configuration>
-				  <tasks>
-					<copy todir="../target" flatten="true">
-						<fileset dir="./target">
-							<include name="*.jar"/>
-						</fileset>
-					</copy>
-				  </tasks>
+					<doctitle>My API for ${project.name} ${project.version}</doctitle>
+					<windowtitle>My API for ${project.name} ${project.version}</windowtitle>
+					<testDoctitle>My Test API for ${project.name} ${project.version}</testDoctitle>
+					<testWindowtitle>My Test API for ${project.name} ${project.version}</testWindowtitle>
+					<show>private</show>
+					<failOnError>false</failOnError>
+					<sourcepath>${basedir}/target/generated</sourcepath>
 				</configuration>
-			  </execution>
-			</executions>
-		</plugin>
-	  
+				<!--
+				<reportSets>
+					<reportSet>
+						<reports>
+							<report>javadoc-no-fork</report>
+							<report>test-javadoc-no-fork</report>
+						</reports>
+					</reportSet>
+				</reportSets>
+				-->
+      </plugin>
+      
+      <plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>2.2.1</version>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<goals>
+							<goal>jar-no-fork</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+    
     </plugins>
   </build>
             

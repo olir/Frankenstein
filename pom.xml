@@ -11,7 +11,7 @@
     <maven.compiler.target>1.8</maven.compiler.target>
     <manifest.Codebase>*</manifest.Codebase>
     <jnlp.URL>https://github.com/olir/Frankenstein/releases/download/${version}</jnlp.URL>
-    <mainClass>de.screenflow.frankenstein.Main</mainClass>
+    <mainClass>de.serviceflow.frankenstein.Main</mainClass>
     <jks.keystore>${project.basedir}/src/main/jnlp/dummy-keystore</jks.keystore>
     <jks.keypass>pass01</jks.keypass>
     <jks.storePass>pass01</jks.storePass>
@@ -19,16 +19,16 @@
   </properties>
 
   <!-- Maven Coordinates -->
-  <groupId>de.screenflow.frankenstein</groupId>
+  <groupId>de.serviceflow.frankenstein</groupId>
   <artifactId>root</artifactId>
-  <version>0.1.1-SNAPSHOT</version>
+  <version>0.2.0</version>
   <packaging>pom</packaging>
 
   <name>Frankenstein - POM</name>
   
   <!-- Native Implementation Plugin -->
   <modules>
-    <module>jniplugin</module>
+    <!-- <module>jniplugin</module> -->
     <module>app</module>
   </modules>
 
@@ -44,8 +44,9 @@
     <tag>HEAD</tag>
   </scm>
 
-  <!-- set version then mvn clean deploy, then check at https://oss.sonatype.org/
-    , Select Staging Repositories, select entry, close, release. in case of error
+  <!-- Instructions: 
+    set to no-snapshot version, then mvn clean deploy, then wait a moment and check at https://oss.sonatype.org/
+    , do artifact search, select entry, click "close", click "release". in case of error
     check http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22nexus-staging-maven-plugin%22
     for latest version. -->
   <distributionManagement>
@@ -129,6 +130,48 @@
   
   <build>
     <plugins>
+    <!--
+      <plugin>
+        <groupId>org.sonatype.plugins</groupId>
+        <artifactId>nexus-staging-maven-plugin</artifactId>
+        <version>1.6.8</version>
+        <extensions>true</extensions>
+        <executions>
+					<execution>
+						<id>default-deploy</id>
+						<phase>deploy</phase>
+						<goals>
+							<goal>deploy</goal>
+						</goals>
+					</execution>
+        </executions>
+        <configuration>
+          <serverId>ossrh</serverId>
+          <nexusUrl>https://oss.sonatype.org/</nexusUrl>
+          <autoReleaseAfterClose>true</autoReleaseAfterClose>
+          <keepStagingRepositoryOnCloseRuleFailure>false</keepStagingRepositoryOnCloseRuleFailure>
+        </configuration>
+      </plugin>
+      
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-gpg-plugin</artifactId>
+				<version>1.5</version>
+				<configuration>
+					<skip>false</skip>
+				</configuration>
+				<executions>
+					<execution>
+						<id>sign-artifacts</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>sign</goal>
+						</goals>
+					</execution>
+				</executions>
+      </plugin>
+      -->
+      
     </plugins>
   </build>
 

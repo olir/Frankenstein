@@ -3,14 +3,14 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>de.screenflow.frankenstein</groupId>
+        <groupId>de.serviceflow.frankenstein</groupId>
         <artifactId>root</artifactId>
-        <version>0.1.1-SNAPSHOT</version>
+        <version>0.2.0</version>
     </parent>
 
-    <groupId>de.screenflow.frankenstein</groupId>
+    <groupId>de.serviceflow.frankenstein</groupId>
     <artifactId>jniplugin-parent</artifactId>
-    <version>0.1.1-SNAPSHOT</version>
+    <version>0.2.0</version>
     <packaging>pom</packaging>
 
     <name>Native OpenCV Filters - Parent</name>
@@ -23,9 +23,9 @@
 
   <dependencies>
     <dependency>
-      <groupId>de.screenflow.frankenstein</groupId>
+      <groupId>de.serviceflow.frankenstein</groupId>
       <artifactId>app</artifactId>
-      <version>0.1.1-SNAPSHOT</version>
+      <version>0.2.0</version>
     </dependency>
   </dependencies>
    

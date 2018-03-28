@@ -2,8 +2,8 @@ package samplefilters;
 
 import org.opencv.core.Mat;
 
-import de.screenflow.frankenstein.vf.FilterContext;
-import de.screenflow.frankenstein.vf.segment.DefaultSegmentFilter;
+import de.serviceflow.frankenstein.vf.FilterContext;
+import de.serviceflow.frankenstein.vf.segment.DefaultSegmentFilter;
 
 public class SampleFilter extends DefaultSegmentFilter {
 
