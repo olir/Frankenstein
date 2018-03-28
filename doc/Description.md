@@ -52,4 +52,4 @@ FFMPEG build contains H264 encoder based on the OpenH264 library, that should be
 ## For developers ##
 When you work on custom filters, you can concentrate on manipulating images with the OpenCV or JogAmp libraries. 
 For more details read [SegmentFilters](https://olir.github.io/Frankenstein/doc/SegmentFilters.html).
-
+To run on [Debian Linux click here](https://olir.github.io/Frankenstein/doc/DebianLinux.html).
