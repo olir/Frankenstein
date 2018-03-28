@@ -158,7 +158,7 @@
         <version>1.6.0</version>
         <configuration>
           <skip>false</skip>
-          <executable>javaw</executable>
+          <executable>${env.JAVA_HOME}/bin/java</executable>
           <workingDirectory>${basedir}/src/main/resources</workingDirectory><!-- opencv_ffmpeg320 dll location -->
           <arguments>
             <argument>${openh264opt}</argument>

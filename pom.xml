@@ -139,7 +139,7 @@
           <version>1.6.0</version>
           <configuration>
             <skip>true</skip>
-            <executable>javaw</executable>
+            <executable>${env.JAVA_HOME}/bin/java</executable>
           </configuration>
         </plugin>        
       </plugins>

@@ -198,17 +198,20 @@ public class Configuration {
 			}
 		}
 
-		if (getFFmpegPath() == null) {
-			if (helper == null)
-				throw new RuntimeException("-ffmpegpath not set");
-			File dir = null;
-			while (dir == null) { // merciless inquisition
-				dir = helper.getFFmpegPath();
-			}
-			iniProperties.setProperty("ffmpegpath", dir.getAbsolutePath());
+    if (getFFmpegPath() == null) {
+      if (helper == null) {
+        System.err.println("Error: -ffmpegpath not set");
+      }
+      if (helper != null) {
+        File dir = null;
+        while (dir == null) { // merciless inquisition
+          dir = helper.getFFmpegPath();
+        }
+        iniProperties.setProperty("ffmpegpath", dir.getAbsolutePath());
 
-			savePreferences();
-		}
+        savePreferences();
+      }
+    }
 
 		String tdp = getTempPath();
 		File tdf = tdp != null ? new File(tdp) : null;
