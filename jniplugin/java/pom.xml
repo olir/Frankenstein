@@ -12,12 +12,12 @@
     <parent>
         <groupId>de.serviceflow.frankenstein</groupId>
         <artifactId>jniplugin-parent</artifactId>
-        <version>0.2.0</version>
+        <version>0.2.1-SNAPSHOT</version>
     </parent>
 
     <groupId>de.serviceflow.frankenstein</groupId>
     <artifactId>jniplugin-java</artifactId>
-    <version>0.2.0</version>
+    <version>0.2.1-SNAPSHOT</version>
 
     <name>Native OpenCV Filters - Java Part</name>
     <!-- Credits to http://www.tricoder.net/blog/?p=197 -->
@@ -65,11 +65,11 @@
         </executions>
       </plugin>
 
-      <!-- Java Documentation -->
+      <!-- 
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
-				<version>2.10.4</version>
+				<version>3.0.0</version>
 				<executions>
 					<execution>
 					  <id>attach-javadocs</id>
@@ -78,25 +78,6 @@
 					  </goals>
 					</execution>
 				</executions>
-				<configuration>
-					<doctitle>My API for ${project.name} ${project.version}</doctitle>
-					<windowtitle>My API for ${project.name} ${project.version}</windowtitle>
-					<testDoctitle>My Test API for ${project.name} ${project.version}</testDoctitle>
-					<testWindowtitle>My Test API for ${project.name} ${project.version}</testWindowtitle>
-					<show>private</show>
-					<failOnError>false</failOnError>
-					<sourcepath>${basedir}/target/generated</sourcepath>
-				</configuration>
-				<!--
-				<reportSets>
-					<reportSet>
-						<reports>
-							<report>javadoc-no-fork</report>
-							<report>test-javadoc-no-fork</report>
-						</reports>
-					</reportSet>
-				</reportSets>
-				-->
       </plugin>
       
       <plugin>
@@ -112,7 +93,25 @@
 					</execution>
 				</executions>
 			</plugin>
-
+      
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-gpg-plugin</artifactId>
+				<version>1.5</version>
+				<configuration>
+					<skip>false</skip>
+				</configuration>
+				<executions>
+					<execution>
+						<id>sign-artifacts</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>sign</goal>
+						</goals>
+					</execution>
+				</executions>
+      </plugin>
+      -->
     
     </plugins>
   </build>

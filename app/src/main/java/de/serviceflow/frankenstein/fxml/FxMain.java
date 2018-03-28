@@ -114,7 +114,7 @@ public class FxMain extends Application {
 		FXMLLoader loader;
 
 		PropertyResourceBundle bundleConfiguration = (PropertyResourceBundle) ResourceBundle
-				.getBundle("de/screenflow/frankenstein/bundles/configuration", locale);
+				.getBundle("de/serviceflow/frankenstein/bundles/configuration", locale);
 		loader = new FXMLLoader(getClass().getResource("ConfigurationScene.fxml"), bundleConfiguration);
 		try {
 			sceneRoot = (BorderPane) loader.load();
@@ -127,7 +127,7 @@ public class FxMain extends Application {
 		cController.configure(this, theStage);
 
 		PropertyResourceBundle bundleProcessing = (PropertyResourceBundle) ResourceBundle
-				.getBundle("de/screenflow/frankenstein/bundles/processing", locale);
+				.getBundle("de/serviceflow/frankenstein/bundles/processing", locale);
 		loader = new FXMLLoader(getClass().getResource("ProcessingScene.fxml"), bundleProcessing);
 		try {
 			sceneRoot = (BorderPane) loader.load();

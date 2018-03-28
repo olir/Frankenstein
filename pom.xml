@@ -21,14 +21,14 @@
   <!-- Maven Coordinates -->
   <groupId>de.serviceflow.frankenstein</groupId>
   <artifactId>root</artifactId>
-  <version>0.2.0</version>
+  <version>0.2.1-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>Frankenstein - POM</name>
   
   <!-- Native Implementation Plugin -->
   <modules>
-    <!-- <module>jniplugin</module> -->
+    <module>jniplugin</module>
     <module>app</module>
   </modules>
 

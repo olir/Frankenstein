@@ -829,7 +829,7 @@ public class ProcessingSceneController implements ProcessingListener {
 	public void filterSetup() {
 
 		PropertyResourceBundle bundleConfiguration = (PropertyResourceBundle) ResourceBundle
-				.getBundle("de/screenflow/frankenstein/bundles/filtersetup", FxMain.getLocale());
+				.getBundle("de/serviceflow/frankenstein/bundles/filtersetup", FxMain.getLocale());
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("FilterSetupPopup.fxml"), bundleConfiguration);
 		Stage stage = new Stage();
 		try {
