@@ -1,4 +1,4 @@
-package cc0;
+package de.serviceflow.frankenstein.plugin.opencv.jni;
 
 import de.serviceflow.frankenstein.plugin.api.NativeFilter;
 

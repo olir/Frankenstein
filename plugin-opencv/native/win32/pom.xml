@@ -98,9 +98,9 @@
 					<javahOutputFileName>nativeCode.h</javahOutputFileName>
 					<javahClassNames>
 					  <javahClassName>cc0.JniTest</javahClassName>
-					  <javahClassName>cc0.NativeExample</javahClassName>
-					  <javahClassName>de.serviceflow.frankenstein.vf.jni.VideoEqualizer</javahClassName>
-					  <javahClassName>de.serviceflow.frankenstein.vf.external.ExternalSample</javahClassName>
+					  <javahClassName>de.serviceflow.frankenstein.plugin.opencv.jni.NativeExample</javahClassName>
+					  <javahClassName>de.serviceflow.frankenstein.plugin.opencv.jni.VideoEqualizer</javahClassName>
+					  <javahClassName>de.serviceflow.frankenstein.plugin.opencv.jni.ExternalSample</javahClassName>
 					</javahClassNames>
 				   </configuration>
 				   <goals>

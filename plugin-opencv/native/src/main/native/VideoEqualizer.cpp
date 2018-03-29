@@ -12,7 +12,7 @@
 using namespace std;
 using namespace cv;
 
-JNIEXPORT void JNICALL Java_de_serviceflow_frankenstein_vf_jni_VideoEqualizer_init
+JNIEXPORT void JNICALL Java_de_serviceflow_frankenstein_plugin_opencv_jni_VideoEqualizer_init
   (JNIEnv* env, jobject obj)
 {
   JwMat* mat = JwMat::matptr;
@@ -21,7 +21,7 @@ JNIEXPORT void JNICALL Java_de_serviceflow_frankenstein_vf_jni_VideoEqualizer_in
   }
 }
 
-JNIEXPORT void JNICALL Java_de_serviceflow_frankenstein_vf_jni_VideoEqualizer_process
+JNIEXPORT void JNICALL Java_de_serviceflow_frankenstein_plugin_opencv_jni_VideoEqualizer_process
   (JNIEnv* env, jobject obj,
    jobject matobj, jint frameId, jobject context, jint brightness, jint contrast, jint saturation)
 {

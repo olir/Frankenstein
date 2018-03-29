@@ -12,7 +12,7 @@
 using namespace std;
 using namespace cv;
 
-JNIEXPORT void JNICALL Java_cc0_NativeExample_init
+JNIEXPORT void JNICALL Java_de_serviceflow_frankenstein_plugin_opencv_jni_NativeExample_init
   (JNIEnv* env, jobject obj)
 {
   JwMat* mat = JwMat::matptr;
@@ -24,7 +24,7 @@ JNIEXPORT void JNICALL Java_cc0_NativeExample_init
   cout << "Java_cc0_NativeExample_init END" << endl;
 }
 
-JNIEXPORT void JNICALL Java_cc0_NativeExample_process
+JNIEXPORT void JNICALL Java_de_serviceflow_frankenstein_plugin_opencv_jni_NativeExample_process
   (JNIEnv* env, jobject obj,
    jobject matobj, jint frameId, jobject context)
 {

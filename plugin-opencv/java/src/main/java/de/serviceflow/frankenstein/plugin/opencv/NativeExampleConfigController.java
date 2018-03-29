@@ -1,4 +1,4 @@
-package de.serviceflow.frankenstein.vf.segment;
+package de.serviceflow.frankenstein.plugin.opencv;
 
 import de.serviceflow.frankenstein.plugin.api.SegmentConfigController;
 

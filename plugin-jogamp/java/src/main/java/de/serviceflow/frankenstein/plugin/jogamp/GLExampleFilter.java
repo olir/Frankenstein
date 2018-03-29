@@ -1,4 +1,4 @@
-package de.serviceflow.frankenstein.vf.segment;
+package de.serviceflow.frankenstein.plugin.jogamp;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;

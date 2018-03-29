@@ -34,17 +34,13 @@ import de.serviceflow.frankenstein.plugin.api.ConfigManager;
 import de.serviceflow.frankenstein.plugin.api.NativeSegmentFilter;
 import de.serviceflow.frankenstein.plugin.api.SegmentVideoFilter;
 import de.serviceflow.frankenstein.vf.segment.BWFilter;
-import de.serviceflow.frankenstein.vf.segment.GLExampleFilter;
-import de.serviceflow.frankenstein.vf.segment.NativeExampleFilter;
 import de.serviceflow.frankenstein.vf.segment.StereoDistanceFilter;
-import de.serviceflow.frankenstein.vf.segment.VideoEqualizerFilter;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
-import samplefilters.SampleFilter;
 
 public class FxMain extends Application implements ConfigManager {
 
@@ -92,8 +88,8 @@ public class FxMain extends Application implements ConfigManager {
 						(Object[]) null);
 				// nu.pattern.OpenCV.loadShared();
 				// nu.pattern.OpenCV.loadLocal();
-        System.out.println("Loading from " + System.getProperty("java.library.path"));
-        System.loadLibrary(org.opencv.core.Core.NATIVE_LIBRARY_NAME);
+				System.out.println("Loading from " + System.getProperty("java.library.path"));
+				System.loadLibrary(org.opencv.core.Core.NATIVE_LIBRARY_NAME);
 			} catch (ClassNotFoundException e) {
 				System.out.println("WARNING: nu.pattern.OpenCV not found.");
 			} catch (Throwable t) {
@@ -210,30 +206,22 @@ public class FxMain extends Application implements ConfigManager {
 		try {
 			segmentFilters.add(new BWFilter());
 			segmentFilters.add(new StereoDistanceFilter());
-			segmentFilters.add(new SampleFilter());
-			segmentFilters.add(new GLExampleFilter());
 		} catch (Throwable t) {
 			t.printStackTrace();
 		}
 
-		// Filters with native proxy in jar
-		try {
-			segmentFilters.add(new NativeExampleFilter()); // try to load from
-															// plugin jar
-			segmentFilters.add(new VideoEqualizerFilter()); // try to load from
-															// plugin jar
-		} catch (Throwable t) {
-			t.printStackTrace();
-		}
-/*
-		// Filters completly in jar
-		try {
-			segmentFilters
-					.add(loadExternalFilterInstance("de.serviceflow.frankenstein.vf.external.ExternalSampleFilter"));
-		} catch (Throwable t) {
-			t.printStackTrace();
-		}
-*/
+		/*
+		 * // Filters completly in jar try { segmentFilters
+		 * .add(loadExternalFilterInstance(
+		 * "de.serviceflow.frankenstein.plugin.opencv.NativeExampleFilter"));
+		 * segmentFilters .add(loadExternalFilterInstance(
+		 * "de.serviceflow.frankenstein.plugin.opencv.VideoEqualizerFilter"));
+		 * segmentFilters .add(loadExternalFilterInstance(
+		 * "de.serviceflow.frankenstein.plugin.opencv.ExternalSampleFilter"));
+		 * segmentFilters .add(loadExternalFilterInstance(
+		 * "de.serviceflow.frankenstein.plugin.jogamp.GLExampleFilter")); }
+		 * catch (Throwable t) { t.printStackTrace(); }
+		 */
 	}
 
 	private SegmentVideoFilter loadExternalFilterInstance(String filterClassName) {

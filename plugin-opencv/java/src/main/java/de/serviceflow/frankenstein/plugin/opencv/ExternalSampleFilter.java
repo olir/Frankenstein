@@ -13,9 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.serviceflow.frankenstein.vf.segment;
+package de.serviceflow.frankenstein.plugin.opencv;
 
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import org.opencv.core.Mat;
@@ -24,46 +23,48 @@ import org.opencv.imgproc.Imgproc;
 import de.serviceflow.frankenstein.plugin.api.FilterContext;
 import de.serviceflow.frankenstein.plugin.api.NativeSegmentFilter;
 
-public class VideoEqualizerFilter extends NativeSegmentFilter<VideoEqualizerConfigController> {
+public class ExternalSampleFilter extends NativeSegmentFilter<ExternalSampleConfigController> {
 
-	private final static String JNI_FILTER_CLASS = "de.serviceflow.frankenstein.vf.jni.VideoEqualizer";
+	private final static String JNI_FILTER_CLASS = "de.serviceflow.frankenstein.vf.external.ExternalSample";
 
 	private final Method jniProxyProcessMethod;
 
 	private Mat mHsvMat = new Mat();
-	
+
 	@SuppressWarnings("unchecked")
-	public VideoEqualizerFilter() throws UnsatisfiedLinkError {
-		super("videoequalizer", JNI_FILTER_CLASS);
+	public ExternalSampleFilter() throws UnsatisfiedLinkError {
+		super("externalsample", JNI_FILTER_CLASS);
 		try {
-			jniProxyProcessMethod = getJniProxyClass().getMethod("process", Object.class, int.class, Object.class, int.class, int.class, int.class);
-		} catch (NoSuchMethodException | SecurityException | IllegalArgumentException e) {
+			jniProxyProcessMethod = getJniProxyClass().getMethod("process", Object.class, int.class, Object.class);
+		} catch (Throwable e) {
 			throw new RuntimeException("jni wrapper creation failed", e);
 		}
 	}
 
 	@Override
 	public Mat process(Mat rgbaImage, int frameId, FilterContext context) {
-        Imgproc.cvtColor(rgbaImage, mHsvMat, Imgproc.COLOR_RGB2HSV_FULL);
+		Imgproc.cvtColor(rgbaImage, mHsvMat, Imgproc.COLOR_RGB2HSV_FULL);
 
-		VideoEqualizerConfigController c = ((VideoEqualizerConfigController)getConfigController());
+		ExternalSampleConfigController c = ((ExternalSampleConfigController) getConfigController());
+		// pass c data to proxy...
+
+		Object params = null;
+
 		try {
-			jniProxyProcessMethod.invoke(getJniProxy(), mHsvMat, frameId, context, c.getBrightness(), c.getContrast(), c.getSaturation());
-		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+			jniProxyProcessMethod.invoke(getJniProxy(), mHsvMat, frameId, context);
+		} catch (Throwable e) {
 			e.printStackTrace();
 		}
-		
+
 		Imgproc.cvtColor(mHsvMat, rgbaImage, Imgproc.COLOR_HSV2RGB_FULL);
-		
+
 		return rgbaImage;
 	}
 
 	@Override
 	protected void initializeController() {
-		VideoEqualizerConfigController c = ((VideoEqualizerConfigController)getConfigController());
-		c.setBrightness(50);
-		c.setContrast(50);
-		c.setSaturation(50);
-		c.initialize();
+		ExternalSampleConfigController c = ((ExternalSampleConfigController) getConfigController());
+		// c.set...(...);
+		// c.initialize();
 	}
 }
