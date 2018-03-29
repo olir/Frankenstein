@@ -21,13 +21,13 @@
   <parent>
 	<groupId>de.serviceflow.frankenstein</groupId>
 	<artifactId>root</artifactId>
-	<version>0.3.3</version>
+	<version>0.3.3-SNAPSHOT</version>
   </parent>
 
 	<!-- Maven Coordinates -->
   <groupId>de.serviceflow.frankenstein</groupId>
   <artifactId>app</artifactId>
-  <version>0.3.3</version>
+  <version>0.3.3-SNAPSHOT</version>
 
   <name>Frankenstein - Application</name>
   
@@ -41,7 +41,7 @@
     <dependency>
       <groupId>de.serviceflow.frankenstein.plugin</groupId>
       <artifactId>api</artifactId>
-      <version>0.3.3</version>
+      <version>0.3.3-SNAPSHOT</version>
     </dependency>
   </dependencies>
 

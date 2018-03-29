@@ -21,7 +21,7 @@
   <!-- Maven Coordinates:  mvn versions:set -DnewVersion=X.Y.Z-SNAPSHOT -->
   <groupId>de.serviceflow.frankenstein</groupId>
   <artifactId>root</artifactId>
-  <version>0.3.3</version>
+  <version>0.3.3-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>Frankenstein - POM</name>
@@ -45,16 +45,11 @@
     <tag>HEAD</tag>
   </scm>
 
-  <!-- Release Instructions to myself: 
-    Remove -SNAPSHOT from Maven Coordinates:  mvn versions:set -DnewVersion=X.Y.Z
+  <!-- Instructions: 
     set to no-snapshot version, then mvn clean deploy, then wait a moment and check at https://oss.sonatype.org/
-    , login, click Staging Repositories, do search in upper right for group: de.serviceflow, select entry, check content
-    , click "close"/confirm, wait/click refresh, in case of error check Activity-Tab 
-    and ensure http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22nexus-staging-maven-plugin%22
-    is latest version. 
-    In case of success click "release", then increment version and add -snapshot to Maven Coordinates:  
-    mvn versions:set -DnewVersion=X.Y.Z-SNAPSHOT , and git push to origin.
-    -->
+    , do artifact search, select entry, click "close", click "release". in case of error
+    check http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22nexus-staging-maven-plugin%22
+    for latest version. -->
   <distributionManagement>
     <snapshotRepository>
       <id>ossrh</id>
@@ -139,6 +134,7 @@
   
     <plugins>
 
+    <!--
       <plugin>
         <groupId>org.sonatype.plugins</groupId>
         <artifactId>nexus-staging-maven-plugin</artifactId>
@@ -178,6 +174,7 @@
 					</execution>
 				</executions>
       </plugin>
+      -->
       
 	  
       

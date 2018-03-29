@@ -5,12 +5,12 @@
     <parent>
       <groupId>de.serviceflow.frankenstein.plugin.opencv</groupId>
       <artifactId>jniplugin-native</artifactId>
-      <version>0.3.1-SNAPSHOT</version>
+      <version>0.3.3</version>
     </parent>
 
     <groupId>de.serviceflow.frankenstein.plugin.opencv</groupId>
     <artifactId>jniplugin-32</artifactId>
-    <version>0.3.1-SNAPSHOT</version>
+    <version>0.3.3</version>
     <packaging>dll</packaging>
 
     <name>OpenCV Filters - Native parts - win32</name>
@@ -20,7 +20,7 @@
     <dependency>
     <groupId>de.serviceflow.frankenstein.plugin.opencv</groupId>
     <artifactId>plugin-opencv</artifactId>
-    <version>0.3.1-SNAPSHOT</version>
+    <version>0.3.3</version>
       <type>jar</type>
       <scope>compile</scope>
     </dependency>   

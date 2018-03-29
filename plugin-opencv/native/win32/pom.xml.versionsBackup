@@ -3,40 +3,67 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-      <groupId>de.serviceflow.frankenstein.plugin.jogamp</groupId>
+      <groupId>de.serviceflow.frankenstein.plugin.opencv</groupId>
       <artifactId>jniplugin-native</artifactId>
-      <version>0.3.3</version>
+      <version>0.3.1-SNAPSHOT</version>
     </parent>
 
-    <groupId>de.serviceflow.frankenstein.plugin.jogamp</groupId>
-    <artifactId>jniplugin-64</artifactId>
-    <version>0.3.3</version>
+    <groupId>de.serviceflow.frankenstein.plugin.opencv</groupId>
+    <artifactId>jniplugin-32</artifactId>
+    <version>0.3.1-SNAPSHOT</version>
     <packaging>dll</packaging>
 
-    <name>JogAmp Filters - Native parts - win64</name>
+    <name>OpenCV Filters - Native parts - win32</name>
     <!-- Credits to http://www.tricoder.net/blog/?p=197 -->
+    
    <dependencies>
     <dependency>
-    <groupId>de.serviceflow.frankenstein.plugin.jogamp</groupId>
-    <artifactId>plugin-jogamp</artifactId>
-    <version>0.3.3</version>
-    <type>jar</type>
-    <scope>compile</scope>
+    <groupId>de.serviceflow.frankenstein.plugin.opencv</groupId>
+    <artifactId>plugin-opencv</artifactId>
+    <version>0.3.1-SNAPSHOT</version>
+      <type>jar</type>
+      <scope>compile</scope>
     </dependency>   
   </dependencies>
 
+  <profiles> 
+    <profile>
+      <id>GCC32_FLAGS-defined</id>
+      <activation>
+        <property>
+          <name>env.GCC32_FLAGS</name>
+        </property>
+      </activation>
+      <properties>
+        <gcc.customflags>${env.GCC32_FLAGS}</gcc.customflags>
+      </properties>
+    </profile>
+    <profile>
+      <id>GCC32_FLAGS-undefined</id>
+      <activation>
+        <property>
+          <name>!env.GCC32_FLAGS</name>
+        </property>
+      </activation>
+      <properties>
+        <gcc.customflags></gcc.customflags>
+      </properties>
+    </profile>
+  </profiles>
+
   <build>
         <plugins>
-        
+
               <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>native-maven-plugin</artifactId>
-                <version>1.0-alpha-8</version>
-                <extensions>true</extensions>
-                <configuration>
-					<!--  trigger javah with win32 architecture -->
-					<javahOS>win32</javahOS>
-					<compilerProvider>generic-classic</compilerProvider>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>native-maven-plugin</artifactId>
+				<version>1.0-alpha-8</version>
+				<extensions>true</extensions>
+				<configuration>
+				  <!--  trigger javah -->
+				  <javahOS>win32</javahOS>
+		  
+				  <compilerProvider>generic-classic</compilerProvider>
 					<compilerExecutable>g++</compilerExecutable>
 					<linkerExecutable>g++</linkerExecutable>
 					<sources>
@@ -47,16 +74,18 @@
 							</includes>
 						</source>
 					</sources>
-					<!-- used -m64 for mingw64 compiler/linker. may not work with 32-bit mingw -->
+
+					<!-- some systems need compile flag -m32 -->
 					<compilerStartOptions>
-					 <compilerStartOption>-m64 -I..\include</compilerStartOption>
+					 <compilerStartOption>-I..\include ${gcc.customflags}</compilerStartOption>
 					</compilerStartOptions>
+					<!-- some systems need link flag -m32 -->
 					<linkerStartOptions>
-					 <linkerStartOption>-shared -m64 -Wl,--add-stdcall-alias -static-libgcc -static-libstdc++</linkerStartOption>
+					 <linkerStartOption>-shared -Wl,--add-stdcall-alias,--kill-at ${gcc.customflags} -static-libgcc -static-libstdc++</linkerStartOption>
 					</linkerStartOptions>
 
-                </configuration>
-                
+				</configuration>
+				
 				<executions>
 				 <execution>
 				   <id>javah</id>
@@ -68,14 +97,17 @@
 					<workingDirectory>${basedir}</workingDirectory>
 					<javahOutputFileName>nativeCode.h</javahOutputFileName>
 					<javahClassNames>
-					  <javahClassName>de.serviceflow.frankenstein.vf.jni.MatBlender</javahClassName>
+					  <javahClassName>cc0.JniTest</javahClassName>
+					  <javahClassName>de.serviceflow.frankenstein.plugin.opencv.jni.NativeExample</javahClassName>
+					  <javahClassName>de.serviceflow.frankenstein.plugin.opencv.jni.VideoEqualizer</javahClassName>
+					  <javahClassName>de.serviceflow.frankenstein.plugin.opencv.jni.ExternalSample</javahClassName>
 					</javahClassNames>
 				   </configuration>
 				   <goals>
 					 <goal>javah</goal>
 				   </goals>
 				 </execution>
-              </executions>               
+			  </executions>               
             </plugin>
 
 			<plugin>
@@ -84,7 +116,7 @@
 				<version>1.4</version>
 				<executions>
 				  <execution>
-					<phase>initialize</phase>
+					<phase>generate-test-resources</phase>
 					<configuration>
 
 					  <tasks>
@@ -114,8 +146,6 @@
 				  </execution>
 				</executions>
 			</plugin>
-      
-      
         </plugins>
     </build>
 </project>

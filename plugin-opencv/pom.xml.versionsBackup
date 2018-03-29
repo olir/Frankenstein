@@ -5,15 +5,15 @@
     <parent>
         <groupId>de.serviceflow.frankenstein</groupId>
         <artifactId>root</artifactId>
-        <version>0.3.3</version>
+        <version>0.3.3-SNAPSHOT</version>
     </parent>
 
-    <groupId>de.serviceflow.frankenstein.plugin.jogamp</groupId>
+    <groupId>de.serviceflow.frankenstein.plugin.opencv</groupId>
     <artifactId>plugin-parent</artifactId>
-    <version>0.3.3</version>
+    <version>0.3.3-SNAPSHOT</version>
     <packaging>pom</packaging>
 
-    <name>JogAmp Filters - Parent</name>
+    <name>OpenCV Filters - Parent</name>
     <!-- Credits to http://www.tricoder.net/blog/?p=197 -->
     
    <modules>

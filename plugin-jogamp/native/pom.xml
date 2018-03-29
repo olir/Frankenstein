@@ -4,13 +4,13 @@
 
     <parent>
         <groupId>de.serviceflow.frankenstein.plugin.jogamp</groupId>
-        <artifactId>jniplugin-parent</artifactId>
-        <version>0.3.1-SNAPSHOT</version>
+        <artifactId>plugin-parent</artifactId>
+        <version>0.3.3</version>
     </parent>
 
     <groupId>de.serviceflow.frankenstein.plugin.jogamp</groupId>
     <artifactId>jniplugin-native</artifactId>
-    <version>0.3.1-SNAPSHOT</version>
+    <version>0.3.3</version>
     <packaging>pom</packaging>
 
     <name>JogAmp Filters - Native parts - switch</name>

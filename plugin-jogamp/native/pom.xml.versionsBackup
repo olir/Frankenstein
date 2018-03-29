@@ -3,17 +3,17 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>de.serviceflow.frankenstein.plugin.opencv</groupId>
+        <groupId>de.serviceflow.frankenstein.plugin.jogamp</groupId>
         <artifactId>plugin-parent</artifactId>
-        <version>0.3.3</version>
+        <version>0.3.3-SNAPSHOT</version>
     </parent>
 
-    <groupId>de.serviceflow.frankenstein.plugin.opencv</groupId>
+    <groupId>de.serviceflow.frankenstein.plugin.jogamp</groupId>
     <artifactId>jniplugin-native</artifactId>
-    <version>0.3.3</version>
+    <version>0.3.3-SNAPSHOT</version>
     <packaging>pom</packaging>
 
-    <name>OpenCV Filters - Native part - switch</name>
+    <name>JogAmp Filters - Native parts - switch</name>
     <!-- Credits to http://www.tricoder.net/blog/?p=197 -->
     
 	<!-- Check activations with: mvn help:system |grep os -->
