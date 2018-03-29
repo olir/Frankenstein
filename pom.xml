@@ -21,7 +21,7 @@
   <!-- Maven Coordinates:  mvn versions:set -DnewVersion=X.Y.Z-SNAPSHOT -->
   <groupId>de.serviceflow.frankenstein</groupId>
   <artifactId>root</artifactId>
-  <version>0.3.3</version>
+  <version>0.3.4-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>Frankenstein - POM</name>
@@ -52,7 +52,9 @@
     , click "close"/confirm, wait/click refresh, in case of error check Activity-Tab 
     and ensure http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22nexus-staging-maven-plugin%22
     is latest version. 
-    In case of success click "release", then increment version and add -snapshot to Maven Coordinates:  
+    In case of success click "release" and check Result via "Artifact Search" with group id
+    the git push, check build is passing on github and release there, 
+    then increment version plus add -snapshot to Maven Coordinates with:  
     mvn versions:set -DnewVersion=X.Y.Z-SNAPSHOT , and git push to origin.
     -->
   <distributionManagement>

@@ -5,12 +5,12 @@
     <parent>
       <groupId>de.serviceflow.frankenstein.plugin.jogamp</groupId>
       <artifactId>jniplugin-native</artifactId>
-      <version>0.3.3</version>
+      <version>0.3.4-SNAPSHOT</version>
     </parent>
 
     <groupId>de.serviceflow.frankenstein.plugin.jogamp</groupId>
     <artifactId>jniplugin-64</artifactId>
-    <version>0.3.3</version>
+    <version>0.3.4-SNAPSHOT</version>
     <packaging>dll</packaging>
 
     <name>JogAmp Filters - Native parts - win64</name>
@@ -19,7 +19,7 @@
     <dependency>
     <groupId>de.serviceflow.frankenstein.plugin.jogamp</groupId>
     <artifactId>plugin-jogamp</artifactId>
-    <version>0.3.3</version>
+    <version>0.3.4-SNAPSHOT</version>
     <type>jar</type>
     <scope>compile</scope>
     </dependency>   

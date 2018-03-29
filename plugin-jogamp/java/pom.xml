@@ -12,12 +12,12 @@
     <parent>
         <groupId>de.serviceflow.frankenstein.plugin.jogamp</groupId>
         <artifactId>plugin-parent</artifactId>
-        <version>0.3.3</version>
+        <version>0.3.4-SNAPSHOT</version>
     </parent>
 
     <groupId>de.serviceflow.frankenstein.plugin.jogamp</groupId>
     <artifactId>plugin-jogamp</artifactId>
-    <version>0.3.3</version>
+    <version>0.3.4-SNAPSHOT</version>
 
     <name>JogAmp Filters - Java Part</name>
     <!-- Credits to http://www.tricoder.net/blog/?p=197 -->
@@ -26,7 +26,7 @@
     <dependency>
       <groupId>de.serviceflow.frankenstein.plugin</groupId>
       <artifactId>api</artifactId>
-      <version>0.3.3</version>
+      <version>0.3.4-SNAPSHOT</version>
     </dependency>
     <!-- jogamp
     <dependency>
