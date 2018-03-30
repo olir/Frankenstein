@@ -14,6 +14,16 @@ import java.util.Random;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 
+import com.jogamp.opengl.DefaultGLCapabilitiesChooser;
+import com.jogamp.opengl.GL2;
+import com.jogamp.opengl.GLAutoDrawable;
+import com.jogamp.opengl.GLCapabilities;
+import com.jogamp.opengl.GLDrawableFactory;
+import com.jogamp.opengl.GLProfile;
+import com.jogamp.opengl.fixedfunc.GLMatrixFunc;
+import com.jogamp.opengl.util.awt.AWTGLReadBufferUtil;
+import com.jogamp.opengl.util.gl2.GLUT;
+
 import de.serviceflow.frankenstein.plugin.api.FilterContext;
 import de.serviceflow.frankenstein.plugin.api.NativeSegmentFilter;
 import de.serviceflow.frankenstein.plugin.api.SegmentConfigController;
@@ -25,11 +35,11 @@ public class GLExampleFilter extends NativeSegmentFilter<GLExampleConfigControll
 
 	private final Method jniProxyProcessMethod;
 
-  /*
+  
 	Mat glFrame;
 	GLProfile glp;
 	GLCapabilities caps;
-*/
+
 
 	@SuppressWarnings("unchecked")
 	public GLExampleFilter() {
@@ -40,7 +50,7 @@ public class GLExampleFilter extends NativeSegmentFilter<GLExampleConfigControll
 		} catch (NoSuchMethodException | SecurityException | IllegalArgumentException e) {
 			throw new RuntimeException("jni wrapper creation failed", e);
 		}
-/*
+
 		glp = GLProfile.getDefault();
 		caps = new GLCapabilities(glp);
 		caps.setHardwareAccelerated(true);
@@ -51,7 +61,7 @@ public class GLExampleFilter extends NativeSegmentFilter<GLExampleConfigControll
 		caps.setGreenBits(8);
 		caps.setDepthBits(24);
 		caps.setOnscreen(false);
-    */
+
 	}
 
 	@Override
@@ -64,7 +74,7 @@ public class GLExampleFilter extends NativeSegmentFilter<GLExampleConfigControll
 		// System.out.println("c = "+sourceFrame.cols()+" r =
 		// "+sourceFrame.rows());
     
-    /*
+    
 		if (glFrame == null || glFrame.cols() != sourceFrame.cols() || glFrame.rows() != sourceFrame.rows()) {
 			glFrame = sourceFrame.clone();
 		}
@@ -83,7 +93,7 @@ public class GLExampleFilter extends NativeSegmentFilter<GLExampleConfigControll
 		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 			e.printStackTrace();
 		}
-  */
+
 		return sourceFrame;
 	}
 
@@ -92,7 +102,7 @@ public class GLExampleFilter extends NativeSegmentFilter<GLExampleConfigControll
 		// getConfigController(). ...
 	}
 
-  /*
+  
 	public GLAutoDrawable init(int width, int height) {
 		GLDrawableFactory factory = GLDrawableFactory.getFactory(glp);
 
@@ -127,7 +137,7 @@ public class GLExampleFilter extends NativeSegmentFilter<GLExampleConfigControll
 
 		return im;
 	}
-  */
+ 
   
   
 }
