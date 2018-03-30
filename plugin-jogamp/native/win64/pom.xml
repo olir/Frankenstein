@@ -52,7 +52,7 @@
 					 <compilerStartOption>-m64 -I..\include</compilerStartOption>
 					</compilerStartOptions>
 					<linkerStartOptions>
-					 <linkerStartOption>-shared -m64 -Wl,--add-stdcall-alias -static-libgcc -static-libstdc++</linkerStartOption>
+					 <linkerStartOption>-shared -m64 -Wl,--kill-at,--add-stdcall-alias -static-libgcc -static-libstdc++</linkerStartOption>
 					</linkerStartOptions>
 
                 </configuration>
@@ -68,7 +68,7 @@
 					<workingDirectory>${basedir}</workingDirectory>
 					<javahOutputFileName>nativeCode.h</javahOutputFileName>
 					<javahClassNames>
-					  <javahClassName>de.serviceflow.frankenstein.vf.jni.MatBlender</javahClassName>
+					  <javahClassName>de.serviceflow.frankenstein.plugin.jogamp.jni.MatBlender</javahClassName>
 					</javahClassNames>
 				   </configuration>
 				   <goals>

@@ -81,7 +81,7 @@
 					</compilerStartOptions>
 					<!-- some systems need link flag -m32 -->
 					<linkerStartOptions>
-					 <linkerStartOption>-shared -Wl,--add-stdcall-alias,--kill-at ${gcc.customflags} -static-libgcc -static-libstdc++</linkerStartOption>
+					 <linkerStartOption>-shared -Wl,--kill-at,--add-stdcall-alias ${gcc.customflags} -static-libgcc -static-libstdc++</linkerStartOption>
 					</linkerStartOptions>
 
 				</configuration>

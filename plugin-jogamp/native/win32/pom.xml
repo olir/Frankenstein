@@ -81,7 +81,7 @@
 					</compilerStartOptions>
 					<!-- some systems need link flag -m32 -->
 					<linkerStartOptions>
-					 <linkerStartOption>-shared -Wl,--add-stdcall-alias,--kill-at ${gcc.customflags} -static-libgcc -static-libstdc++</linkerStartOption>
+					 <linkerStartOption>-shared -Wl,--kill-at,--add-stdcall-alias ${gcc.customflags} -static-libgcc -static-libstdc++</linkerStartOption>
 					</linkerStartOptions>
 
 				</configuration>
@@ -97,7 +97,7 @@
 					<workingDirectory>${basedir}</workingDirectory>
 					<javahOutputFileName>nativeCode.h</javahOutputFileName>
 					<javahClassNames>
-					  <javahClassName>de.serviceflow.frankenstein.vf.jni.MatBlender</javahClassName>
+					  <javahClassName>de.serviceflow.frankenstein.plugin.jogamp.jni.MatBlender</javahClassName>
 					</javahClassNames>
 				   </configuration>
 				   <goals>

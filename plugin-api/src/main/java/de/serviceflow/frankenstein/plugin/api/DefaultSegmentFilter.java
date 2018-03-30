@@ -33,8 +33,9 @@ public abstract class DefaultSegmentFilter implements SegmentVideoFilter {
 	protected DefaultSegmentFilter(String identifier) {
 		this.identifier = identifier;
 
-		bundleConfiguration = (PropertyResourceBundle) ResourceBundle
-				.getBundle(getClass().getPackage().getName().replace('.', '/') + '/' + identifier, getLocale());
+		bundleConfiguration = (PropertyResourceBundle) ResourceBundle.getBundle(
+				this.getClass().getPackage().getName().replace('.', '/') + '/' + identifier, getLocale(),
+				this.getClass().getClassLoader());
 	}
 
 	private Locale getLocale() {
@@ -45,7 +46,7 @@ public abstract class DefaultSegmentFilter implements SegmentVideoFilter {
 		Class<?> fxMain;
 		try {
 			fxMain = Class.forName("de.serviceflow.frankenstein.fxml.FxMain");
-			Class<?> parameterTypes[] = { };
+			Class<?> parameterTypes[] = {};
 			Method main = fxMain.getDeclaredMethod("getInstance", parameterTypes);
 			Object[] invokeArgs = {};
 			return (ConfigManager) main.invoke(fxMain, invokeArgs);

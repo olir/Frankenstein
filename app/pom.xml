@@ -139,14 +139,14 @@
           <appendAssemblyId>false</appendAssemblyId>
           <archive>
             <manifest>
-              <mainClass>
-                ${mainClass}
-              </mainClass>
+              <mainClass>${mainClass}</mainClass>
+              <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
               </manifest>
             <manifestEntries>
               <application-name>Frankenstein VR</application-name>
               <permissions>all-permissions</permissions>
               <codebase>${manifest.Codebase}</codebase>
+              <!-- <Implementation-Build>${buildNumber}</Implementation-Build> -->
             </manifestEntries>
           </archive>
         </configuration>

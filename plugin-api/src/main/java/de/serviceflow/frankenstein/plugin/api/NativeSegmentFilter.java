@@ -23,7 +23,7 @@ import java.net.URL;
 import java.net.URLClassLoader;
 
 public abstract class NativeSegmentFilter<C> extends DefaultSegmentFilter implements SegmentVideoFilter {
-	private static URLClassLoader loader = null;
+	// private static URLClassLoader loader = null;
 
 	@SuppressWarnings("rawtypes")
 	private final Class jniProxyClass;
@@ -37,19 +37,19 @@ public abstract class NativeSegmentFilter<C> extends DefaultSegmentFilter implem
 		try {
 			// use dynamic loading and reflection when loading jni proxy class
 			// from jar, so app do not depend on it.
-			URLClassLoader childLoader = getLoader();
-			jniProxyClass = Class.forName(proxyClassName, true, childLoader);
+			// URLClassLoader childLoader = getLoader();
+			jniProxyClass = Class.forName(proxyClassName, true, this.getClass().getClassLoader());
 			jniProxy = jniProxyClass.newInstance();
 			jniProxyInitMethod = jniProxyClass.getMethod("init");
 			jniProxyInitMethod.invoke(jniProxy);
 		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | NoSuchMethodException
-				| SecurityException | IllegalArgumentException | InvocationTargetException | MalformedURLException e) {
+				| SecurityException | IllegalArgumentException | InvocationTargetException /* | MalformedURLException */ e) {
 			throw new RuntimeException(
 					"jni wrapper creation failed. Bug-Mining: Ensure the wrapper was added to the javahClassNames in pom.xml. Check NativeCode.h for existing and proper signatures.",
 					e);
 		}
 	}
-
+/*
 	static synchronized URLClassLoader getLoader() throws MalformedURLException {
 		if (loader == null) {
 			final String RELEATIVE_TO_MAVEN_EXEC_CWD = "../../../../jniplugin/target";
@@ -60,7 +60,7 @@ public abstract class NativeSegmentFilter<C> extends DefaultSegmentFilter implem
 		}
 		return loader;
 	}
-
+*/
 	@SuppressWarnings("rawtypes")
 	protected Class getJniProxyClass() {
 		return jniProxyClass;

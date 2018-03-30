@@ -25,7 +25,7 @@ import de.serviceflow.frankenstein.plugin.api.NativeSegmentFilter;
 
 public class ExternalSampleFilter extends NativeSegmentFilter<ExternalSampleConfigController> {
 
-	private final static String JNI_FILTER_CLASS = "de.serviceflow.frankenstein.vf.external.ExternalSample";
+	private final static String JNI_FILTER_CLASS = "de.serviceflow.frankenstein.plugin.opencv.jni.ExternalSample";
 
 	private final Method jniProxyProcessMethod;
 

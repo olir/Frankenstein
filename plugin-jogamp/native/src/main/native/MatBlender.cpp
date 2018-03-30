@@ -12,7 +12,7 @@
 using namespace std;
 using namespace cv;
 
-JNIEXPORT void JNICALL Java_de_serviceflow_frankenstein_vf_jni_MatBlender_init
+JNIEXPORT void JNICALL Java_de_serviceflow_frankenstein_plugin_jogamp_jni_MatBlender_init
   (JNIEnv* env, jobject obj)
 {
   JwMat* mat = JwMat::matptr;
@@ -21,7 +21,7 @@ JNIEXPORT void JNICALL Java_de_serviceflow_frankenstein_vf_jni_MatBlender_init
   }
 }
 
-JNIEXPORT void JNICALL Java_de_serviceflow_frankenstein_vf_jni_MatBlender_process
+JNIEXPORT void JNICALL Java_de_serviceflow_frankenstein_plugin_jogamp_jni_MatBlender_process
   (JNIEnv* env, jobject obj,
    jobject matobj, jint frameId, jobject context, jobject overlaymatobj)
 {

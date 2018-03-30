@@ -63,7 +63,7 @@
                    <compilerStartOption>-m64 -I..\include</compilerStartOption>
                     </compilerStartOptions>
                   <linkerStartOptions>
-                   <linkerStartOption>-shared -m64 -Wl,--add-stdcall-alias -static-libgcc -static-libstdc++</linkerStartOption>
+                   <linkerStartOption>-shared -m64 -Wl,--kill-at,--add-stdcall-alias -static</linkerStartOption><!-- -static-libgcc -static-libstdc++  -lwinpthread -->
                     </linkerStartOptions>
 
                           </configuration>

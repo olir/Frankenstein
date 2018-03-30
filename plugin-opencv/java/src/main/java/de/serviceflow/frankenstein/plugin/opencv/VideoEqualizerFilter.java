@@ -26,7 +26,7 @@ import de.serviceflow.frankenstein.plugin.api.NativeSegmentFilter;
 
 public class VideoEqualizerFilter extends NativeSegmentFilter<VideoEqualizerConfigController> {
 
-	private final static String JNI_FILTER_CLASS = "de.serviceflow.frankenstein.vf.jni.VideoEqualizer";
+	private final static String JNI_FILTER_CLASS = "de.serviceflow.frankenstein.plugin.opencv.jni.VideoEqualizer";
 
 	private final Method jniProxyProcessMethod;
 

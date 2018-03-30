@@ -1,4 +1,4 @@
-package de.serviceflow.frankenstein.vf.jni;
+package de.serviceflow.frankenstein.plugin.jogamp.jni;
 
 import de.serviceflow.frankenstein.plugin.api.NativeFilter;
 

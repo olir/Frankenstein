@@ -4,7 +4,7 @@ import de.serviceflow.frankenstein.plugin.api.NativeFilter;
 
 public class JniTest {
 	public JniTest() throws UnsatisfiedLinkError {
-		NativeFilter.loadLibrary();
+		NativeFilter.loadLibrary(this.getClass());
 	}
 
 	public static void main(String[] args) {

@@ -25,7 +25,7 @@ import de.serviceflow.frankenstein.plugin.api.NativeSegmentFilter;
 
 public class NativeExampleFilter extends NativeSegmentFilter<NativeExampleConfigController> {
 
-	private final static String JNI_FILTER_CLASS = "cc0.NativeExample";
+	private final static String JNI_FILTER_CLASS = "de.serviceflow.frankenstein.plugin.opencv.jni.NativeExample";
 
 	private final Method jniProxyProcessMethod;
 

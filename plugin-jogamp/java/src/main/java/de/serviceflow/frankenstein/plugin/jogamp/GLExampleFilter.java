@@ -19,7 +19,7 @@ import de.serviceflow.frankenstein.plugin.api.NativeSegmentFilter;
 
 public class GLExampleFilter extends NativeSegmentFilter<GLExampleConfigController> {
 
-	private final static String JNI_FILTER_CLASS = "de.serviceflow.frankenstein.vf.jni.MatBlender";
+	private final static String JNI_FILTER_CLASS = "de.serviceflow.frankenstein.plugin.jogamp.jni.MatBlender";
 
 	private final Method jniProxyProcessMethod;
 

@@ -7,5 +7,5 @@ public class ExternalSample extends NativeFilter {
 	}
 
 	public native void init();
-	public native void process(Object mat, int frameId, Object context, Object params, Object result);
+	public native void process(Object mat, int frameId, Object context);
 }
