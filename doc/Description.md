@@ -31,8 +31,8 @@ The pipeline allows input as video file, camera, network stream or pictures stor
 # HOWTO run it
 Install Pre-Requisites first (see below), then you have 3 options to start it:
 * _Jar execution:_ 
-** Download and execute the jar file from the release (see section below) 
-** or build jar in app module with 'maven clean package' and execute jar in app/target
+ * Download and execute the jar file from the release (see section below) 
+ * or build jar in app module with 'maven clean package' and execute jar in app/target
 
 ## Pre-Requisites
 - [FFmpeg 3.1.1+](https://ffmpeg.org) installed. Select path at first startup (is stored in frankenstein.ini at user-home)
