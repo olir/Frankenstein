@@ -161,3 +161,4 @@ Some messages should appear: **Hello from C++!** ...
 ### Plattform Issues
 *  java.lang.UnsatisfiedLinkError: "Can't load AMD 64-bit .dll on a IA 32-bit platform": In win32/pom.xml set the property gcc.customflags to -m32
 
+

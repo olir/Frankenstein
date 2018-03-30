@@ -45,3 +45,4 @@ and follow the tutorial with ...
 ### Compile Application
 
 Ready to use git and maven as usual. Read to parent instructions.
+
