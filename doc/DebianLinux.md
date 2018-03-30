@@ -7,8 +7,8 @@ To run under Debian under Windows 10 ...
 * Install X-Server like [Xming](http://www.straightrunning.com/XmingNotes/). [More information](https://virtualizationreview.com/articles/2017/02/08/graphical-programs-on-windows-subsystem-on-linux.aspx)
 
 
-## Instructions
-
+## Linux Compilation Instructions
+### Preparation
 In Terminal enter:
 ```
 sudo apt-get update
@@ -23,6 +23,7 @@ export DISPLAY=:0 >>~/.bashrc
 source ~/.bashrc
 ```
 
+### Compile OpenCV
 Install OpenCV on Linux: Read [Tutorial](http://opencv-java-tutorials.readthedocs.io/en/latest/01-installing-opencv-for-java.html) or execute:
 ```
 sudo apt-get --yes install cmake
@@ -41,8 +42,6 @@ and follow the tutorial with ...
 * Ungrouped Entries/ANT_EXECUTEABLE: /opt/apache-ant-1.10.2/bin/ant
 * ...
 
+### Compile Application
 
-
-Ready to use git and maven.
-
-apache-ant-1.10.2-bin.tar.gz  
+Ready to use git and maven as usual. Read to parent instructions.
