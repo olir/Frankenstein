@@ -16,7 +16,7 @@ public abstract class NativeFilter {
   private static UnsatisfiedLinkError error = null;
   private static final Set<String> loadedLibraries = Collections.synchronizedSet(new HashSet<String>());
 
-  public static void loadLibrary(Class invokerClass) throws UnsatisfiedLinkError {
+  public static void prepareLoadLibrary(NativeFilter invoker) throws UnsatisfiedLinkError {
     if (!loaderCalled) {
       loaderCalled = true;
       System.out.println("Working Directory = " + new File(".").getAbsolutePath());
@@ -24,10 +24,10 @@ public abstract class NativeFilter {
         if (System.getProperty("os.arch").contains("64")
             && System.getProperty("sun.arch.data.model").contains("64")) {
           // load 64-bit lib
-          loadLibrary(invokerClass, "jniplugin-64");
+        	prepareLoadLibrary(invoker, "jniplugin-64");
         } else {
           // load 32-bit lib
-          loadLibrary(invokerClass, "jniplugin-32");
+        	prepareLoadLibrary(invoker, "jniplugin-32");
         }
       } catch (UnsatisfiedLinkError t) {
         System.out.println("sun.arch.data.model=" + System.getProperty("sun.arch.data.model"));
@@ -41,14 +41,14 @@ public abstract class NativeFilter {
     }
   }
 
-  private static void loadLibrary(Class invokerClass, String libraryName) throws UnsatisfiedLinkError {
+  private static void prepareLoadLibrary(NativeFilter invoker, String libraryName) throws UnsatisfiedLinkError {
     synchronized (loadedLibraries) {
 
       if (loadedLibraries.contains(libraryName.intern()))
         return;
 
       try {
-        System.loadLibrary(libraryName);
+    	  invoker.loadLibrary(libraryName);
       } catch (final UnsatisfiedLinkError e) {
         if (!String.format("no %s in java.library.path", libraryName).equals(e.getMessage())) {
           System.out.println(
@@ -58,7 +58,7 @@ public abstract class NativeFilter {
 
         String libFileName = libraryName + ".dll";
         String location = "/" + libFileName;
-        InputStream binary = invokerClass.getResourceAsStream("/" + libFileName);
+        InputStream binary = invoker.getClass().getResourceAsStream("/" + libFileName);
         if (binary == null)
           throw new Error("binary not found: " + "/" + libFileName);
 
@@ -90,8 +90,7 @@ public abstract class NativeFilter {
           }
 
           try {
-        	//System.load(destination.normalize().toString());
-            System.loadLibrary(libraryName);
+        	  invoker.loadLibrary(libraryName);
           } catch (UnsatisfiedLinkError x) {
               System.out.println("!!! [1] UnsatisfiedLinkError: "+e.getMessage()+". But found binary in classpath -> Relocated to "+destination);
               System.out.println(
@@ -109,7 +108,8 @@ public abstract class NativeFilter {
   }
 
   protected NativeFilter() throws UnsatisfiedLinkError {
-    loadLibrary(this.getClass());
+    prepareLoadLibrary(this);
   }
 
+  protected abstract void loadLibrary(String name);
 }

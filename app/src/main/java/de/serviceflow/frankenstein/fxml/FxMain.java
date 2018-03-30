@@ -264,11 +264,11 @@ public class FxMain extends Application implements ConfigManager {
 			URLClassLoader childLoader = getLoader(ref);
 			Class filterClass = Class.forName(filterClassName, true, childLoader);
 			SegmentVideoFilter filter = (SegmentVideoFilter) filterClass.newInstance();
-			Method filterInitMethod = filterClass.getMethod("init");
-			filterInitMethod.invoke(filter);
+//			Method filterInitMethod = filterClass.getMethod("init");
+//			filterInitMethod.invoke(filter);
 			return filter;
-		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | NoSuchMethodException
-				| SecurityException | IllegalArgumentException | InvocationTargetException | MalformedURLException e) {
+		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | MalformedURLException
+				| SecurityException | IllegalArgumentException /* | InvocationTargetException | NoSuchMethodException */ e) {
 			throw new RuntimeException(
 					"Failed loading filter " + filterClassName + " from " + ref,
 					e);

@@ -5,7 +5,11 @@ import de.serviceflow.frankenstein.plugin.api.NativeFilter;
 public class ExternalSample extends NativeFilter {
 	public ExternalSample() throws UnsatisfiedLinkError {
 	}
-
+	
+  protected void loadLibrary(String name) {
+    System.loadLibrary(name);
+  }
+  
 	public native void init();
 	public native void process(Object mat, int frameId, Object context);
 }
