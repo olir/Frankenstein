@@ -22,6 +22,7 @@ import org.opencv.imgproc.Imgproc;
 
 import de.serviceflow.frankenstein.plugin.api.FilterContext;
 import de.serviceflow.frankenstein.plugin.api.NativeSegmentFilter;
+import de.serviceflow.frankenstein.plugin.api.SegmentConfigController;
 
 public class ExternalSampleFilter extends NativeSegmentFilter<ExternalSampleConfigController> {
 
@@ -39,6 +40,11 @@ public class ExternalSampleFilter extends NativeSegmentFilter<ExternalSampleConf
 		} catch (Throwable e) {
 			throw new RuntimeException("jni wrapper creation failed", e);
 		}
+	}
+
+	@Override
+	protected SegmentConfigController instantiateController() {
+		return new ExternalSampleConfigController();
 	}
 
 	@Override

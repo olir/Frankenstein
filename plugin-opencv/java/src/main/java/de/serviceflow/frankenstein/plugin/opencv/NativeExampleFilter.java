@@ -22,6 +22,7 @@ import org.opencv.core.Mat;
 
 import de.serviceflow.frankenstein.plugin.api.FilterContext;
 import de.serviceflow.frankenstein.plugin.api.NativeSegmentFilter;
+import de.serviceflow.frankenstein.plugin.api.SegmentConfigController;
 
 public class NativeExampleFilter extends NativeSegmentFilter<NativeExampleConfigController> {
 
@@ -37,6 +38,11 @@ public class NativeExampleFilter extends NativeSegmentFilter<NativeExampleConfig
 		} catch (NoSuchMethodException | SecurityException | IllegalArgumentException e) {
 			throw new RuntimeException("jni wrapper creation failed", e);
 		}
+	}
+
+	@Override
+	protected SegmentConfigController instantiateController() {
+		return new NativeExampleConfigController();
 	}
 
 	@Override

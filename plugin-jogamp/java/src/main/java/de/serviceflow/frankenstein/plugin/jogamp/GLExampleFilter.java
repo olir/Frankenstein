@@ -16,6 +16,8 @@ import org.opencv.core.Mat;
 
 import de.serviceflow.frankenstein.plugin.api.FilterContext;
 import de.serviceflow.frankenstein.plugin.api.NativeSegmentFilter;
+import de.serviceflow.frankenstein.plugin.api.SegmentConfigController;
+
 
 public class GLExampleFilter extends NativeSegmentFilter<GLExampleConfigController> {
 
@@ -52,6 +54,11 @@ public class GLExampleFilter extends NativeSegmentFilter<GLExampleConfigControll
     */
 	}
 
+	@Override
+	protected SegmentConfigController instantiateController() {
+		return new GLExampleConfigController();
+	}
+  
 	@Override
 	public Mat process(Mat sourceFrame, int frameId, FilterContext context) {
 		// System.out.println("c = "+sourceFrame.cols()+" r =
@@ -121,4 +128,6 @@ public class GLExampleFilter extends NativeSegmentFilter<GLExampleConfigControll
 		return im;
 	}
   */
+  
+  
 }

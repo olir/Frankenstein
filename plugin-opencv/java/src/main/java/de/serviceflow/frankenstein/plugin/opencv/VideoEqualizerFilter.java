@@ -23,6 +23,7 @@ import org.opencv.imgproc.Imgproc;
 
 import de.serviceflow.frankenstein.plugin.api.FilterContext;
 import de.serviceflow.frankenstein.plugin.api.NativeSegmentFilter;
+import de.serviceflow.frankenstein.plugin.api.SegmentConfigController;
 
 public class VideoEqualizerFilter extends NativeSegmentFilter<VideoEqualizerConfigController> {
 
@@ -40,6 +41,11 @@ public class VideoEqualizerFilter extends NativeSegmentFilter<VideoEqualizerConf
 		} catch (NoSuchMethodException | SecurityException | IllegalArgumentException e) {
 			throw new RuntimeException("jni wrapper creation failed", e);
 		}
+	}
+
+	@Override
+	protected SegmentConfigController instantiateController() {
+		return new VideoEqualizerConfigController();
 	}
 
 	@Override

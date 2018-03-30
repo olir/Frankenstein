@@ -12,33 +12,36 @@ import java.util.HashSet;
 import java.util.Set;
 
 public abstract class NativeFilter {
-  private static boolean loaderCalled = false;
-  private static UnsatisfiedLinkError error = null;
+//  private static boolean loaderCalled = false;
+//  private static UnsatisfiedLinkError error = null;
   private static final Set<String> loadedLibraries = Collections.synchronizedSet(new HashSet<String>());
 
   public static void prepareLoadLibrary(NativeFilter invoker) throws UnsatisfiedLinkError {
-    if (!loaderCalled) {
-      loaderCalled = true;
+//    if (!loaderCalled) {
+//      loaderCalled = true;
       System.out.println("Working Directory = " + new File(".").getAbsolutePath());
       try {
+      	String packageName = invoker.getClass().getPackage().getName();
+      	String pluginName = packageName.substring(packageName.lastIndexOf(".plugin.")+1);
+      	pluginName = pluginName.substring(0, pluginName.indexOf('.', pluginName.indexOf('.')+1)).replace('.', '-');
         if (System.getProperty("os.arch").contains("64")
             && System.getProperty("sun.arch.data.model").contains("64")) {
           // load 64-bit lib
-        	prepareLoadLibrary(invoker, "jniplugin-64");
+        	prepareLoadLibrary(invoker, pluginName+"-64");
         } else {
           // load 32-bit lib
-        	prepareLoadLibrary(invoker, "jniplugin-32");
+        	prepareLoadLibrary(invoker, pluginName+"-32");
         }
       } catch (UnsatisfiedLinkError t) {
         System.out.println("sun.arch.data.model=" + System.getProperty("sun.arch.data.model"));
         System.out.println("os.arch=" + System.getProperty("os.arch"));
 
-        error = t;
+//        error = t;
         throw t;
       }
-      if (error != null)
-        throw error; // throw again
-    }
+//      if (error != null)
+//        throw error; // throw again
+//    }
   }
 
   private static void prepareLoadLibrary(NativeFilter invoker, String libraryName) throws UnsatisfiedLinkError {

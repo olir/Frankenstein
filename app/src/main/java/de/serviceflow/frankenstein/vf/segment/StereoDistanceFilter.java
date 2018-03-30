@@ -21,6 +21,7 @@ import org.opencv.core.Scalar;
 
 import de.serviceflow.frankenstein.plugin.api.DefaultSegmentFilter;
 import de.serviceflow.frankenstein.plugin.api.FilterContext;
+import de.serviceflow.frankenstein.plugin.api.SegmentConfigController;
 
 public class StereoDistanceFilter extends DefaultSegmentFilter {
 
@@ -75,6 +76,11 @@ public class StereoDistanceFilter extends DefaultSegmentFilter {
 	@Override
 	protected void initializeController() {
 		((StereoDistanceConfigController)getConfigController()).initialize();
+	}
+
+	@Override
+	protected SegmentConfigController instantiateController() {
+		return new StereoDistanceConfigController();
 	}
 
 }

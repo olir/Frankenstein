@@ -9,7 +9,7 @@
     </parent>
 
     <groupId>de.serviceflow.frankenstein.plugin.opencv</groupId>
-    <artifactId>jniplugin-64</artifactId>
+    <artifactId>plugin-opencv-64</artifactId>
     <version>0.3.4-SNAPSHOT</version>
     <packaging>dll</packaging>
 

@@ -70,7 +70,9 @@ public abstract class DefaultSegmentFilter implements SegmentVideoFilter {
 
 	@Override
 	public final Scene createConfigurationScene(String stylesheet) {
-		FXMLLoader loader = new FXMLLoader(getClass().getResource(identifier + ".fxml"), bundleConfiguration);
+		FXMLLoader loader = new FXMLLoader(this.getClass().getResource(identifier + ".fxml"), bundleConfiguration);
+		configController = instantiateController();
+		loader.setController(configController);
 		try {
 			loader.load();
 		} catch (IOException e) {
@@ -78,10 +80,12 @@ public abstract class DefaultSegmentFilter implements SegmentVideoFilter {
 		}
 		Scene scene = new Scene(loader.getRoot());
 		scene.getStylesheets().add(stylesheet);
-		configController = loader.getController();
+		// configController = loader.getController();
 		initializeController(); // custom initialization possible here
 		return scene;
 	}
+
+	abstract protected SegmentConfigController instantiateController();
 
 	abstract protected void initializeController();
 

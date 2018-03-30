@@ -202,6 +202,38 @@ public class FxMain extends Application implements ConfigManager {
 		return segmentFilters;
 	}
 
+
+	private SegmentVideoFilter loadExternalFilterInstance(String filterClassName, String ref) {
+		try {
+			// use dynamic loading and reflection when loading jni proxy class
+			// from jar, so app do not depend on it.
+			System.out.println("loading " + filterClassName + " from " + ref + " ...");
+			URLClassLoader childLoader = getLoader(ref);
+			Class filterClass = Class.forName(filterClassName, true, childLoader);
+			SegmentVideoFilter filter = (SegmentVideoFilter) filterClass.newInstance();
+			return filter;
+		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | MalformedURLException
+				| SecurityException | IllegalArgumentException /* | InvocationTargetException | NoSuchMethodException */ e) {
+			throw new RuntimeException(
+					"Failed loading filter " + filterClassName + " from " + ref,
+					e);
+		}
+	}
+
+	static Map<String, URLClassLoader> loaders = new HashMap<String, URLClassLoader>();
+
+	static synchronized URLClassLoader getLoader(String ref) throws MalformedURLException {
+		ref = ref.intern();
+		URLClassLoader loader = loaders.get(ref);
+		if (loader == null) {
+			URL[] urls = new URL[] { new URL(ref) };
+			loader = new URLClassLoader(urls, FxMain.class.getClassLoader());
+			loaders.put(ref, loader);
+		}
+		return loader;
+	}
+
+		
 	public void createSegmentFilters() {
 		segmentFilters = new ArrayList<SegmentVideoFilter>();
 
@@ -246,8 +278,8 @@ public class FxMain extends Application implements ConfigManager {
 //					"de.serviceflow.frankenstein.plugin.opencv.NativeExampleFilter", pluginOpenCVRef));
 			segmentFilters.add(loadExternalFilterInstance(
 					"de.serviceflow.frankenstein.plugin.opencv.VideoEqualizerFilter", pluginOpenCVRef));
-			segmentFilters.add(loadExternalFilterInstance(
-					"de.serviceflow.frankenstein.plugin.opencv.ExternalSampleFilter", pluginOpenCVRef));
+//			segmentFilters.add(loadExternalFilterInstance(
+//					"de.serviceflow.frankenstein.plugin.opencv.ExternalSampleFilter", pluginOpenCVRef));
 			segmentFilters.add(loadExternalFilterInstance("de.serviceflow.frankenstein.plugin.jogamp.GLExampleFilter",
 					pluginJogAmpRef));
 		} catch (Throwable t) {
@@ -256,48 +288,4 @@ public class FxMain extends Application implements ConfigManager {
 
 	}
 
-	private SegmentVideoFilter loadExternalFilterInstance(String filterClassName, String ref) {
-		try {
-			// use dynamic loading and reflection when loading jni proxy class
-			// from jar, so app do not depend on it.
-			System.out.println("loading " + filterClassName + " from " + ref + " ...");
-			URLClassLoader childLoader = getLoader(ref);
-			Class filterClass = Class.forName(filterClassName, true, childLoader);
-			SegmentVideoFilter filter = (SegmentVideoFilter) filterClass.newInstance();
-//			Method filterInitMethod = filterClass.getMethod("init");
-//			filterInitMethod.invoke(filter);
-			return filter;
-		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | MalformedURLException
-				| SecurityException | IllegalArgumentException /* | InvocationTargetException | NoSuchMethodException */ e) {
-			throw new RuntimeException(
-					"Failed loading filter " + filterClassName + " from " + ref,
-					e);
-		}
-	}
-
-	static Map<String, URLClassLoader> loaders = new HashMap<String, URLClassLoader>();
-
-	static synchronized URLClassLoader getLoader(String ref) throws MalformedURLException {
-		ref = ref.intern();
-		URLClassLoader loader = loaders.get(ref);
-		if (loader == null) {
-			URL[] urls = new URL[] { new URL(ref) };
-			loader = new URLClassLoader(urls, FxMain.class.getClassLoader());
-			loaders.put(ref, loader);
-		}
-		return loader;
-	}
-
-	/*
-	 * static URLClassLoader loader = null;
-	 * 
-	 * static synchronized URLClassLoader getLoader() throws
-	 * MalformedURLException { if (loader == null) { final String
-	 * RELEATIVE_TO_MAVEN_EXEC_CWD = "../../../target"; String pluginpath =
-	 * System.getProperty("pluginpath", RELEATIVE_TO_MAVEN_EXEC_CWD); File myJar
-	 * = new File(new File(pluginpath), "plugin-opencv-0.3.1-SNAPSHOT.jar");
-	 * URL[] urls = new URL[] { myJar.toURI().toURL() }; loader = new
-	 * URLClassLoader(urls, NativeSegmentFilter.class.getClassLoader()); }
-	 * return loader; }
-	 */
 }
