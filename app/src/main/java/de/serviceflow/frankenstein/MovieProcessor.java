@@ -164,7 +164,7 @@ public class MovieProcessor {
 		}
 	}
 
-	public boolean process(ProcessingListener l) {
+	public boolean processVideo(ProcessingListener l) {
 		try {
 			streamStopped = !configuration.doInput || !(configuration.getSource() instanceof VideoStreamSource);
 			if (!configuration.doInput || !(configuration.getSource() instanceof VideoStreamSource)) {
@@ -435,6 +435,7 @@ public class MovieProcessor {
 	}
 
 	public void seek(final ProcessingListener l, int frameId) {
+
 		// System.out.println("MovieProcessor.seek @"+frameId);
 		if (configuration.doInput && frameId < currentPos) {
 			if (l != null)
@@ -443,41 +444,51 @@ public class MovieProcessor {
 			currentPos = 0;
 			configuration.getSource().reopen(l);
 		}
-		currentPos = configuration.getSource().seek(frameId, l);
-		frame = configuration.getSource().getFrame();
-		if (frame != null && !frame.empty()) {
-			FilterContext context = new DefaultFilterContext();
-			Mat newFrame = frame;
-			for (VideoFilter filter : filters) {
-				// System.out.println("MovieProcessor process
-				// "+filter.getClass().getName());
-				newFrame = filter.process(newFrame, frameId, context);
-			}
-			if (localFilters != null && !localFilters.isEmpty()) {
-				for (FilterElement element : localFilters) {
-					if (element.filter != null) {
-						if (element.r.start <= currentPos && currentPos < element.r.end) {
-							// System.out.println("MovieProcessor
-							// processStreamFrame " +
-							// element.filter);
-							newFrame = element.filter.process(newFrame, currentPos, context);
+		
+		ExecutorThread.getInstance().execute(new Runnable() {
+			@Override
+			public void run() {
+
+				currentPos = configuration.getSource().seek(frameId, l);
+				frame = configuration.getSource().getFrame();
+				if (frame != null && !frame.empty()) {
+					FilterContext context = new DefaultFilterContext();
+					Mat newFrame = frame;
+					for (VideoFilter filter : filters) {
+						// System.out.println("MovieProcessor process
+						// "+filter.getClass().getName());
+						newFrame = filter.process(newFrame, frameId, context);
+					}
+					if (localFilters != null && !localFilters.isEmpty()) {
+						for (FilterElement element : localFilters) {
+							if (element.filter != null) {
+								if (element.r.start <= currentPos && currentPos < element.r.end) {
+									// System.out.println("MovieProcessor
+									// processStreamFrame " +
+									// element.filter);
+									newFrame = element.filter.process(newFrame, currentPos, context);
+								}
+							}
 						}
 					}
+					if (previewFilter != null) {
+						// System.out.println("MovieProcessor processStreamFrame
+						// " +
+						// previewFilter);
+						newFrame = previewFilter.process(newFrame, currentPos, context);
+					}
+					if (l != null)
+						l.nextFrameProcessed(newFrame, currentPos);
+				} else {
+					if (frameId <= movie_frameCount && l != null)
+						l.prematureEnd(frameId - 1);
 				}
-			}
-			if (previewFilter != null) {
-				// System.out.println("MovieProcessor processStreamFrame " +
-				// previewFilter);
-				newFrame = previewFilter.process(newFrame, currentPos, context);
-			}
-			if (l != null)
-				l.nextFrameProcessed(newFrame, currentPos);
-		} else {
-			if (frameId <= movie_frameCount && l != null)
-				l.prematureEnd(frameId - 1);
-		}
 
-		l.seekDone(frameId);
+				l.seekDone(frameId);
+
+			}
+		});
+
 	}
 
 	public List<String> getVideoDevices() {

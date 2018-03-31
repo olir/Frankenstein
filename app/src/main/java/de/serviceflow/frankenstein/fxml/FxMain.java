@@ -31,6 +31,7 @@ import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 
 import de.serviceflow.frankenstein.Configuration;
+import de.serviceflow.frankenstein.ExecutorThread;
 import de.serviceflow.frankenstein.MovieProcessor;
 import de.serviceflow.frankenstein.plugin.api.ConfigManager;
 import de.serviceflow.frankenstein.plugin.api.NativeSegmentFilter;
@@ -185,6 +186,7 @@ public class FxMain extends Application implements ConfigManager {
 		// Stage is closing
 		System.out.println("stopping");
 		MovieProcessor.stop();
+		ExecutorThread.shutdown();
 	}
 
 	public void setDocumentInTitle(String name) {

@@ -30,6 +30,7 @@ import org.opencv.core.Mat;
 import org.opencv.core.Range;
 
 import de.serviceflow.frankenstein.Configuration;
+import de.serviceflow.frankenstein.ExecutorThread;
 import de.serviceflow.frankenstein.MovieProcessor;
 import de.serviceflow.frankenstein.ProcessingListener;
 import de.serviceflow.frankenstein.plugin.api.SegmentConfigController;
@@ -193,7 +194,7 @@ public class ProcessingSceneController implements ProcessingListener {
 								processor.seek(ProcessingSceneController.this, position);
 							}
 						};
-						new Thread(r).start();
+						ExecutorThread.getInstance().execute(r);
 					}
 				}
 			}
@@ -468,7 +469,7 @@ public class ProcessingSceneController implements ProcessingListener {
 
 				long seconds = System.currentTimeMillis() / 1000;
 
-				if (processor.process(ProcessingSceneController.this)) {
+				if (processor.processVideo(ProcessingSceneController.this)) {
 
 					seconds = System.currentTimeMillis() / 1000 - seconds;
 
@@ -488,7 +489,7 @@ public class ProcessingSceneController implements ProcessingListener {
 				});
 			}
 		};
-		new Thread(r).start();
+		ExecutorThread.getInstance().execute(r);
 	}
 
 	void startProcessing(Configuration configuration) {
@@ -583,12 +584,17 @@ public class ProcessingSceneController implements ProcessingListener {
 		Mat frame = s.getFrame();
 		int frameId = s.getCurrentPos() + 1;
 		this.frames = s.getFrames();
-		processor.processStreamFrame(this);
-		Platform.runLater(() -> {
-			// System.out.println("nextFrameProcessed "+frameId);
-			this.currentFrameIndex.setText("" + frameId);
-			this.currentTime.setText("" + time((frameId - 1) / fps));
-			drawEditCanvas();
+		ExecutorThread.getInstance().execute(new Runnable() {
+			@Override
+			public void run() {
+				processor.processStreamFrame(ProcessingSceneController.this);
+				Platform.runLater(() -> {
+					// System.out.println("nextFrameProcessed "+frameId);
+					ProcessingSceneController.this.currentFrameIndex.setText("" + frameId);
+					ProcessingSceneController.this.currentTime.setText("" + time((frameId - 1) / fps));
+					drawEditCanvas();
+				});
+			}
 		});
 		adjustVideoLengthDisplay();
 	}
@@ -661,7 +667,7 @@ public class ProcessingSceneController implements ProcessingListener {
 						processor.seek(ProcessingSceneController.this, position);
 					}
 				};
-				new Thread(r).start();
+				ExecutorThread.getInstance().execute(r);
 			}
 		} else {
 			seeking = false;
@@ -849,7 +855,7 @@ public class ProcessingSceneController implements ProcessingListener {
 					processor.seek(ProcessingSceneController.this, position);
 				}
 			};
-			new Thread(r).start();
+			ExecutorThread.getInstance().execute(r);
 			Platform.runLater(() -> {
 				listViewFilter.refresh();
 				drawEditCanvas();
@@ -894,7 +900,7 @@ public class ProcessingSceneController implements ProcessingListener {
 				processor.seek(ProcessingSceneController.this, position);
 			}
 		};
-		new Thread(r).start();
+		ExecutorThread.getInstance().execute(r);
 	}
 
 	@FXML
@@ -922,7 +928,7 @@ public class ProcessingSceneController implements ProcessingListener {
 				processor.seek(ProcessingSceneController.this, position);
 			}
 		};
-		new Thread(r).start();
+		ExecutorThread.getInstance().execute(r);
 	}
 
 	public List<SegmentVideoFilter> getLocalFilters() {
