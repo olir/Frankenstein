@@ -550,9 +550,15 @@ public class ProcessingSceneController implements ProcessingListener {
 	}
 
 	private double time(String t) {
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss.SS");
-		LocalTime lt = LocalTime.parse(t, formatter);
-		return ((double) lt.toNanoOfDay()) / 1000000000.0;
+		try {
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss.SS");
+			LocalTime lt = LocalTime.parse(t, formatter);
+			return ((double) lt.toNanoOfDay()) / 1000000000.0;
+		} catch (java.time.format.DateTimeParseException e) {
+			// ffmpeg causes DateTimeParseException: Text '-577014:32:22.77' could not be parsed
+			System.err.println(e.getLocalizedMessage() + ": t=" + t);
+			return 0.0;
+		}
 	}
 
 	@Override

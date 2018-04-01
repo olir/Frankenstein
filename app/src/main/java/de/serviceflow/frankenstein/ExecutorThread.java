@@ -17,7 +17,7 @@ public class ExecutorThread implements Executor {
 					scheduleNext();
 					Thread.sleep(10L);
 				}
-				System.out.println("ExecutorThread shudown");
+				System.out.println("ExecutorThread shutdown");
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
