@@ -276,8 +276,8 @@ public class FxMain extends Application implements ConfigManager {
 			String pluginJogAmpRef = pluginJogAmpbase + "/" + "plugin-jogamp-" + version + ".jar";
 
 			// Filters completly in jar
-//			segmentFilters.add(loadExternalFilterInstance(
-//					"de.serviceflow.frankenstein.plugin.opencv.NativeExampleFilter", pluginOpenCVRef));
+			segmentFilters.add(loadExternalFilterInstance(
+					"de.serviceflow.frankenstein.plugin.opencv.NativeExampleFilter", pluginOpenCVRef));
 			segmentFilters.add(loadExternalFilterInstance(
 					"de.serviceflow.frankenstein.plugin.opencv.VideoEqualizerFilter", pluginOpenCVRef));
 //			segmentFilters.add(loadExternalFilterInstance(

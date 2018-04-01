@@ -16,35 +16,66 @@ JNIEXPORT void JNICALL Java_de_serviceflow_frankenstein_plugin_opencv_jni_Native
   (JNIEnv* env, jobject obj)
 {
   JwMat* mat = JwMat::matptr;
-  cout << "Java_cc0_NativeExample_init START" << endl;
   if (mat == NULL) {
-	 cout << "Java_cc0_NativeExample_init Mat-Wrapper created" << endl;
 	 JwMat::matptr = new JwMat(env);
   }
-  cout << "Java_cc0_NativeExample_init END" << endl;
 }
 
 JNIEXPORT void JNICALL Java_de_serviceflow_frankenstein_plugin_opencv_jni_NativeExample_process
   (JNIEnv* env, jobject obj,
-   jobject matobj, jint frameId, jobject context)
+   jobject matobj, jint frameId, jobject context, jint keyHue, jint range)
 {
-  cout << "Java_cc0_NativeExample_process CALLED " << frameId << endl;
   JwMat* mat = JwMat::matptr;
   int cols = mat->cols(env, matobj);
   int rows = mat->rows(env, matobj);
-  cout << "rows=" << rows << ", cols=" << cols << endl;
+//  cout << "rows=" << rows << ", cols=" << cols << endl;
 
   int channels = mat->channels(env, matobj);
   if (channels<3) {
-	  J_THROW("java/lang/Error", "channels < 3: "+mat->channels(env, matobj));
+	  J_THROW("java/lang/Error", "Expecting HSV Mat. channels < 3: "+mat->channels(env, matobj));
       return;
   }
 
-  int c0 = (unsigned char)POINT_CHANNEL_VALUE(env,matobj,mat,(rows>>1),(cols>>1),0);
-  int c1 = (unsigned char)POINT_CHANNEL_VALUE(env,matobj,mat,(rows>>1),(cols>>1),1);
-  int c2 = (unsigned char)POINT_CHANNEL_VALUE(env,matobj,mat,(rows>>1),(cols>>1),2);
-  cout << "RGB-values at " << (rows>>1) << "," << (cols>>1) << ": " <<
-		  c2 << "/" << c1 << "/" << c0 << endl ;
+  // keyHue := [0,359]
+  
+  int saturation = 60;
+  int keyHueB = keyHue >> 1;
+  
+  for(int y = 0; y < rows; y++)
+  {
+	  jbyte * rowaddr = ROW_ADDR(env, matobj,mat,y);
+
+	  for (int x = 0; x < cols; x++)
+	  {
+		  int i = x * channels;
+
+    // OpenCV: For HSV, Hue range is [0,179] mapped to [0,359], Saturation range is [0,255] and Value range is [0,255].
+		  int h = 2 * (unsigned char)rowaddr[i];
+		  int s = (unsigned char)rowaddr[i+1];
+		  int v = (unsigned char)rowaddr[i+2];
+
+      int hlower = keyHue - range;
+      int hupper = keyHue + range;
+
+      if ( (h > hlower && h < hupper) || (hlower<0 && h>360+hlower) || (hupper>360 && h<hupper-360))
+      {
+        int distance = keyHue - h;
+        if (distance<0)
+          distance = -distance;
+        
+        if (distance>=range-2)
+          s = s >>1;
+        if (distance>=range)
+          s = s >>1;
+      }
+      else
+      {
+        s = 0;
+      }
+      
+		  rowaddr[i+1] = s; // save result
+	  }
+  }
 
 }
 

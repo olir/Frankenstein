@@ -231,7 +231,7 @@ public class MovieProcessor {
 						FilterContext context = new DefaultFilterContext();
 						for (FilterElement element : localFilters) {
 							if (element.filter != null) {
-								if (element.r.start <= i && i < element.r.end) {
+								if (element.r.start <= i && (i < element.r.end || !streamStopped)) {
 									// System.out.println("MovieProcessor
 									// processStreamFrame
 									// " +

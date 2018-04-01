@@ -517,6 +517,12 @@ public class ProcessingSceneController implements ProcessingListener {
 			currentFrameIndex.setDisable(false);
 		});
 
+		FilterElement val = new FilterElement(new Range(1, frames), this);
+		filterListData.add(val);
+		Platform.runLater(() -> {
+			drawEditCanvas();
+		});
+		
 	}
 
 	private void adjustVideoLengthDisplay() {

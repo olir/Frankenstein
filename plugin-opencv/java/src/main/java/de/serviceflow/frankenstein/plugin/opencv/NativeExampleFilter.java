@@ -19,6 +19,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import org.opencv.core.Mat;
+import org.opencv.imgproc.Imgproc;
 
 import de.serviceflow.frankenstein.plugin.api.FilterContext;
 import de.serviceflow.frankenstein.plugin.api.NativeSegmentFilter;
@@ -30,11 +31,13 @@ public class NativeExampleFilter extends NativeSegmentFilter<NativeExampleConfig
 
 	private final Method jniProxyProcessMethod;
 
+	private Mat mHsvMat = new Mat();
+
 	@SuppressWarnings("unchecked")
 	public NativeExampleFilter() throws UnsatisfiedLinkError {
 		super("native", JNI_FILTER_CLASS);
 		try {
-			jniProxyProcessMethod = getJniProxyClass().getMethod("process", Object.class, int.class, Object.class);
+			jniProxyProcessMethod = getJniProxyClass().getMethod("process", Object.class, int.class, Object.class, int.class, int.class);
 		} catch (NoSuchMethodException | SecurityException | IllegalArgumentException e) {
 			throw new RuntimeException("jni wrapper creation failed", e);
 		}
@@ -46,17 +49,29 @@ public class NativeExampleFilter extends NativeSegmentFilter<NativeExampleConfig
 	}
 
 	@Override
-	public Mat process(Mat sourceFrame, int frameId, FilterContext context) {
+	public Mat process(Mat rgbaImage, int frameId, FilterContext context) {
+        Imgproc.cvtColor(rgbaImage, mHsvMat, Imgproc.COLOR_RGB2HSV_FULL);
+
+        NativeExampleConfigController c = ((NativeExampleConfigController)getConfigController());
+        int farbe = c.getFarbe();
+        int range = c.getRange();
 		try {
-			jniProxyProcessMethod.invoke(getJniProxy(), sourceFrame, frameId, context);
+			jniProxyProcessMethod.invoke(getJniProxy(), mHsvMat, frameId, context, farbe, range);
 		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 			e.printStackTrace();
 		}
-		return sourceFrame;
+		
+		Imgproc.cvtColor(mHsvMat, rgbaImage, Imgproc.COLOR_HSV2RGB_FULL);
+		
+		return rgbaImage;
 	}
 
 	@Override
 	protected void initializeController() {
-		// getConfigController(). ...
+        NativeExampleConfigController c = ((NativeExampleConfigController)getConfigController());
+        int farbe = 310;
+        c.setFarbe(farbe);
+        int range = 20;
+        c.setRange(range);
 	}
 }
