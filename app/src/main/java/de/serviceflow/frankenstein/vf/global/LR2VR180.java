@@ -66,12 +66,15 @@ public class LR2VR180 implements VideoFilter {
 		float aspect = ((float) sourceFrame.cols()) / (float) sourceFrame.rows();
 		int vcut = 0;
 
+		System.out.println("aspect (A): " + aspect);
+
 		if (aspect > 2f)
 			aspect = aspect / 2f; // not a half sbs
-		if (aspect < 1.24f) {
+		if (aspect < 1.34f) {
 			aspect *= 1.3f;
 			vcut = 1;
 		}
+		System.out.println("aspect (B): " + aspect);
 
 		vrVerticalSpan = 0.7f - (aspect - 1.33333f) / 1.7f; // aspect heuristic
 		if (vrVerticalSpan < 0.4f)
@@ -80,12 +83,14 @@ public class LR2VR180 implements VideoFilter {
 		System.out.println("VerticalSpan: " + vrVerticalSpan + "  vcut: " + vcut);
 
 		borderW = (int) ((1.0f - factor) * (float) (sourceFrame.cols() >> 1) * 0.25f)
-				+ vcut * (sourceFrame.cols() >> 2);
+				+ vcut * (int)(sourceFrame.cols() *0.50);
 
 		borderH = (int) (((1.0f - factor) + (1.0f / vrVerticalSpan - 1.0) * convert3DMode) * (float) sourceFrame.rows()
 				* 0.5f);
 		borderH = ((borderH + (2 << (ALIGMENT_POT - 1)) - 1) >> ALIGMENT_POT) << ALIGMENT_POT;
 
+		System.out.println("borderW: " + borderW + "  borderH: " + borderH);
+		
 		newFrame = sourceFrame.clone();
 		Imgproc.resize(sourceFrame, newFrame,
 				new Size((double) sourceFrame.cols() + 4 * borderW, (double) sourceFrame.rows() + 2 * borderH));

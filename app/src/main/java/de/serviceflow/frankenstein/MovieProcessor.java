@@ -275,18 +275,18 @@ public class MovieProcessor {
 
 				if (!configuration.doInput || !(configuration.getSource() instanceof VideoStreamSource)) {
 					if (configuration.doInput) {
-						if (!new Task(this, ffmpeg.getAbsolutePath() + " -y -i " + tempVideoFile.getAbsolutePath()
-								+ " -i " + tempAudioFile.getAbsolutePath() + " -i " + tempMetadataFile.getAbsolutePath()
+						if (!new Task(this, ffmpeg.getAbsolutePath() + " -y -i \"" + tempVideoFile.getAbsolutePath()
+								+ "\" -i " + tempAudioFile.getAbsolutePath() + " -i " + tempMetadataFile.getAbsolutePath()
 								+ " -map_metadata 2" + " -c:a aac -c:v libx264  -q 17 \"" + of.getAbsolutePath() + '"',
 								new TimeTaskHandler(l, "Assembling Output")).run())
 							return false;
 					} else {
 						if (!new Task(this,
-								ffmpeg.getAbsolutePath() + " -y -i " + tempVideoFile.getAbsolutePath() + " -i "
-										+ tempAudioFile.getAbsolutePath() + " -c:a aac -c:v libx264  -q 17 "
-										+ of.getAbsolutePath(),
+								ffmpeg.getAbsolutePath() + " -y -i \"" + tempVideoFile.getAbsolutePath() + "\" -i "
+										+ tempAudioFile.getAbsolutePath() + " -c:a aac -c:v libx264  -q 17 \""
+										+ of.getAbsolutePath()+ '"',
 								new TimeTaskHandler(l, "Processing Output")).run())
-							return false;
+							System.out.println("Warning: Task failed");
 					}
 				} else {
 					System.out.println("Renaming temp  file " + tempVideoFile.getAbsolutePath());
