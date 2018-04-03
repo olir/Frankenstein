@@ -19,7 +19,24 @@ public class PluginManager {
 	private List<SegmentVideoFilter> segmentFilters;
 
 	public void load(Configuration configuration) {
+		loadOpenCV();
 		createSegmentFilters();
+	}
+
+	private void loadOpenCV() {
+		// https://github.com/openpnp/opencv
+		try {
+			Class.forName("nu.pattern.OpenCV").getMethod("loadShared", (Class<?>[]) null).invoke((Object[]) null,
+					(Object[]) null);
+			// nu.pattern.OpenCV.loadShared();
+			// nu.pattern.OpenCV.loadLocal();
+			System.out.println("Loading from " + System.getProperty("java.library.path"));
+			System.loadLibrary(org.opencv.core.Core.NATIVE_LIBRARY_NAME);
+		} catch (ClassNotFoundException e) {
+			System.out.println("WARNING: nu.pattern.OpenCV not found.");
+		} catch (Throwable t) {
+			System.out.println("WARNING: nu.pattern.OpenCV not loaded.");
+		}
 	}
 
 	public List<SegmentVideoFilter> getLocalFilters() {

@@ -26,7 +26,8 @@ import de.serviceflow.frankenstein.plugin.api.SegmentConfigController;
 public class StereoDistanceFilter extends DefaultSegmentFilter {
 
 	private Mat newFrame = null;
-
+    private int perspectiveMultiplier = 1;
+    
 	public StereoDistanceFilter() {
 		super("stereodistance");
 	}
@@ -35,6 +36,9 @@ public class StereoDistanceFilter extends DefaultSegmentFilter {
 	public Mat process(Mat sourceFrame, int frameId, FilterContext context) {
 		if (newFrame == null || newFrame.cols() != sourceFrame.cols() || newFrame.rows() != sourceFrame.rows()) {
 			newFrame = sourceFrame.clone();
+			perspectiveMultiplier = sourceFrame.cols() / 320;
+			if (perspectiveMultiplier<1)
+				perspectiveMultiplier = 1;
 		}
 
 		newFrame.setTo(new Scalar(0, 0, 0));
@@ -66,11 +70,11 @@ public class StereoDistanceFilter extends DefaultSegmentFilter {
 	}
 
 	/**
-	 * -2n ... -4,-2,0,2,4, ... +2n : Negative values for farer away, positive
+	 * -32 ... -4,-2,0,2,4, ... +32 : Negative values for farer away, positive
 	 * for closer
 	 */
 	private int perspective() {
-		return ((StereoDistanceConfigController)getConfigController()).getPerspective();
+		return perspectiveMultiplier * ((StereoDistanceConfigController)getConfigController()).getPerspective();
 	}
 
 	@Override
