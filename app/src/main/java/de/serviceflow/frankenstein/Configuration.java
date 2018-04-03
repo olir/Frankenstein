@@ -82,16 +82,14 @@ public class Configuration implements ConfigManager {
 
 	public static StringBuffer usage = new StringBuffer();
 
-	private static Configuration configuration;
+	private static final Configuration configuration = new Configuration(null);
 
 	public static ConfigManager getInstance() {
 		return configuration;
 	}
 
-
 	public static Configuration cliCreateConfiguration(String[] args) {
-		configuration = new Configuration(null);
-
+		
 		int optionKeyIndex;
 		String optionValue;
 		Properties optionProperties;

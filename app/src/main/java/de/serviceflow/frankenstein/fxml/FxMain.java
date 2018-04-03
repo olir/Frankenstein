@@ -154,8 +154,4 @@ public class FxMain extends Application {
 			theStage.setTitle(APP_NAME);
 	}
 
-	public List<SegmentVideoFilter> getLocalFilters() {
-		return configuration.getPluginManager().getLocalFilters();
-	}
-
 }

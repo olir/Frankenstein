@@ -1,0 +1,3 @@
+de.serviceflow.frankenstein.plugin.opencv.NativeExampleFilter
+de.serviceflow.frankenstein.plugin.opencv.VideoEqualizerFilter
+de.serviceflow.frankenstein.plugin.opencv.ExternalSampleFilter

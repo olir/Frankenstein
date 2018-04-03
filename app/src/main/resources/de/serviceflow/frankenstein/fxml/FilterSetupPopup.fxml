@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.BorderPane?>
 
-<BorderPane fx:id="bpContainer" maxHeight="600.0" maxWidth="512.0" prefHeight="600.0" prefWidth="512.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.serviceflow.frankenstein.fxml.FilterSetupController">
+<BorderPane fx:id="bpContainer" maxHeight="600.0" maxWidth="512.0" prefHeight="600.0" prefWidth="512.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <bottom>
       <Button mnemonicParsing="false" onAction="#ok" text="OK" BorderPane.alignment="CENTER">
          <BorderPane.margin>

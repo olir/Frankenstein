@@ -848,8 +848,9 @@ public class ProcessingSceneController implements ProcessingListener {
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("FilterSetupPopup.fxml"), bundleConfiguration);
 		Stage stage = new Stage();
 		try {
+			FilterSetupController controller = new FilterSetupController();
+			loader.setController(controller);
 			stage.setScene(new Scene(loader.load()));
-			FilterSetupController controller = (FilterSetupController) loader.getController();
 			controller.configure(this, stage);
 			stage.setTitle("Edit filter " + selectedFilter.toStringRange());
 			stage.initModality(Modality.APPLICATION_MODAL);
@@ -938,10 +939,6 @@ public class ProcessingSceneController implements ProcessingListener {
 			}
 		};
 		ExecutorThread.getInstance().execute(r);
-	}
-
-	public List<SegmentVideoFilter> getLocalFilters() {
-		return main.getLocalFilters();
 	}
 
 	@Override

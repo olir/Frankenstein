@@ -1,7 +1,9 @@
 package de.serviceflow.frankenstein.fxml;
 
 import java.net.URL;
+import java.util.List;
 
+import de.serviceflow.frankenstein.Configuration;
 import de.serviceflow.frankenstein.plugin.api.SegmentConfigController;
 import de.serviceflow.frankenstein.plugin.api.SegmentVideoFilter;
 import javafx.beans.value.ChangeListener;
@@ -30,7 +32,11 @@ public class FilterSetupController {
 		// this.parent = parent;
 		this.stage = stage;
 
-		cbFilter.getItems().setAll(parent.getLocalFilters());
+		List<SegmentVideoFilter> flist = ((Configuration)Configuration.getInstance()).getPluginManager().getLocalFilters();
+		if (flist == null) {
+			new Error("No Filters!?").printStackTrace();
+		}
+		cbFilter.getItems().setAll(flist);
 
 		cbFilter.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<SegmentVideoFilter>() {
 			@Override
