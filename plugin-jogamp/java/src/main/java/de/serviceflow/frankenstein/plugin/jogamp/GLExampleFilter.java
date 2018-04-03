@@ -4,12 +4,6 @@ import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.FloatBuffer;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
 
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
@@ -28,18 +22,15 @@ import de.serviceflow.frankenstein.plugin.api.FilterContext;
 import de.serviceflow.frankenstein.plugin.api.NativeSegmentFilter;
 import de.serviceflow.frankenstein.plugin.api.SegmentConfigController;
 
-
 public class GLExampleFilter extends NativeSegmentFilter<GLExampleConfigController> {
 
 	private final static String JNI_FILTER_CLASS = "de.serviceflow.frankenstein.plugin.jogamp.jni.MatBlender";
 
 	private final Method jniProxyProcessMethod;
 
-  
 	Mat glFrame;
 	GLProfile glp;
 	GLCapabilities caps;
-
 
 	@SuppressWarnings("unchecked")
 	public GLExampleFilter() {
@@ -68,13 +59,12 @@ public class GLExampleFilter extends NativeSegmentFilter<GLExampleConfigControll
 	protected SegmentConfigController instantiateController() {
 		return new GLExampleConfigController();
 	}
-  
+
 	@Override
 	public Mat process(Mat sourceFrame, int frameId, FilterContext context) {
 		// System.out.println("c = "+sourceFrame.cols()+" r =
 		// "+sourceFrame.rows());
-    
-    
+
 		if (glFrame == null || glFrame.cols() != sourceFrame.cols() || glFrame.rows() != sourceFrame.rows()) {
 			glFrame = sourceFrame.clone();
 		}
@@ -102,7 +92,6 @@ public class GLExampleFilter extends NativeSegmentFilter<GLExampleConfigControll
 		// getConfigController(). ...
 	}
 
-  
 	public GLAutoDrawable init(int width, int height) {
 		GLDrawableFactory factory = GLDrawableFactory.getFactory(glp);
 
@@ -128,7 +117,7 @@ public class GLExampleFilter extends NativeSegmentFilter<GLExampleConfigControll
 		gl.glColor3f(0.8f, 0.8f, 0.8f);
 
 		GLUT glut = new GLUT();
-		String text = ""+frameId;
+		String text = "" + frameId;
 		gl.glRasterPos3d(111, 111, 0);
 		glut.glutBitmapString(GLUT.BITMAP_TIMES_ROMAN_24, text);
 
@@ -137,7 +126,5 @@ public class GLExampleFilter extends NativeSegmentFilter<GLExampleConfigControll
 
 		return im;
 	}
- 
-  
-  
+
 }

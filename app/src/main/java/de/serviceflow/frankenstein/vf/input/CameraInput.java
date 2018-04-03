@@ -23,12 +23,11 @@ import org.opencv.videoio.VideoCapture;
 import org.opencv.videoio.Videoio;
 
 import de.serviceflow.frankenstein.ProcessingListener;
-import de.serviceflow.frankenstein.vf.VideoSource;
 import de.serviceflow.frankenstein.vf.VideoStreamSource;
 
 public class CameraInput implements VideoStreamSource {
 	private final int id;
-	
+
 	private VideoCapture movie = null;
 	private Mat currentFrame;
 	private double fps = 10.0;
@@ -66,7 +65,7 @@ public class CameraInput implements VideoStreamSource {
 		height = (int) movie.get(Videoio.CAP_PROP_FRAME_HEIGHT);
 		frames = 1;
 		currentPos = 0;
-		
+
 		timer = new Timer();
 		timer.schedule(new TimerTask() {
 			@Override
@@ -76,16 +75,16 @@ public class CameraInput implements VideoStreamSource {
 				currentFrame = retrieve(currentFrame, l);
 				l.nextFrameLoaded(CameraInput.this);
 			}
-		}, 0, (int)(1000.0/fps));
+		}, 0, (int) (1000.0 / fps));
 	}
 
 	public void pause() {
 		try {
-			Thread.sleep((int)(1000.0/fps));
+			Thread.sleep((int) (1000.0 / fps));
 		} catch (InterruptedException e) {
 		}
 	}
-	
+
 	@Override
 	public void close() {
 		if (movie != null)
@@ -105,7 +104,7 @@ public class CameraInput implements VideoStreamSource {
 	private Mat retrieve(Mat frame, ProcessingListener l) {
 		movie.retrieve(currentFrame); // ignore boolean
 		try {
-			Thread.sleep((int)(1000.0/fps));
+			Thread.sleep((int) (1000.0 / fps));
 		} catch (InterruptedException e) {
 		}
 		return currentFrame;
@@ -133,7 +132,7 @@ public class CameraInput implements VideoStreamSource {
 	@Override
 	public int seek(int pos, ProcessingListener l) {
 		currentFrame = retrieve(currentFrame, l);
-		return pos; 
+		return pos;
 	}
 
 	@Override

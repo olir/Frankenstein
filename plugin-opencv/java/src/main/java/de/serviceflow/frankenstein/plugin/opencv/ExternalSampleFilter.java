@@ -51,10 +51,8 @@ public class ExternalSampleFilter extends NativeSegmentFilter<ExternalSampleConf
 	public Mat process(Mat rgbaImage, int frameId, FilterContext context) {
 		Imgproc.cvtColor(rgbaImage, mHsvMat, Imgproc.COLOR_RGB2HSV_FULL);
 
-		ExternalSampleConfigController c = ((ExternalSampleConfigController) getConfigController());
+		// ExternalSampleConfigController c = ((ExternalSampleConfigController) getConfigController());
 		// pass c data to proxy...
-
-		Object params = null;
 
 		try {
 			jniProxyProcessMethod.invoke(getJniProxy(), mHsvMat, frameId, context);
@@ -69,7 +67,7 @@ public class ExternalSampleFilter extends NativeSegmentFilter<ExternalSampleConf
 
 	@Override
 	protected void initializeController() {
-		ExternalSampleConfigController c = ((ExternalSampleConfigController) getConfigController());
+		// ExternalSampleConfigController c = ((ExternalSampleConfigController) getConfigController());
 		// c.set...(...);
 		// c.initialize();
 	}

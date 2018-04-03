@@ -14,7 +14,7 @@ import javafx.stage.Stage;
 
 public class FilterSetupController {
 
-	private ProcessingSceneController parent;
+	// private ProcessingSceneController parent;
 
 	private Stage stage;
 
@@ -27,7 +27,7 @@ public class FilterSetupController {
 	BorderPane bpContainer;
 
 	public void configure(ProcessingSceneController parent, Stage stage) {
-		this.parent = parent;
+		// this.parent = parent;
 		this.stage = stage;
 
 		cbFilter.getItems().setAll(parent.getLocalFilters());

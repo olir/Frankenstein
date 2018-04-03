@@ -45,7 +45,7 @@ public abstract class DefaultSegmentFilter implements SegmentVideoFilter {
 	protected ConfigManager getConfigManager() {
 		Class<?> fxMain;
 		try {
-			fxMain = Class.forName("de.serviceflow.frankenstein.fxml.FxMain");
+			fxMain = Class.forName("de.serviceflow.frankenstein.Configuration");
 			Class<?> parameterTypes[] = {};
 			Method main = fxMain.getDeclaredMethod("getInstance", parameterTypes);
 			Object[] invokeArgs = {};

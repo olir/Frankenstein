@@ -10,9 +10,7 @@ import org.opencv.videoio.VideoCapture;
 import org.opencv.videoio.Videoio;
 
 import de.serviceflow.frankenstein.ProcessingListener;
-import de.serviceflow.frankenstein.vf.VideoSource;
 import de.serviceflow.frankenstein.vf.VideoStreamSource;
-import javafx.application.Platform;
 
 public class StreamInput implements VideoStreamSource {
 
@@ -31,9 +29,9 @@ public class StreamInput implements VideoStreamSource {
 	private Timer timer = null;
 
 	/**
-	 * 
+	 *
 	 * @param streamurl
-	 * 
+	 *
 	 * @param videofilename
 	 */
 	public StreamInput(String streamurl, String videofilename) {
@@ -157,7 +155,8 @@ public class StreamInput implements VideoStreamSource {
 	}
 
 	private Mat retrieve(Mat frame, ProcessingListener l) {
-		boolean status = movie.retrieve(currentFrame); // ignore boolean
+		// boolean status =
+				movie.retrieve(currentFrame); // ignore boolean
 		// System.out.println("retrieve: " + status);
 		return currentFrame;
 	}
@@ -184,7 +183,7 @@ public class StreamInput implements VideoStreamSource {
 	@Override
 	public int seek(int pos, ProcessingListener l) {
 		currentFrame = retrieve(currentFrame, l);
-		return currentPos; 
+		return currentPos;
 	}
 
 	public Process executeCommand(String... command) {

@@ -36,7 +36,6 @@ import de.serviceflow.frankenstein.ProcessingListener;
 import de.serviceflow.frankenstein.plugin.api.SegmentConfigController;
 import de.serviceflow.frankenstein.plugin.api.SegmentVideoFilter;
 import de.serviceflow.frankenstein.vf.FilterElement;
-import de.serviceflow.frankenstein.vf.VideoFilter;
 import de.serviceflow.frankenstein.vf.VideoStreamSource;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
@@ -47,7 +46,6 @@ import javafx.embed.swing.SwingFXUtils;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -62,7 +60,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Modality;
-import javafx.stage.Popup;
 import javafx.stage.Stage;
 
 public class ProcessingSceneController implements ProcessingListener {
@@ -522,7 +519,7 @@ public class ProcessingSceneController implements ProcessingListener {
 		Platform.runLater(() -> {
 			drawEditCanvas();
 		});
-		
+
 	}
 
 	private void adjustVideoLengthDisplay() {
@@ -593,7 +590,7 @@ public class ProcessingSceneController implements ProcessingListener {
 
 	@Override
 	public void nextFrameLoaded(VideoStreamSource s) {
-		Mat frame = s.getFrame();
+		//Mat frame = s.getFrame();
 		int frameId = s.getCurrentPos() + 1;
 		this.frames = s.getFrames();
 		ExecutorThread.getInstance().execute(new Runnable() {
@@ -847,7 +844,7 @@ public class ProcessingSceneController implements ProcessingListener {
 	public void filterSetup() {
 
 		PropertyResourceBundle bundleConfiguration = (PropertyResourceBundle) ResourceBundle
-				.getBundle("de/serviceflow/frankenstein/bundles/filtersetup", FxMain.getInstance().getLocale());
+				.getBundle("de/serviceflow/frankenstein/bundles/filtersetup", Configuration.getInstance().getLocale());
 		FXMLLoader loader = new FXMLLoader(getClass().getResource("FilterSetupPopup.fxml"), bundleConfiguration);
 		Stage stage = new Stage();
 		try {

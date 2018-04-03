@@ -22,8 +22,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.Properties;
 
+import de.serviceflow.frankenstein.plugin.api.ConfigManager;
 import de.serviceflow.frankenstein.vf.VideoFilter;
 import de.serviceflow.frankenstein.vf.VideoSource;
 import de.serviceflow.frankenstein.vf.input.CameraInput;
@@ -35,7 +37,7 @@ import de.serviceflow.frankenstein.vf.input.VideoInput;
 /**
  * Handles information about the configuration of the 'Project' and the tool.
  */
-public class Configuration {
+public class Configuration implements ConfigManager {
 	// Ini-File properties
 	Properties iniProperties = new Properties();
 
@@ -53,8 +55,8 @@ public class Configuration {
 	public String outputVideo = null;
 	private String recordingVideo = null;
 	private String inputVideoStreamURL = null;
-	
-	
+
+
 	public int limitOutputWidth = 2880;
 
 	public int testScreenWidth = 1280;
@@ -74,12 +76,21 @@ public class Configuration {
 
 	private final File configFile;
 
+	private final PluginManager pluginManager = new PluginManager();
+
 	public SectionedProperties metadata = new SectionedProperties();
 
 	public static StringBuffer usage = new StringBuffer();
 
+	private static Configuration configuration;
+
+	public static ConfigManager getInstance() {
+		return configuration;
+	}
+
+
 	public static Configuration cliCreateConfiguration(String[] args) {
-		Configuration configuration = new Configuration(null);
+		configuration = new Configuration(null);
 
 		int optionKeyIndex;
 		String optionValue;
@@ -95,6 +106,8 @@ public class Configuration {
 		optionValue = getOptionValue(args, "source", "test", optionKeyIndex, "file", "test", "slides", "camera", "stream");
 		optionProperties = getOptionProperties(args, optionKeyIndex);
 		cliConfigureSource(configuration, optionValue, optionProperties);
+
+		configuration.getPluginManager().load(configuration);
 
 		// todo ...
 
@@ -306,7 +319,7 @@ public class Configuration {
 	public void setInputStreamURL(String inputVideoStreamURL) {
 		this.inputVideoStreamURL = inputVideoStreamURL;
 	}
-	
+
 	public String getRecordingVideoPath() {
 		return iniProperties.getProperty("recordingvideopath", iniProperties.getProperty("inputvideopath"));
 	}
@@ -340,5 +353,17 @@ public class Configuration {
 	public static String getUsage() {
 		return usage.toString();
 	}
+
+	public PluginManager getPluginManager() {
+		return pluginManager;
+	}
+
+	private static Locale locale = Locale.getDefault();
+
+
+	public Locale getLocale() {
+		return locale;
+	}
+
 
 }
