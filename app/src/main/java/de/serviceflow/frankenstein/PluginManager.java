@@ -1,6 +1,8 @@
 package de.serviceflow.frankenstein;
 
 import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -49,8 +51,27 @@ public class PluginManager {
 		return segmentFilters;
 	}
 
+	public TextSet loadPluginSet() throws IOException {
+		File userPluginConfigFile = new File(new File(System.getProperty("user.home")), ".frankenstein-plugin.set");
+		Reader reader = null;
+		if (userPluginConfigFile.exists()) {
+			reader = new FileReader(userPluginConfigFile);
+		} else {
+			reader = new InputStreamReader(this.getClass().getClassLoader().getResourceAsStream("plugin.set"));
+		}
+		TextSet pluginSet = new TextSet();
+		pluginSet.load(reader);
+		reader.close();
+		if (!userPluginConfigFile.exists()) {
+			FileWriter writer = new FileWriter(userPluginConfigFile);
+			pluginSet.store(writer);
+			writer.close();
+		}
+		return pluginSet;
+	}
+
 	public void loadSegmentFilters() {
-				try {
+		try {
 			segmentFilters.add(new BWFilter());
 			segmentFilters.add(new StereoDistanceFilter());
 		} catch (Throwable t) {
@@ -59,50 +80,48 @@ public class PluginManager {
 
 		String fs = File.separator;
 		try {
-/*			
-			String pluginOpenCVbase;
-			String pluginJogAmpbase;
-
-			String version = getClass().getPackage().getImplementationVersion();
-			
-			if (version != null && !version.endsWith("-SNAPSHOT")) {
-				fs = "/";
-				pluginOpenCVbase = "https://oss.sonatype.org/service/local/repositories/releases/content/de/serviceflow/frankenstein/plugin/opencv/plugin-opencv/"
-						+ version;
-				pluginJogAmpbase = "https://oss.sonatype.org/service/local/repositories/releases/content/de/serviceflow/frankenstein/plugin/jogamp/plugin-jogamp/"
-						+ version;
-			} else {
-				// Assume development environment in packaged state cwd =
-				// app/src/main/resources
-				// @todo Eclipse:
-				// https://stackoverflow.com/questions/6092200/how-to-fix-an-unsatisfiedlinkerror-cant-find-dependent-libraries-in-a-jni-pro
-				version = "0.3.4-SNAPSHOT";
-				String baseFromAppResources = ".." + fs + ".." + fs + ".." + fs + ".." + fs;
-				pluginOpenCVbase = new File(System.getProperty("user.dir") + fs + baseFromAppResources + "plugin-opencv"
-						+ fs + "java" + fs + "target").toURI().toURL().toExternalForm();
-				pluginJogAmpbase = new File(System.getProperty("user.dir") + fs + baseFromAppResources + "plugin-jogamp"
-						+ fs + "java" + fs + "target").toURI().toURL().toExternalForm();
-			}
-
-			System.out.println("version (e.g. 0.3.3) = " + version);
-
-			String pluginOpenCVRef = pluginOpenCVbase + "/" + "plugin-opencv-" + version + ".jar";
-			String pluginJogAmpRef = pluginJogAmpbase + "/" + "plugin-jogamp-" + version + ".jar";
-*/
-			Reader reader = new InputStreamReader(this.getClass().getClassLoader().getResourceAsStream("plugin.set"));
-			TextSet pluginSet = new TextSet();
-			pluginSet.load(reader);
+			/*
+			 * String pluginOpenCVbase; String pluginJogAmpbase;
+			 *
+			 * String version =
+			 * getClass().getPackage().getImplementationVersion();
+			 *
+			 * if (version != null && !version.endsWith("-SNAPSHOT")) { fs =
+			 * "/"; pluginOpenCVbase =
+			 * "https://oss.sonatype.org/service/local/repositories/releases/content/de/serviceflow/frankenstein/plugin/opencv/plugin-opencv/"
+			 * + version; pluginJogAmpbase =
+			 * "https://oss.sonatype.org/service/local/repositories/releases/content/de/serviceflow/frankenstein/plugin/jogamp/plugin-jogamp/"
+			 * + version; } else { // Assume development environment in packaged
+			 * state cwd = // app/src/main/resources // @todo Eclipse: //
+			 * https://stackoverflow.com/questions/6092200/how-to-fix-an-
+			 * unsatisfiedlinkerror-cant-find-dependent-libraries-in-a-jni-pro
+			 * version = "0.3.4-SNAPSHOT"; String baseFromAppResources = ".." +
+			 * fs + ".." + fs + ".." + fs + ".." + fs; pluginOpenCVbase = new
+			 * File(System.getProperty("user.dir") + fs + baseFromAppResources +
+			 * "plugin-opencv" + fs + "java" + fs +
+			 * "target").toURI().toURL().toExternalForm(); pluginJogAmpbase =
+			 * new File(System.getProperty("user.dir") + fs +
+			 * baseFromAppResources + "plugin-jogamp" + fs + "java" + fs +
+			 * "target").toURI().toURL().toExternalForm(); }
+			 *
+			 * System.out.println("version (e.g. 0.3.3) = " + version);
+			 *
+			 * String pluginOpenCVRef = pluginOpenCVbase + "/" +
+			 * "plugin-opencv-" + version + ".jar"; String pluginJogAmpRef =
+			 * pluginJogAmpbase + "/" + "plugin-jogamp-" + version + ".jar";
+			 */
+			TextSet pluginSet = loadPluginSet();
 
 			for (Iterator<String> piter = pluginSet.iterator(); piter.hasNext();) {
 				String pluginRef = piter.next();
 				if (pluginRef.startsWith("http:") || pluginRef.startsWith("https:")) {
 					// no op
 				} else {
-					if (!pluginRef.startsWith(fs))
+					if (pluginRef.startsWith("."))
 						pluginRef = System.getProperty("user.dir") + fs + pluginRef;
 					File f = new File(pluginRef);
 					if (!f.exists()) {
-						System.err.println("Warning: Plugin path not found: " + pluginRef);
+						System.err.println("Warning: Plugin at path not found: " + pluginRef);
 						continue;
 					}
 					if (f.isDirectory()) {
@@ -121,7 +140,7 @@ public class PluginManager {
 							}
 						}
 						if (f == null) {
-							System.err.println("Warning: Plugin path not found: " + pluginRef);
+							System.err.println("Warning: Plugin path contains no plugin: " + pluginRef);
 							continue;
 						}
 					}
@@ -146,7 +165,13 @@ public class PluginManager {
 			URLClassLoader childLoader = getLoader(pluginRef);
 			InputStream s = childLoader.getResourceAsStream("filter.set");
 			TextSet filterSet = new TextSet();
-			filterSet.load(new InputStreamReader(s));
+			if (s != null) {
+				filterSet.load(new InputStreamReader(s));
+				s.close();
+			}
+			else {
+				System.err.println("Warning: Plugin contains no filter.set file: " + pluginRef);
+			}
 			return filterSet;
 		} catch (IOException e) {
 			System.err.println(e.getLocalizedMessage() + ": Plugin path not found: " + pluginRef);
