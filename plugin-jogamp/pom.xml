@@ -19,13 +19,7 @@
    <modules>
       <module>java</module>
       <module>native</module>
-   </modules>
-
-  <build>
-    <plugins>
-    </plugins>
-	
-  </build>
-	
+      <module>distribution</module>
+    </modules>
 
 </project>

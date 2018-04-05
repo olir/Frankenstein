@@ -11,6 +11,7 @@ public class SegmentConfigController {
 	}
 
 	public void fireChange() {
-		listener.configChanged(this, filter);
+		if (listener!=null)
+			listener.configChanged(this, filter);
 	}
 }

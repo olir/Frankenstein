@@ -28,18 +28,7 @@
       <artifactId>api</artifactId>
       <version>0.3.4-SNAPSHOT</version>
     </dependency>
-    <!-- AI Submodul
-    <dependency>
-      <groupId>ml.dmlc.mxnet</groupId>
-      <artifactId>mxnet-full_2.10-linux-x86_64-gpu</artifactId>
-      <version>0.1.1</version>
-    </dependency>
-    <dependency>
-      <groupId>ml.dmlc.mxnet</groupId>
-      <artifactId>mxnet-core_2.10</artifactId>
-      <version>0.1.1</version>
-    </dependency>
-    -->
+
   </dependencies>
     
    <build>
@@ -117,24 +106,6 @@
 				</executions>
 			</plugin>
       
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-gpg-plugin</artifactId>
-				<version>1.5</version>
-				<configuration>
-					<skip>false</skip>
-				</configuration>
-				<executions>
-					<execution>
-						<id>sign-artifacts</id>
-						<phase>verify</phase>
-						<goals>
-							<goal>sign</goal>
-						</goals>
-					</execution>
-				</executions>
-      </plugin>
-
       <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-jar-plugin</artifactId>

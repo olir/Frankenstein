@@ -16,14 +16,12 @@
 package de.serviceflow.frankenstein.fxml;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 
 import de.serviceflow.frankenstein.Configuration;
 import de.serviceflow.frankenstein.ExecutorThread;
 import de.serviceflow.frankenstein.MovieProcessor;
-import de.serviceflow.frankenstein.plugin.api.SegmentVideoFilter;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;

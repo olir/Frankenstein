@@ -34,88 +34,71 @@
                 <version>1.0-alpha-8</version>
                 <extensions>true</extensions>
                 <configuration>
-					<!--  trigger javah with win32 architecture -->
-					<javahOS>win32</javahOS>
-					<compilerProvider>generic-classic</compilerProvider>
-					<compilerExecutable>g++</compilerExecutable>
-					<linkerExecutable>g++</linkerExecutable>
-					<sources>
-						<source>
-							<directory>../src/main/native</directory>
-							<includes>
-								<include>**/*.cpp</include>
-							</includes>
-						</source>
-					</sources>
-					<!-- used -m64 for mingw64 compiler/linker. may not work with 32-bit mingw -->
-					<compilerStartOptions>
-					 <compilerStartOption>-m64 -I..\include</compilerStartOption>
-					</compilerStartOptions>
-					<linkerStartOptions>
-                   <linkerStartOption>-shared -m64 -Wl,--kill-at,--add-stdcall-alias -static</linkerStartOption><!-- -static-libgcc -static-libstdc++  -lwinpthread -->
-					</linkerStartOptions>
+                <!--  trigger javah with win32 architecture -->
+                <javahOS>win32</javahOS>
+                <compilerProvider>generic-classic</compilerProvider>
+                <compilerExecutable>g++</compilerExecutable>
+                <linkerExecutable>g++</linkerExecutable>
+                <sources>
+                  <source>
+                    <directory>../src/main/native</directory>
+                    <includes>
+                      <include>**/*.cpp</include>
+                    </includes>
+                  </source>
+                </sources>
+                <!-- used -m64 for mingw64 compiler/linker. may not work with 32-bit mingw -->
+                <compilerStartOptions>
+                 <compilerStartOption>-m64 -I..\include</compilerStartOption>
+                </compilerStartOptions>
+                <linkerStartOptions>
+                         <linkerStartOption>-shared -m64 -Wl,--kill-at,--add-stdcall-alias -static</linkerStartOption><!-- -static-libgcc -static-libstdc++  -lwinpthread -->
+                </linkerStartOptions>
 
                 </configuration>
-                
-				<executions>
-				 <execution>
-				   <id>javah</id>
-				   <phase>generate-sources</phase>
-				   <configuration>
-					<javahOS>win32</javahOS>
-					<javahProvider>default</javahProvider>
-					<javahOutputDirectory>${project.build.directory}/custom-javah</javahOutputDirectory>
-					<workingDirectory>${basedir}</workingDirectory>
-					<javahOutputFileName>nativeCode.h</javahOutputFileName>
-					<javahClassNames>
-					  <javahClassName>de.serviceflow.frankenstein.plugin.jogamp.jni.MatBlender</javahClassName>
-					</javahClassNames>
-				   </configuration>
-				   <goals>
-					 <goal>javah</goal>
-				   </goals>
-				 </execution>
-              </executions>               
-            </plugin>
+                <executions>
+                 <execution>
+                   <id>javah</id>
+                   <phase>generate-sources</phase>
+                   <configuration>
+                  <javahOS>win32</javahOS>
+                  <javahProvider>default</javahProvider>
+                  <javahOutputDirectory>${project.build.directory}/custom-javah</javahOutputDirectory>
+                  <workingDirectory>${basedir}</workingDirectory>
+                  <javahOutputFileName>nativeCode.h</javahOutputFileName>
+                  <javahClassNames>
+                    <javahClassName>de.serviceflow.frankenstein.plugin.jogamp.jni.MatBlender</javahClassName>
+                  </javahClassNames>
+                   </configuration>
+                   <goals>
+                   <goal>javah</goal>
+                   </goals>
+                 </execution>
+            </executions>               
+          </plugin>
 
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-antrun-plugin</artifactId>
-				<version>1.4</version>
-				<executions>
-				  <execution>
-					<phase>initialize</phase>
-					<configuration>
+          <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-antrun-plugin</artifactId>
+            <version>1.4</version>
+            <executions>
+              <execution>
+                <phase>initialize</phase>
+                <configuration>
 
-					  <tasks>
-						<mkdir dir="./target/objs"/>
-					  </tasks>
+                  <tasks>
+                  <mkdir dir="./target/objs"/>
+                  </tasks>
 
-					</configuration>
-					<goals>
-					  <goal>run</goal>
-					</goals>
-				  </execution>
-				  <execution>
-					<id>copy</id>
-					<phase>prepare-package</phase>
-					<goals>
-					  <goal>run</goal>
-					</goals>
-					<configuration>
-					  <tasks>
-						<copy todir="../../java/src/main/resources" flatten="true">
-							<fileset dir="./target">
-								<include name="*.dll"/>
-							</fileset>
-						</copy>
-					  </tasks>
-					</configuration>
-				  </execution>
-				</executions>
-			</plugin>
-      
-      
+                </configuration>
+                <goals>
+                  <goal>run</goal>
+                </goals>
+              </execution>
+
+            </executions>
+          </plugin>
+     
         </plugins>
     </build>
 </project>
