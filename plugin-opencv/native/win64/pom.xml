@@ -111,7 +111,7 @@
 				  </execution>
 				  <execution>
 					<id>copy</id>
-					<phase>package</phase>
+					<phase>prepare-package</phase>
 					<goals>
 					  <goal>run</goal>
 					</goals>

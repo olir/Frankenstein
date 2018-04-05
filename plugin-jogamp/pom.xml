@@ -22,16 +22,8 @@
    </modules>
 
   <build>
-
-	<pluginManagement>
-	  <plugins>
-		<plugin>
-		  <groupId>org.codehaus.mojo</groupId>
-		  <artifactId>native-maven-plugin</artifactId>
-		  <version>1.0-alpha-8</version>
-		</plugin>
-	  </plugins>
-	</pluginManagement>
+    <plugins>
+    </plugins>
 	
   </build>
 	

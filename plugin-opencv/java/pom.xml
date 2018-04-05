@@ -147,9 +147,7 @@
           <goal>jar</goal>
             </goals>
             <configuration>
-            <outputDirectory>
-              ${project.basedir}/target/jws
-            </outputDirectory>
+            <outputDirectory>${project.basedir}/target/jws</outputDirectory>
           </configuration>
         </execution>
           </executions>
