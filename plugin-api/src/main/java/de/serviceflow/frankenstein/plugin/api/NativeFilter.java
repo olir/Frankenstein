@@ -1,118 +1,41 @@
 package de.serviceflow.frankenstein.plugin.api;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import java.lang.reflect.Field;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.Set;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 public abstract class NativeFilter {
-//  private static boolean loaderCalled = false;
-//  private static UnsatisfiedLinkError error = null;
-  private static final Set<String> loadedLibraries = Collections.synchronizedSet(new HashSet<String>());
 
-  public static void prepareLoadLibrary(NativeFilter invoker) throws UnsatisfiedLinkError {
-//    if (!loaderCalled) {
-//      loaderCalled = true;
-      System.out.println("Working Directory = " + new File(".").getAbsolutePath());
-      try {
-      	String packageName = invoker.getClass().getPackage().getName();
-      	String pluginName = packageName.substring(packageName.lastIndexOf(".plugin.")+1);
-      	pluginName = pluginName.substring(0, pluginName.indexOf('.', pluginName.indexOf('.')+1)).replace('.', '-');
-        if (System.getProperty("os.arch").contains("64")
-            && System.getProperty("sun.arch.data.model").contains("64")) {
-          // load 64-bit lib
-        	prepareLoadLibrary(invoker, pluginName+"-64");
-        } else {
-          // load 32-bit lib
-        	prepareLoadLibrary(invoker, pluginName+"-32");
-        }
-      } catch (UnsatisfiedLinkError t) {
-        System.out.println("sun.arch.data.model=" + System.getProperty("sun.arch.data.model"));
-        System.out.println("os.arch=" + System.getProperty("os.arch"));
+	protected NativeFilter() throws UnsatisfiedLinkError {
+		prepareLoadLibrary(this);
+	}
 
-//        error = t;
-        throw t;
-      }
-//      if (error != null)
-//        throw error; // throw again
-//    }
-  }
+	private void prepareLoadLibrary(NativeFilter invoker) throws UnsatisfiedLinkError {
+		String packageName = invoker.getClass().getPackage().getName();
+		String pluginName = packageName.substring(packageName.lastIndexOf(".plugin.") + 1);
+		pluginName = pluginName.substring(0, pluginName.indexOf('.', pluginName.indexOf('.') + 1)).replace('.', '-');
 
-  private static void prepareLoadLibrary(NativeFilter invoker, String libraryName) throws UnsatisfiedLinkError {
-    synchronized (loadedLibraries) {
+		invoker.loadLibrary(prepareLoadLibrary(invoker.getClass(), pluginName));
+	}
 
-      if (loadedLibraries.contains(libraryName.intern()))
-        return;
+	private String prepareLoadLibrary(Class<?> invokerClass, String name) throws UnsatisfiedLinkError {
+		try {
+			Class<?> c = invokerClass.getClassLoader().loadClass("de.serviceflow.frankenstein.LibraryManager");
+			Object o = c.newInstance();
+			Method m = c.getMethod("prepareLoadLibrary", Class.class, String.class);
+			return (String) m.invoke(o, invokerClass, name);
+		} catch (SecurityException | ClassNotFoundException | NoSuchMethodException | InstantiationException
+				| IllegalAccessException | IllegalArgumentException e) {
+			e.printStackTrace();
+			throw new UnsatisfiedLinkError("Prepare to load library failed for " + name + " with " + invokerClass.getName());
+		}
+		catch (InvocationTargetException e) {
+			Throwable t = e.getCause();
+			if (t!=null)
+				t.printStackTrace();
+			e.printStackTrace();
+			throw new UnsatisfiedLinkError("Prepare to load library failed for " + name + " with " + invokerClass.getName());
+		}
+	}
 
-      try {
-    	  invoker.loadLibrary(libraryName);
-      } catch (final UnsatisfiedLinkError e) {
-        if (!String.format("no %s in java.library.path", libraryName).equals(e.getMessage())) {
-          System.out.println(
-                  "!!! [1] UnsatisfiedLinkError @ libraryName='" + libraryName + " message: "+e.getMessage()+", but lookup seems to successful. java.library.path="+System.getProperty("java.library.path"));
-          throw e;
-        }
-
-        String libFileName = libraryName + ".dll";
-        String location = "/" + libFileName;
-        InputStream binary = invoker.getClass().getResourceAsStream("/" + libFileName);
-        if (binary == null)
-          throw new Error("binary not found: " + "/" + libFileName);
-
-
-        try {
-          Path tmpDir = Files.createTempDirectory("frankenstein");
-          tmpDir.toFile().deleteOnExit();
-          Path destination = tmpDir.resolve("./" + location).normalize();
-
-          try {
-            Files.createDirectories(destination.getParent());
-            Files.copy(binary, destination);
-            String nPath = destination.getParent().normalize().toString();
-
-            Field field = ClassLoader.class.getDeclaredField("usr_paths");
-            field.setAccessible(true);
-
-            Set<String> myPath = new HashSet<String>(Arrays.asList((String[]) field.get(null)));
-            myPath.add(nPath);
-
-            field.set(null, myPath.toArray(new String[myPath.size()]));
-
-            System.setProperty("java.library.path",
-            System.getProperty("java.library.path") + File.pathSeparator + nPath);
-          } catch (IllegalAccessException x) {
-            throw new Error("IllegalAccessException!?", x);
-          } catch (NoSuchFieldException x) {
-            throw new Error("NoSuchFieldException!?", x);
-          }
-
-          try {
-        	  invoker.loadLibrary(libraryName);
-          } catch (UnsatisfiedLinkError x) {
-              System.out.println("!!! [1] UnsatisfiedLinkError: "+e.getMessage()+". But found binary in classpath -> Relocated to "+destination);
-              System.out.println(
-                  "!!! [2] UnsatisfiedLinkError @ libraryName='" + libraryName + " message: "+x.getMessage());
-             throw x;
-          }
-
-          loadedLibraries.add(libraryName.intern());
-
-        } catch (final IOException x) {
-          throw new Error("Error writing native library", x);
-        }
-      }
-    }
-  }
-
-  protected NativeFilter() throws UnsatisfiedLinkError {
-    prepareLoadLibrary(this);
-  }
-
-  protected abstract void loadLibrary(String name);
+	protected abstract void loadLibrary(String name);
 }

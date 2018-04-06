@@ -1,2 +1,2 @@
-../../../../plugin-opencv/target
-../../../../plugin-jogamp/target
+../../../../plugin-opencv/distribution/target
+../../../../plugin-jogamp/distribution/target

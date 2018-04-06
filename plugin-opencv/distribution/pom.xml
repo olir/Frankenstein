@@ -30,7 +30,7 @@
     </dependency>
     <dependency>
       <groupId>de.serviceflow.frankenstein.plugin.opencv</groupId>
-      <artifactId>plugin-opencv-64</artifactId>
+      <artifactId>plugin-opencv-win64</artifactId>
       <version>0.3.4-SNAPSHOT</version>
       <type>dll</type>
     </dependency>
@@ -48,7 +48,7 @@
             <configuration>
               <tasks>
                 <unzip src="${project.basedir}/../java/target/plugin-opencv-${project.version}.jar" dest="${project.build.directory}/assembly"/>
-                <copy file="${project.basedir}/../native/win64/target/plugin-opencv-64.dll" tofile="${project.build.directory}/assembly/plugin-opencv-64.dll"/>
+                <copy file="${project.basedir}/../native/win64/target/plugin-opencv-win64.dll" tofile="${project.build.directory}/assembly/plugin-opencv-win64.dll"/>
                 <jar destfile="${project.build.directory}/plugin-opencv-${project.version}.jar" basedir="${project.build.directory}/assembly" manifest="${project.build.directory}/assembly/META-INF/MANIFEST.MF"/>
                 <copy file="${project.basedir}/../java/target/plugin-opencv-${project.version}-sources.jar" tofile="${project.build.directory}/plugin-opencv-${project.version}-sources.jar"/>
                 <copy file="${project.basedir}/../java/target/plugin-opencv-${project.version}-javadoc.jar" tofile="${project.build.directory}/plugin-opencv-${project.version}-javadoc.jar"/>
