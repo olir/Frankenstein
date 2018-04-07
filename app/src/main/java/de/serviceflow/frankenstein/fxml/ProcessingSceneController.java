@@ -33,7 +33,7 @@ import de.serviceflow.frankenstein.Configuration;
 import de.serviceflow.frankenstein.ExecutorThread;
 import de.serviceflow.frankenstein.MovieProcessor;
 import de.serviceflow.frankenstein.ProcessingListener;
-import de.serviceflow.frankenstein.plugin.api.SegmentConfigController;
+import de.serviceflow.frankenstein.plugin.api.DefaultSegmentConfigController;
 import de.serviceflow.frankenstein.plugin.api.SegmentVideoFilter;
 import de.serviceflow.frankenstein.vf.FilterElement;
 import de.serviceflow.frankenstein.vf.VideoStreamSource;
@@ -942,7 +942,7 @@ public class ProcessingSceneController implements ProcessingListener {
 	}
 
 	@Override
-	public void configChanged(SegmentConfigController segmentConfigController, SegmentVideoFilter selectedFilter) {
+	public void configChanged(DefaultSegmentConfigController segmentConfigController, SegmentVideoFilter selectedFilter) {
 		Runnable r = new Runnable() {
 			public void run() {
 				processor.setPreviewFilter(selectedFilter);

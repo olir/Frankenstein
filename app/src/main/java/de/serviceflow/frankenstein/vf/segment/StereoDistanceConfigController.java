@@ -1,10 +1,10 @@
 package de.serviceflow.frankenstein.vf.segment;
 
-import de.serviceflow.frankenstein.plugin.api.SegmentConfigController;
+import de.serviceflow.frankenstein.plugin.api.DefaultSegmentConfigController;
 import javafx.fxml.FXML;
 import javafx.scene.control.Slider;
 
-public class StereoDistanceConfigController extends SegmentConfigController {
+public class StereoDistanceConfigController extends DefaultSegmentConfigController {
 
 	@FXML
 	Slider sliderStereoPerspective;

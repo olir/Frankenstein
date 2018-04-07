@@ -1,10 +1,10 @@
 package de.serviceflow.frankenstein.plugin.opencv;
 
-import de.serviceflow.frankenstein.plugin.api.SegmentConfigController;
+import de.serviceflow.frankenstein.plugin.api.DefaultSegmentConfigController;
 import javafx.fxml.FXML;
 import javafx.scene.control.Slider;
 
-public class VideoEqualizerConfigController extends SegmentConfigController {
+public class VideoEqualizerConfigController extends DefaultSegmentConfigController {
 
 	@FXML
 	Slider slBrightness;

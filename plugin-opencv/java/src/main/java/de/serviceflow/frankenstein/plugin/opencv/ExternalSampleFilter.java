@@ -15,35 +15,29 @@
  */
 package de.serviceflow.frankenstein.plugin.opencv;
 
-import java.lang.reflect.Method;
-
 import org.opencv.core.Mat;
 import org.opencv.imgproc.Imgproc;
 
+import de.serviceflow.frankenstein.plugin.api.DefaultSegmentFilter;
 import de.serviceflow.frankenstein.plugin.api.FilterContext;
-import de.serviceflow.frankenstein.plugin.api.NativeSegmentFilter;
-import de.serviceflow.frankenstein.plugin.api.SegmentConfigController;
+import de.serviceflow.frankenstein.plugin.api.DefaultSegmentConfigController;
+import de.serviceflow.frankenstein.plugin.opencv.jni.ExternalSample;
 
-public class ExternalSampleFilter extends NativeSegmentFilter<ExternalSampleConfigController> {
+public class ExternalSampleFilter extends DefaultSegmentFilter {
 
-	private final static String JNI_FILTER_CLASS = "de.serviceflow.frankenstein.plugin.opencv.jni.ExternalSample";
-
-	private final Method jniProxyProcessMethod;
+	private final ExternalSample proxy;
 
 	private Mat mHsvMat = new Mat();
 
-	@SuppressWarnings("unchecked")
 	public ExternalSampleFilter() throws UnsatisfiedLinkError {
-		super("externalsample", JNI_FILTER_CLASS);
-		try {
-			jniProxyProcessMethod = getJniProxyClass().getMethod("process", Object.class, int.class, Object.class);
-		} catch (Throwable e) {
-			throw new RuntimeException("jni wrapper creation failed", e);
-		}
+		super("externalsample");
+
+		proxy = new ExternalSample();
+		proxy.init();
 	}
 
 	@Override
-	protected SegmentConfigController instantiateController() {
+	protected DefaultSegmentConfigController instantiateController() {
 		return new ExternalSampleConfigController();
 	}
 
@@ -51,14 +45,11 @@ public class ExternalSampleFilter extends NativeSegmentFilter<ExternalSampleConf
 	public Mat process(Mat rgbaImage, int frameId, FilterContext context) {
 		Imgproc.cvtColor(rgbaImage, mHsvMat, Imgproc.COLOR_RGB2HSV_FULL);
 
-		// ExternalSampleConfigController c = ((ExternalSampleConfigController) getConfigController());
+		// ExternalSampleConfigController c = ((ExternalSampleConfigController)
+		// getConfigController());
 		// pass c data to proxy...
 
-		try {
-			jniProxyProcessMethod.invoke(getJniProxy(), mHsvMat, frameId, context);
-		} catch (Throwable e) {
-			e.printStackTrace();
-		}
+		proxy.process(mHsvMat, frameId, context);
 
 		Imgproc.cvtColor(mHsvMat, rgbaImage, Imgproc.COLOR_HSV2RGB_FULL);
 
@@ -67,7 +58,8 @@ public class ExternalSampleFilter extends NativeSegmentFilter<ExternalSampleConf
 
 	@Override
 	protected void initializeController() {
-		// ExternalSampleConfigController c = ((ExternalSampleConfigController) getConfigController());
+		// ExternalSampleConfigController c = ((ExternalSampleConfigController)
+		// getConfigController());
 		// c.set...(...);
 		// c.initialize();
 	}

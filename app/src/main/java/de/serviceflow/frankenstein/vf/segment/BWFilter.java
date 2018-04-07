@@ -20,7 +20,7 @@ import org.opencv.imgproc.Imgproc;
 
 import de.serviceflow.frankenstein.plugin.api.DefaultSegmentFilter;
 import de.serviceflow.frankenstein.plugin.api.FilterContext;
-import de.serviceflow.frankenstein.plugin.api.SegmentConfigController;
+import de.serviceflow.frankenstein.plugin.api.DefaultSegmentConfigController;
 
 public class BWFilter extends DefaultSegmentFilter {
 
@@ -47,7 +47,7 @@ public class BWFilter extends DefaultSegmentFilter {
 	}
 
 	@Override
-	protected SegmentConfigController instantiateController() {
+	protected DefaultSegmentConfigController instantiateController() {
 		return new BWConfigController();
 	}
 }

@@ -15,9 +15,7 @@
         <version>0.3.4-SNAPSHOT</version>
     </parent>
 
-    <groupId>de.serviceflow.frankenstein.plugin.opencv</groupId>
     <artifactId>plugin-opencv</artifactId>
-    <version>0.3.4-SNAPSHOT</version>
 
     <name>OpenCV Filters - Java Part</name>
     <!-- Credits to http://www.tricoder.net/blog/?p=197 -->

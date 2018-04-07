@@ -10,7 +10,6 @@
 
     <groupId>de.serviceflow.frankenstein.plugin.opencv</groupId>
     <artifactId>plugin-parent</artifactId>
-    <version>0.3.4-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>OpenCV Filters - Parent</name>

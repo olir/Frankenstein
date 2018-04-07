@@ -15,63 +15,53 @@
  */
 package de.serviceflow.frankenstein.plugin.opencv;
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-
 import org.opencv.core.Mat;
 import org.opencv.imgproc.Imgproc;
 
+import de.serviceflow.frankenstein.plugin.api.DefaultSegmentFilter;
 import de.serviceflow.frankenstein.plugin.api.FilterContext;
-import de.serviceflow.frankenstein.plugin.api.NativeSegmentFilter;
-import de.serviceflow.frankenstein.plugin.api.SegmentConfigController;
+import de.serviceflow.frankenstein.plugin.api.DefaultSegmentConfigController;
+import de.serviceflow.frankenstein.plugin.opencv.jni.NativeExample;
 
-public class NativeExampleFilter extends NativeSegmentFilter<NativeExampleConfigController> {
+public class NativeExampleFilter extends DefaultSegmentFilter {
 
-	private final static String JNI_FILTER_CLASS = "de.serviceflow.frankenstein.plugin.opencv.jni.NativeExample";
-
-	private final Method jniProxyProcessMethod;
+	private final NativeExample proxy;
 
 	private Mat mHsvMat = new Mat();
 
-	@SuppressWarnings("unchecked")
 	public NativeExampleFilter() throws UnsatisfiedLinkError {
-		super("native", JNI_FILTER_CLASS);
-		try {
-			jniProxyProcessMethod = getJniProxyClass().getMethod("process", Object.class, int.class, Object.class, int.class, int.class);
-		} catch (NoSuchMethodException | SecurityException | IllegalArgumentException e) {
-			throw new RuntimeException("jni wrapper creation failed", e);
-		}
+		super("native");
+
+		proxy = new NativeExample();
+		proxy.init();
 	}
 
 	@Override
-	protected SegmentConfigController instantiateController() {
+	protected DefaultSegmentConfigController instantiateController() {
 		return new NativeExampleConfigController();
 	}
 
 	@Override
 	public Mat process(Mat rgbaImage, int frameId, FilterContext context) {
-        Imgproc.cvtColor(rgbaImage, mHsvMat, Imgproc.COLOR_RGB2HSV_FULL);
+		Imgproc.cvtColor(rgbaImage, mHsvMat, Imgproc.COLOR_RGB2HSV_FULL);
 
-        NativeExampleConfigController c = ((NativeExampleConfigController)getConfigController());
-        int farbe = c.getFarbe();
-        int range = c.getRange();
-		try {
-			jniProxyProcessMethod.invoke(getJniProxy(), mHsvMat, frameId, context, farbe, range);
-		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-			e.printStackTrace();
-		}
-		
+		NativeExampleConfigController c = ((NativeExampleConfigController) getConfigController());
+		int farbe = c.getFarbe();
+		int range = c.getRange();
+
+		proxy.process(mHsvMat, frameId, context, farbe, range);
+
 		Imgproc.cvtColor(mHsvMat, rgbaImage, Imgproc.COLOR_HSV2RGB_FULL);
-		
+
 		return rgbaImage;
 	}
 
 	@Override
 	protected void initializeController() {
-        NativeExampleConfigController c = ((NativeExampleConfigController)getConfigController());
-        int farbe = 310;
-        c.setFarbe(farbe);
-        int range = 20;
-        c.setRange(range);
+		NativeExampleConfigController c = ((NativeExampleConfigController) getConfigController());
+		int farbe = 310;
+		c.setFarbe(farbe);
+		int range = 20;
+		c.setRange(range);
 	}
 }

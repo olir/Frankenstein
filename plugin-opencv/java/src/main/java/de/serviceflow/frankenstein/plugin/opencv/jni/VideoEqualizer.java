@@ -1,8 +1,8 @@
 package de.serviceflow.frankenstein.plugin.opencv.jni;
 
-import de.serviceflow.frankenstein.plugin.api.NativeFilter;
+import de.serviceflow.frankenstein.plugin.api.NativeJniProxy;
 
-public class VideoEqualizer extends NativeFilter {
+public class VideoEqualizer extends NativeJniProxy {
 	public VideoEqualizer() throws UnsatisfiedLinkError {
 	}
 	

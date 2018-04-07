@@ -1,10 +1,10 @@
 package de.serviceflow.frankenstein.plugin.opencv;
 
-import de.serviceflow.frankenstein.plugin.api.SegmentConfigController;
+import de.serviceflow.frankenstein.plugin.api.DefaultSegmentConfigController;
 import javafx.fxml.FXML;
 import javafx.scene.control.Slider;
 
-public class NativeExampleConfigController extends SegmentConfigController {
+public class NativeExampleConfigController extends DefaultSegmentConfigController {
 
 	@FXML
 	Slider slColor;

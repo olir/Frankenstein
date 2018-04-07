@@ -10,7 +10,6 @@
 
     <groupId>de.serviceflow.frankenstein.plugin.jogamp</groupId>
     <artifactId>plugin-parent</artifactId>
-    <version>0.3.4-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>JogAmp Filters - Parent</name>

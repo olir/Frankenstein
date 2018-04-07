@@ -2,8 +2,6 @@ package de.serviceflow.frankenstein.plugin.jogamp;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.DataBufferByte;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
@@ -18,29 +16,24 @@ import com.jogamp.opengl.fixedfunc.GLMatrixFunc;
 import com.jogamp.opengl.util.awt.AWTGLReadBufferUtil;
 import com.jogamp.opengl.util.gl2.GLUT;
 
+import de.serviceflow.frankenstein.plugin.api.DefaultSegmentFilter;
 import de.serviceflow.frankenstein.plugin.api.FilterContext;
-import de.serviceflow.frankenstein.plugin.api.NativeSegmentFilter;
-import de.serviceflow.frankenstein.plugin.api.SegmentConfigController;
+import de.serviceflow.frankenstein.plugin.api.DefaultSegmentConfigController;
+import de.serviceflow.frankenstein.plugin.jogamp.jni.MatBlender;
 
-public class GLExampleFilter extends NativeSegmentFilter<GLExampleConfigController> {
+public class GLExampleFilter extends DefaultSegmentFilter {
 
-	private final static String JNI_FILTER_CLASS = "de.serviceflow.frankenstein.plugin.jogamp.jni.MatBlender";
-
-	private final Method jniProxyProcessMethod;
+	private final MatBlender proxy;
 
 	Mat glFrame;
 	GLProfile glp;
 	GLCapabilities caps;
 
-	@SuppressWarnings("unchecked")
 	public GLExampleFilter() {
-		super("glexample", JNI_FILTER_CLASS);
-		try {
-			jniProxyProcessMethod = getJniProxyClass().getMethod("process", Object.class, int.class, Object.class,
-					Object.class);
-		} catch (NoSuchMethodException | SecurityException | IllegalArgumentException e) {
-			throw new RuntimeException("jni wrapper creation failed", e);
-		}
+		super("glexample");
+
+		proxy = new MatBlender();
+		proxy.init();
 
 		glp = GLProfile.getDefault();
 		caps = new GLCapabilities(glp);
@@ -56,7 +49,7 @@ public class GLExampleFilter extends NativeSegmentFilter<GLExampleConfigControll
 	}
 
 	@Override
-	protected SegmentConfigController instantiateController() {
+	protected DefaultSegmentConfigController instantiateController() {
 		return new GLExampleConfigController();
 	}
 
@@ -78,11 +71,7 @@ public class GLExampleFilter extends NativeSegmentFilter<GLExampleConfigControll
 		byte[] data = ((DataBufferByte) image.getRaster().getDataBuffer()).getData();
 		glFrame.put(0, 0, data);
 
-		try {
-			jniProxyProcessMethod.invoke(getJniProxy(), sourceFrame, frameId, context, glFrame);
-		} catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-			e.printStackTrace();
-		}
+		proxy.process(sourceFrame, frameId, context, glFrame);
 
 		return sourceFrame;
 	}

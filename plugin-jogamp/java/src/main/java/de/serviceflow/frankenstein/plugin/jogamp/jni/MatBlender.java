@@ -1,8 +1,8 @@
 package de.serviceflow.frankenstein.plugin.jogamp.jni;
 
-import de.serviceflow.frankenstein.plugin.api.NativeFilter;
+import de.serviceflow.frankenstein.plugin.api.NativeJniProxy;
 
-public class MatBlender extends NativeFilter {
+public class MatBlender extends NativeJniProxy {
 	public MatBlender() throws UnsatisfiedLinkError {
 	}
 

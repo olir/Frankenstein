@@ -4,7 +4,7 @@ import java.net.URL;
 import java.util.List;
 
 import de.serviceflow.frankenstein.Configuration;
-import de.serviceflow.frankenstein.plugin.api.SegmentConfigController;
+import de.serviceflow.frankenstein.plugin.api.DefaultSegmentConfigController;
 import de.serviceflow.frankenstein.plugin.api.SegmentVideoFilter;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -52,7 +52,7 @@ public class FilterSetupController {
 					String stylesheet = url.toExternalForm();
 					Scene scene = selectedFilter.createConfigurationScene(stylesheet);
 					bpContainer.setCenter(scene.getRoot());
-					SegmentConfigController c = ((SegmentVideoFilter) selectedFilter).getConfigController();
+					DefaultSegmentConfigController c = ((SegmentVideoFilter) selectedFilter).getConfigController();
 					c.bind(parent, selectedFilter);
 					c.fireChange();
 				}

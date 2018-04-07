@@ -1,18 +1,3 @@
-/*
- * Copyright 2017 Oliver Rode, https://github.com/olir/Frankenstein
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *     http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
 package de.serviceflow.frankenstein.plugin.api;
 
 import java.io.IOException;
@@ -24,14 +9,43 @@ import java.util.ResourceBundle;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 
+/**
+ * Basic implementation of a SegmentVideoFilter.
+ */
 public abstract class DefaultSegmentFilter implements SegmentVideoFilter {
-	private SegmentConfigController configController = null;
+	private DefaultSegmentConfigController configController = null;
 
 	private final String identifier;
 	private final PropertyResourceBundle bundleConfiguration;
+	private final String configManagerClass;
 
+	/**
+	 * Created an instance for the given IDENTIFIER. Convention is that in the
+	 * package of the implementing class an fxml file of name IDENTIFIER.fxml
+	 * and a property file of name IDENTIFIER.properties (and optionally
+	 * localizations) exists.
+	 * 
+	 * The ConfigManager implementation
+	 * de.serviceflow.frankenstein.Configuration is used.
+	 * 
+	 * @param identifier
+	 *            simple identifier name for this filter.
+	 */
 	protected DefaultSegmentFilter(String identifier) {
+		this(identifier, "de.serviceflow.frankenstein.Configuration");
+	}
+
+	/**
+	 * Like {@link DefaultSegmentFilter#DefaultSegmentFilter(String)}, but with
+	 * the option to specify an individual configManagerClass.
+	 * 
+	 * @param identifier simple identifier name for this filter.
+	 * @param configManagerClass
+	 *            full qualified class name to a ConfigManager implementation.
+	 */
+	protected DefaultSegmentFilter(String identifier, String configManagerClass) {
 		this.identifier = identifier;
+		this.configManagerClass = configManagerClass;
 
 		bundleConfiguration = (PropertyResourceBundle) ResourceBundle.getBundle(
 				this.getClass().getPackage().getName().replace('.', '/') + '/' + identifier, getLocale(),
@@ -45,7 +59,7 @@ public abstract class DefaultSegmentFilter implements SegmentVideoFilter {
 	protected ConfigManager getConfigManager() {
 		Class<?> fxMain;
 		try {
-			fxMain = Class.forName("de.serviceflow.frankenstein.Configuration");
+			fxMain = Class.forName(configManagerClass);
 			Class<?> parameterTypes[] = {};
 			Method main = fxMain.getDeclaredMethod("getInstance", parameterTypes);
 			Object[] invokeArgs = {};
@@ -80,16 +94,23 @@ public abstract class DefaultSegmentFilter implements SegmentVideoFilter {
 		}
 		Scene scene = new Scene(loader.getRoot());
 		scene.getStylesheets().add(stylesheet);
-		// configController = loader.getController();
 		initializeController(); // custom initialization possible here
 		return scene;
 	}
 
-	abstract protected SegmentConfigController instantiateController();
+	/**
+	 * Returns, if necessary creates, the controller instance.
+	 * 
+	 * @return SegmentConfigController
+	 */
+	abstract protected DefaultSegmentConfigController instantiateController();
 
+	/**
+	 * initializing the current controller.
+	 */
 	abstract protected void initializeController();
 
-	public SegmentConfigController getConfigController() {
+	public DefaultSegmentConfigController getConfigController() {
 		return configController;
 	}
 }

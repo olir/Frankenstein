@@ -19,15 +19,13 @@
   </properties>
 
   <parent>
-	<groupId>de.serviceflow.frankenstein</groupId>
-	<artifactId>root</artifactId>
-	<version>0.3.4-SNAPSHOT</version>
+    <groupId>de.serviceflow.frankenstein</groupId>
+    <artifactId>root</artifactId>
+    <version>0.3.4-SNAPSHOT</version>
   </parent>
 
 	<!-- Maven Coordinates -->
-  <groupId>de.serviceflow.frankenstein</groupId>
   <artifactId>app</artifactId>
-  <version>0.3.4-SNAPSHOT</version>
 
   <name>Frankenstein - Application</name>
   

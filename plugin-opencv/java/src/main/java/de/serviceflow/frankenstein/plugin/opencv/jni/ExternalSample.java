@@ -1,8 +1,8 @@
 package de.serviceflow.frankenstein.plugin.opencv.jni;
 
-import de.serviceflow.frankenstein.plugin.api.NativeFilter;
+import de.serviceflow.frankenstein.plugin.api.NativeJniProxy;
 
-public class ExternalSample extends NativeFilter {
+public class ExternalSample extends NativeJniProxy {
 	public ExternalSample() throws UnsatisfiedLinkError {
 	}
 	

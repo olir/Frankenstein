@@ -8,9 +8,7 @@
         <version>0.3.4-SNAPSHOT</version>
     </parent>
 
-    <groupId>de.serviceflow.frankenstein.plugin.jogamp</groupId>
     <artifactId>jniplugin-native</artifactId>
-    <version>0.3.4-SNAPSHOT</version>
     <packaging>pom</packaging>
 
     <name>JogAmp Filters - Native parts - switch</name>

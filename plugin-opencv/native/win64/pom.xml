@@ -8,9 +8,7 @@
       <version>0.3.4-SNAPSHOT</version>
     </parent>
 
-    <groupId>de.serviceflow.frankenstein.plugin.opencv</groupId>
     <artifactId>plugin-opencv-win64</artifactId>
-    <version>0.3.4-SNAPSHOT</version>
     <packaging>dll</packaging>
 
     <name>OpenCV Filters - Native parts - win64</name>
