@@ -15,13 +15,13 @@
   <parent>
 	<groupId>de.serviceflow.frankenstein</groupId>
 	<artifactId>root</artifactId>
-	<version>0.3.6</version>
+	<version>0.3.7-SNAPSHOT</version>
   </parent>
 
 	<!-- Maven Coordinates -->
   <groupId>de.serviceflow.frankenstein.plugin</groupId>
   <artifactId>api</artifactId>
-  <version>0.3.6</version>
+  <version>0.3.7-SNAPSHOT</version>
 
   <name>Filter Plugin API</name>
   

@@ -12,7 +12,7 @@
     <parent>
         <groupId>de.serviceflow.frankenstein.plugin.jogamp</groupId>
         <artifactId>plugin-parent</artifactId>
-        <version>0.3.6</version>
+        <version>0.3.7-SNAPSHOT</version>
     </parent>
 
     <artifactId>plugin-jogamp</artifactId>
@@ -24,7 +24,7 @@
     <dependency>
       <groupId>de.serviceflow.frankenstein.plugin</groupId>
       <artifactId>api</artifactId>
-      <version>0.3.6</version>
+      <version>0.3.7-SNAPSHOT</version>
     </dependency>
     <!-- jogamp dependencies -->
     <dependency>

@@ -21,7 +21,7 @@
   <!-- Maven Coordinates:  mvn versions:set -DnewVersion=X.Y.Z-SNAPSHOT -->
   <groupId>de.serviceflow.frankenstein</groupId>
   <artifactId>root</artifactId>
-  <version>0.3.6</version>
+  <version>0.3.7-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>Frankenstein - POM</name>

@@ -7,7 +7,7 @@
   <parent>
     <groupId>de.serviceflow.frankenstein.plugin.jogamp</groupId>
     <artifactId>plugin-parent</artifactId>
-    <version>0.3.6</version>
+    <version>0.3.7-SNAPSHOT</version>
   </parent>
   
   <artifactId>distribution</artifactId>
@@ -26,12 +26,12 @@
     <dependency>
       <groupId>de.serviceflow.frankenstein.plugin.jogamp</groupId>
       <artifactId>plugin-jogamp</artifactId>
-      <version>0.3.6</version>
+      <version>0.3.7-SNAPSHOT</version>
     </dependency>
     <dependency>
       <groupId>de.serviceflow.frankenstein.plugin.jogamp</groupId>
       <artifactId>plugin-jogamp-win64</artifactId>
-      <version>0.3.6</version>
+      <version>0.3.7-SNAPSHOT</version>
       <type>dll</type>
     </dependency>
   </dependencies>
