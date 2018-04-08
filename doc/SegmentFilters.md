@@ -1,12 +1,12 @@
-# Frankenstein VR - Segment Filters
+# Frankenstein - Segment Filters
 
-## Available Filters
+## Available Sample Filters
 
 * Black and White - Converts to grayscale.
 * Stereo Distance - Manipulates the stereo effect distance of side by side videos
 ** Distance slider: frame can appear farer or closer
 
-## Howto create a new filter (!!! UNDER CONSTRUCTION !!!)
+# Howto create a new filter (!!! UNDER CONSTRUCTION !!!)
 
 ## Overview
 A filter is made of the following parts:
@@ -161,4 +161,14 @@ Some messages should appear: **Hello from C++!** ...
 ### Plattform Issues
 *  java.lang.UnsatisfiedLinkError: "Can't load AMD 64-bit .dll on a IA 32-bit platform": In win32/pom.xml set the property gcc.customflags to -m32
 
+## Filter-Plugins ##
+Your own plugin must depend on the Frankenstein API with the following Maven coordinates:
+```
+<dependency>
+  <groupId>de.serviceflow.frankenstein.plugin</groupId>
+  <artifactId>api</artifactId>
+  <version>0.3.6</version>
+  <scope>provided</scope>
+</dependency>
+```
 

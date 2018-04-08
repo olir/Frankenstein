@@ -30,7 +30,7 @@
   <modules>
     <module>plugin-api</module>
     <module>plugin-opencv</module>
-    <module>plugin-jogamp</module>
+    <!-- <module>plugin-jogamp</module> -->
     <module>app</module>
   </modules>
   
@@ -52,11 +52,11 @@
     , click "close"/confirm, wait/click refresh, in case of error check Activity-Tab 
     and ensure http://search.maven.org/#search%7Cga%7C1%7Ca%3A%22nexus-staging-maven-plugin%22
     is latest version. 
-    In case of success click "release", wait until operation finishs
+    In case of success click "release", wait until operation ends, ignore errors,
     and check Result via "Artifact Search" with group id
     then git add/commit/push, check build is passing on github and release there, 
     then increment version plus add -snapshot to Maven Coordinates with:  
-    mvn versions:set -DnewVersion=X.Y.Z-SNAPSHOT , and git push to origin.
+    mvn versions:set -DnewVersion=X.Y.Z-SNAPSHOT , and git add/commit/push to origin.
     -->
   <distributionManagement>
     <snapshotRepository>

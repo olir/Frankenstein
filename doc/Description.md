@@ -1,5 +1,8 @@
 # Frankenstein VR
-A Video Stream Analysis and Manipulation Framework for Java™ and C++, where custom filters can be simply added into the processing pipeline.
+A Video Stream Analysis and Manipulation Framework for Java™ and C++, 
+where custom filters can be simply added into the processing pipeline.
+
+Plattforms: Windows 64. Linux will follow "soon".
 
 The Tool supports 
 * [OpenCV](http://www.opencv.org/releases.html) - computer vision and machine learning
@@ -47,7 +50,12 @@ FFMPEG build contains H264 encoder based on the OpenH264 library, that should be
   Downloaded binary file can be placed into global system path (System32 or SysWOW64) or near application binaries (bin/).
   You can also specify location of binary file via OPENH264_LIBRARY_PATH environment variable.
 
-## For developers ##
+## Your custom Video Filters ##
+Frankstein supports loading external filters plugins either from network or local.
+
+After first run .frankenstein-plugin.set contains the list of sample filters. 
+Filter plugin jars are either specified by the directory location or an URL to the jar file.
+
 When you work on custom filters, you can concentrate on manipulating images with the OpenCV or JogAmp libraries. 
 For more details read [SegmentFilters](https://olir.github.io/Frankenstein/doc/SegmentFilters.html).
 To run on [Debian Linux click here](https://olir.github.io/Frankenstein/doc/DebianLinux.html).

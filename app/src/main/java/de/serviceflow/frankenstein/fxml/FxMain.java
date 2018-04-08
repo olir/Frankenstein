@@ -59,7 +59,7 @@ public class FxMain extends Application {
 		try {
 			theStage = primaryStage;
 
-			theStage.setTitle(APP_NAME);
+			setDocumentInTitle(null);
 			theStage.setMinHeight(HEIGHT);
 			theStage.setMaxHeight(HEIGHT);
 			theStage.setHeight(HEIGHT);
@@ -149,7 +149,7 @@ public class FxMain extends Application {
 		if (name != null)
 			theStage.setTitle(APP_NAME + " - " + name);
 		else
-			theStage.setTitle(APP_NAME);
+			theStage.setTitle(APP_NAME + " v" + getInitialConfiguration().getPluginManager().getImplementationVersion() );
 	}
 
 }

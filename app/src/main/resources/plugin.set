@@ -1,2 +1,6 @@
-../../../../plugin-opencv/distribution/target
-../../../../plugin-jogamp/distribution/target
+# Frankenstein plugin configuration
+#===================================
+#https://oss.sonatype.org/service/local/repositories/releases/content/de/serviceflow/frankenstein/plugin/jogamp/distribution/0.3.6/distribution-0.3.6.jar
+#https://oss.sonatype.org/service/local/repositories/releases/content/de/serviceflow/frankenstein/plugin/opencv/distribution/0.3.6/distribution-0.3.6.jar
+#plugin-jogamp/distribution/target
+plugin-opencv/distribution/target

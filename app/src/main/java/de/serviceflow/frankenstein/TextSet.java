@@ -5,14 +5,17 @@ import java.io.LineNumberReader;
 import java.io.Reader;
 import java.io.Writer;
 import java.util.AbstractSet;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
 public class TextSet extends AbstractSet<String> {
 
 	private SortedSet<String> s = Collections.synchronizedSortedSet(new TreeSet<String>());
+	private List<String> comments = Collections.synchronizedList(new ArrayList<String>());
 
 	@Override
 	public Iterator<String> iterator() {
@@ -32,10 +35,19 @@ public class TextSet extends AbstractSet<String> {
 	
 	@Override
 	public boolean add(String e) {
-		return s.add(e);
+		if (e.startsWith("#")) {
+			comments.add(e);
+			return true;
+		}
+		else
+			return s.add(e);
 	}
 	
 	public void store(Writer writer) throws IOException {
+		for (String c : comments) {
+			writer.write(c);
+			writer.write('\n');
+		}
 		for (Iterator<String> iter = iterator(); iter.hasNext();) {
 			String text = iter.next();
 			text.replace("\\", "\\\\");
@@ -66,12 +78,12 @@ public class TextSet extends AbstractSet<String> {
 			}
 			text.replace("\\\\", "\\");
 			if (text.length()>0)
-				s.add(text);
+				add(text);
 		}
 		if (multiLineBuffer!=null) {
 			multiLineBuffer.replace("\\\\", "\\");
 			if (multiLineBuffer.length()>0)
-				s.add(multiLineBuffer);
+				add(multiLineBuffer);
 		}
 	}
 

@@ -22,9 +22,16 @@
     
   <dependencies>
     <dependency>
+        <groupId>org.openpnp</groupId>
+        <artifactId>opencv</artifactId>
+        <version>3.2.0-1</version>
+        <scope>provided</scope>
+    </dependency>
+    <dependency>
       <groupId>de.serviceflow.frankenstein.plugin</groupId>
       <artifactId>api</artifactId>
       <version>0.3.7-SNAPSHOT</version>
+      <scope>provided</scope>
     </dependency>
     <!-- jogamp dependencies -->
     <dependency>

@@ -44,6 +44,7 @@
   </dependencies>
 
   <profiles> 
+<!--  
     <profile>
       <id>OPENH264_LIBRARY_PATH-defined</id>
       <activation>
@@ -66,6 +67,7 @@
         <openh264opt>-DOPENH264_LIBRARY_PATH_UNSET</openh264opt>
       </properties>
     </profile>
+-->
   </profiles>
   
   <!-- Build Settings -->

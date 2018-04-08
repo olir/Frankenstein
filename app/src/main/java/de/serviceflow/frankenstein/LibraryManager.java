@@ -37,6 +37,11 @@ public class LibraryManager {
 		return plattformLibraryName;
 	}
 
+	// direct, plattform-specific
+	public void prepareLoadLibraryWithoutArch(Class<?> invokerClass, String name, String suffix) throws UnsatisfiedLinkError {
+		prepareLoadLibraryImpl(invokerClass, name, suffix);
+	}
+
 	private static void prepareLoadLibraryImpl(Class<?> invokerClass, String plattformLibraryName, String suffix)
 			throws UnsatisfiedLinkError {
 		synchronized (loadedLibraries) {

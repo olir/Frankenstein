@@ -26,25 +26,25 @@ public class PluginManager {
 
 	private final List<SegmentVideoFilter> segmentFilters = new ArrayList<SegmentVideoFilter>();
 
+	public String getImplementationVersion() {
+		return this.getClass().getPackage().getImplementationVersion();
+	}
+	
 	public void load(Configuration configuration) {
 		loadOpenCV();
 		loadSegmentFilters();
 	}
 
 	private void loadOpenCV() {
-		// https://github.com/openpnp/opencv
-		try {
-			Class.forName("nu.pattern.OpenCV").getMethod("loadShared", (Class<?>[]) null).invoke((Object[]) null,
-					(Object[]) null);
-			// nu.pattern.OpenCV.loadShared();
-			// nu.pattern.OpenCV.loadLocal();
-			// System.out.println("Loading from " + System.getProperty("java.library.path"));
-			System.loadLibrary(org.opencv.core.Core.NATIVE_LIBRARY_NAME);
-		} catch (ClassNotFoundException e) {
-			System.out.println("WARNING: nu.pattern.OpenCV not found.");
-		} catch (Throwable t) {
-			System.out.println("WARNING: nu.pattern.OpenCV not loaded.");
-		}
+		String opencvlib = "opencv_java320";
+		String ffmpeglib = "opencv_ffmpeg320_64";
+		String suffix = ".dll";
+
+		LibraryManager lm = new LibraryManager();
+		lm.prepareLoadLibraryWithoutArch(this.getClass(), ffmpeglib, suffix);
+		System.loadLibrary(ffmpeglib);
+		lm.prepareLoadLibraryWithoutArch(this.getClass(), opencvlib, suffix);
+		System.loadLibrary(opencvlib);
 	}
 
 	public List<SegmentVideoFilter> getLocalFilters() {
@@ -83,8 +83,6 @@ public class PluginManager {
 			/*
 			 * String pluginOpenCVbase; String pluginJogAmpbase;
 			 *
-			 * String version =
-			 * getClass().getPackage().getImplementationVersion();
 			 *
 			 * if (version != null && !version.endsWith("-SNAPSHOT")) { fs =
 			 * "/"; pluginOpenCVbase =
@@ -104,12 +102,13 @@ public class PluginManager {
 			 * baseFromAppResources + "plugin-jogamp" + fs + "java" + fs +
 			 * "target").toURI().toURL().toExternalForm(); }
 			 *
-			 * System.out.println("version (e.g. 0.3.3) = " + version);
+			 * 
 			 *
 			 * String pluginOpenCVRef = pluginOpenCVbase + "/" +
 			 * "plugin-opencv-" + version + ".jar"; String pluginJogAmpRef =
 			 * pluginJogAmpbase + "/" + "plugin-jogamp-" + version + ".jar";
 			 */
+			
 			TextSet pluginSet = loadPluginSet();
 
 			for (Iterator<String> piter = pluginSet.iterator(); piter.hasNext();) {
@@ -168,8 +167,7 @@ public class PluginManager {
 			if (s != null) {
 				filterSet.load(new InputStreamReader(s));
 				s.close();
-			}
-			else {
+			} else {
 				System.err.println("Warning: Plugin contains no filter.set file: " + pluginRef);
 			}
 			return filterSet;

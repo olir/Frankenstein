@@ -21,6 +21,12 @@
     <type>jar</type>
     <scope>compile</scope>
     </dependency>   
+    <dependency>
+      <groupId>de.serviceflow.frankenstein.plugin</groupId>
+      <artifactId>api</artifactId>
+      <version>0.3.7-SNAPSHOT</version>
+      <scope>compile</scope>
+    </dependency>
   </dependencies>
 
   <build>
