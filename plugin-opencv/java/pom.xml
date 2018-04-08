@@ -12,7 +12,7 @@
     <parent>
         <groupId>de.serviceflow.frankenstein.plugin.opencv</groupId>
         <artifactId>plugin-parent</artifactId>
-        <version>0.3.4-SNAPSHOT</version>
+        <version>0.3.6</version>
     </parent>
 
     <artifactId>plugin-opencv</artifactId>
@@ -24,7 +24,7 @@
     <dependency>
       <groupId>de.serviceflow.frankenstein.plugin</groupId>
       <artifactId>api</artifactId>
-      <version>0.3.4-SNAPSHOT</version>
+      <version>0.3.6</version>
     </dependency>
 
   </dependencies>
@@ -93,7 +93,7 @@
       <plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-source-plugin</artifactId>
-				<version>2.2.1</version>
+				<version>3.0.1</version>
 				<executions>
 					<execution>
 						<id>attach-sources</id>
