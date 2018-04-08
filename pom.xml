@@ -29,7 +29,7 @@
   <!-- Native Implementation Plugin -->
   <modules>
     <module>plugin-api</module>
-    <module>plugin-opencv</module>
+    <!-- <module>plugin-opencv</module> -->
     <!-- <module>plugin-jogamp</module> -->
     <module>app</module>
   </modules>
