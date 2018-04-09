@@ -125,10 +125,10 @@
         <artifactId>maven-assembly-plugin</artifactId>
         <executions>
           <execution>
-          <phase>package</phase>
-          <goals>
-            <goal>single</goal>
-          </goals>
+            <phase>package</phase>
+            <goals>
+              <goal>single</goal>
+            </goals>
           </execution>
         </executions>
         <configuration>
@@ -137,17 +137,21 @@
           </descriptorRefs>
           <finalName>frankenstein</finalName>
           <appendAssemblyId>false</appendAssemblyId>
+          <descriptors>
+            <!-- win64 only for now -->
+            <descriptor>src/assembly/jar-with-deps-with-exclude.xml</descriptor> 
+          </descriptors>
           <archive>
             <manifest>
               <mainClass>${mainClass}</mainClass>
               <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
               </manifest>
-            <manifestEntries>
-              <application-name>Frankenstein VR</application-name>
-              <permissions>all-permissions</permissions>
-              <codebase>${manifest.Codebase}</codebase>
-              <!-- <Implementation-Build>${buildNumber}</Implementation-Build> -->
-            </manifestEntries>
+              <manifestEntries>
+                <application-name>Frankenstein</application-name>
+                <permissions>all-permissions</permissions>
+                <codebase>${manifest.Codebase}</codebase>
+                <!-- <Implementation-Build>${buildNumber}</Implementation-Build> -->
+              </manifestEntries>
           </archive>
         </configuration>
       </plugin>

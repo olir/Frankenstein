@@ -32,30 +32,32 @@ public class LibraryManager {
 		}
 		// TODO !!! ...
 
-		prepareLoadLibraryImpl(invokerClass, plattformLibraryName, suffix);
+		prepareLoadLibraryImpl(invokerClass, plattformLibraryName, suffix, null);
 
 		return plattformLibraryName;
 	}
 
 	// direct, plattform-specific
-	public void prepareLoadLibraryWithoutArch(Class<?> invokerClass, String name, String suffix) throws UnsatisfiedLinkError {
-		prepareLoadLibraryImpl(invokerClass, name, suffix);
+	public void prepareLoadLibraryWithoutArch(Class<?> invokerClass, String name, String suffix, String path) throws UnsatisfiedLinkError {
+		prepareLoadLibraryImpl(invokerClass, name, suffix, path);
 	}
 
-	private static void prepareLoadLibraryImpl(Class<?> invokerClass, String plattformLibraryName, String suffix)
+	private static void prepareLoadLibraryImpl(Class<?> invokerClass, String plattformLibraryName, String suffix, String path)
 			throws UnsatisfiedLinkError {
 		synchronized (loadedLibraries) {
 
 			if (loadedLibraries.contains(plattformLibraryName.intern()))
 				return;
 
+			if (path==null)
+				path = "/";
 			String libFileName = plattformLibraryName + suffix;
-			String location = "/" + libFileName;
-			InputStream binary = invokerClass.getResourceAsStream("/" + libFileName);
+			InputStream binary = invokerClass.getResourceAsStream(path + libFileName);
 			if (binary == null)
-				throw new Error("binary not found: " + "/" + libFileName);
+				throw new Error("binary not found: " + path + libFileName);
 
 			try {
+				String location = "/" + libFileName;
 				Path tmpDir = Files.createTempDirectory(TEMPPATH);
 				tmpDir.toFile().deleteOnExit();
 				Path destination = tmpDir.resolve("./" + location).normalize();

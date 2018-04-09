@@ -39,11 +39,12 @@ public class PluginManager {
 		String opencvlib = "opencv_java320";
 		String ffmpeglib = "opencv_ffmpeg320_64";
 		String suffix = ".dll";
-
+		String cvarchpath = "/nu/pattern/opencv/windows/x86_64";
+		
 		LibraryManager lm = new LibraryManager();
-		lm.prepareLoadLibraryWithoutArch(this.getClass(), ffmpeglib, suffix);
+		lm.prepareLoadLibraryWithoutArch(this.getClass(), ffmpeglib, suffix, null);
 		System.loadLibrary(ffmpeglib);
-		lm.prepareLoadLibraryWithoutArch(this.getClass(), opencvlib, suffix);
+		lm.prepareLoadLibraryWithoutArch(this.getClass(), opencvlib, suffix, cvarchpath);
 		System.loadLibrary(opencvlib);
 	}
 
