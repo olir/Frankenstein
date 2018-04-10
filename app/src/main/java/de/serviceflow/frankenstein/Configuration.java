@@ -89,7 +89,7 @@ public class Configuration implements ConfigManager {
 	}
 
 	public static Configuration cliCreateConfiguration(String[] args) {
-		
+
 		int optionKeyIndex;
 		String optionValue;
 		Properties optionProperties;

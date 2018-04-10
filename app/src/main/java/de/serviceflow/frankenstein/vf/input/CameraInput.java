@@ -55,10 +55,11 @@ public class CameraInput implements VideoStreamSource {
 	@Override
 	public void open(ProcessingListener l) {
 		movie = new VideoCapture(id);
-		if (!movie.isOpened()) {
-			throw new RuntimeException("Camera Opening Error for #" + id);
-		}
 		currentFrame = new Mat();
+		movie.read(currentFrame);
+		if (!movie.isOpened()) {
+			System.err.println("Error: Camera Opening Error for #" + id);
+		}
 		grab();
 		currentFrame = retrieve(currentFrame, l);
 		width = (int) movie.get(Videoio.CAP_PROP_FRAME_WIDTH);
