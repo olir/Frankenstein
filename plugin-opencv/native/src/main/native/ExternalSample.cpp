@@ -19,6 +19,118 @@ JNIEXPORT void JNICALL Java_de_serviceflow_frankenstein_plugin_opencv_jni_Extern
   }
 }
 
+unsigned int degree(signed int xparam, signed int yparam);
+
+// Fast XY vector to integer degree algorithm - Jan 2011 www.RomanBlack.com
+// Converts any XY values including 0 to a degree value that should be
+// within +/- 1 degree of the accurate value without needing
+// large slow trig functions like ArcTan() or ArcCos().
+// NOTE! at least one of the X or Y values must be non-zero!
+// This is the full version, for all 4 quadrants and will generate
+// the angle in integer degrees from 0-360.
+// Any values of X and Y are usable including negative values provided
+// they are between -1456 and 1456 so the 16bit multiply does not overflow.
+unsigned int degree(signed int xparam, signed int yparam) {
+
+   unsigned char negflag;
+   unsigned char tempdegree;
+   unsigned char comp;
+   unsigned int degree;     // this will hold the result
+   signed int x = xparam;            // these hold the XY vector at the start
+   signed int y = yparam;            // (and they will be destroyed)
+   unsigned int ux;
+   unsigned int uy;
+
+   if (x==0 && y==0)
+     return 0;
+   
+   // Save the sign flags then remove signs and get XY as unsigned ints
+   negflag = 0;
+   if(x < 0)
+   {
+      negflag += 0x01;    // x flag bit
+      x = - x;        // is now +
+   }
+   ux = x;                // copy to unsigned var before multiply
+   if(y < 0)
+   {
+      negflag += 0x02;    // y flag bit
+      y = - y;        // is now +
+   }
+   uy = y;                // copy to unsigned var before multiply
+
+   // 1. Calc the scaled "degrees"
+   if(ux > uy)
+   {
+      degree = (uy * 45) / ux;   // degree result will be 0-45 range
+      negflag += 0x10;    // octant flag bit
+   }
+   else
+   {
+      degree = (ux * 45) / uy;   // degree result will be 0-45 range
+   }
+
+   // 2. Compensate for the 4 degree error curve
+   comp = 0;
+   tempdegree = degree;    // use an unsigned char for speed!
+   if(tempdegree > 22)      // if top half of range
+   {
+      if(tempdegree <= 44) comp++;
+      if(tempdegree <= 41) comp++;
+      if(tempdegree <= 37) comp++;
+      if(tempdegree <= 32) comp++;  // max is 4 degrees compensated
+   }
+   else    // else is lower half of range
+   {
+      if(tempdegree >= 2) comp++;
+      if(tempdegree >= 6) comp++;
+      if(tempdegree >= 10) comp++;
+      if(tempdegree >= 15) comp++;  // max is 4 degrees compensated
+   }
+   degree += comp;   // degree is now accurate to +/- 1 degree!
+
+   // Invert degree if it was X>Y octant, makes 0-45 into 90-45
+   if(negflag & 0x10) degree = (90 - degree);
+
+   // 3. Degree is now 0-90 range for this quadrant,
+   // need to invert it for whichever quadrant it was in
+   if(negflag & 0x02)   // if -Y
+   {
+      if(negflag & 0x01)   // if -Y -X
+            degree = (180 + degree);
+      else        // else is -Y +X
+            degree = (180 - degree);
+   }
+   else    // else is +Y
+   {
+      if(negflag & 0x01)   // if +Y -X
+            degree = (360 - degree);
+   }
+   
+   return degree;
+}
+
+void CircleRow(int x,  int y, int radius, long rowptr, int xmid, int channels);
+
+// draw row of circle at "ymid + y" from -x to +x at xmid offset
+void CircleRow(int x,  int y, int radius, long rowptr, int xmid, int channels) {
+
+  jbyte * data = (jbyte *)rowptr;
+  int i = (xmid-x) * channels;
+  for (int xx=-x; xx<=x; xx++, i+= channels) {
+    int h = degree(xx, y) * 255 / 360;
+    int v = 255 - 255 * (xx * xx + y * y) / (radius * radius);
+    int s = 2 * (v - 128);
+    if (s<0)
+       s = -s;
+    s = 255 - s;
+    data[i+0] = CLAMP(h, 0, 255);
+    data[i+1] = CLAMP(s, 0, 255);
+    data[i+2] = CLAMP(v, 0, 255);
+  }
+  
+}
+
 JNIEXPORT void JNICALL Java_de_serviceflow_frankenstein_plugin_opencv_jni_ExternalSample_process
   (JNIEnv* env, jobject obj,
    jobject matobj, jint frameId, jobject context)
@@ -34,23 +146,59 @@ JNIEXPORT void JNICALL Java_de_serviceflow_frankenstein_plugin_opencv_jni_Extern
       return;
   }
 
+  long dataAddr = mat->dataAddr(env, matobj);
+  long step1 = mat->step1(env, matobj);
 
+  // Black background
+  long rowPtr = dataAddr;
   for(int y = 0; y < rows; y++)
   {
-	  jbyte * rowaddr = ROW_ADDR(env, matobj,mat,y);
-
-	  for (int x = 0; x < cols; x++)
-	  {
-		  int i = x * channels;
-
-		  // OpenCV: For HSV, Hue range is [0,179], Saturation range is [0,255] and Value range is [0,255].
-		  int h = (unsigned char)rowaddr[i];
-		  int s = (unsigned char)rowaddr[i+1];
-		  int v = (unsigned char)rowaddr[i+2];
-
-        // ...
-	  }
+    jbyte * data = (jbyte *)rowPtr;
+    for (int x = 0; x < cols; x++)
+    {
+      int i = x * channels;
+      data[i+2] = 0; // value -> black
+    }
+    rowPtr += step1;
   }
-
+  
+  int radius = cols > rows ? (rows>>1) - 1 : (cols>>1) - 1;
+  
+  // midpoint circle
+  int x = 0;
+  int y = radius;
+  long rowPtr1 = dataAddr + step1 * (rows>>1);
+  long rowPtr2 = rowPtr1;
+  long rowPtr3 = rowPtr1;
+  long rowPtr4 = rowPtr1;
+  rowPtr1 -= step1 * y;
+  rowPtr2 += step1 * y;
+  int d = 1 - radius;
+  CircleRow(x, y, radius, rowPtr1, cols>>1, channels);
+  CircleRow(x, -y, radius, rowPtr2, cols>>1, channels);
+  CircleRow(y, x, radius, rowPtr3, cols>>1, channels);
+  CircleRow(y, -x, radius, rowPtr4, cols>>1, channels);
+  while (y > x) {
+    if (d<0) {
+      d+=2*x+3;
+      x++;
+      rowPtr3 -= step1;
+      rowPtr4 += step1;
+    }
+    else {
+      d+=2*(x-y)+5;
+      x++;
+      rowPtr3 -= step1;
+      rowPtr4 += step1;
+      y--;
+      rowPtr1 += step1;
+      rowPtr2 -= step1;
+    }
+    CircleRow(x, y, radius, rowPtr1, cols>>1, channels);
+    CircleRow(x, -y, radius, rowPtr2, cols>>1, channels);
+    CircleRow(y, x, radius, rowPtr3, cols>>1, channels);
+    CircleRow(y, -x, radius, rowPtr4, cols>>1, channels);
+  }
 }
+
 
