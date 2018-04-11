@@ -47,8 +47,8 @@ JNIEXPORT void JNICALL Java_de_serviceflow_frankenstein_plugin_opencv_jni_Native
 	  {
 		  int i = x * channels;
 
-    // OpenCV: For HSV, Hue range is [0,179] mapped to [0,359], Saturation range is [0,255] and Value range is [0,255].
-		  int h = 2 * (unsigned char)rowaddr[i];
+    // OpenCV: For HSV, Hue range is [0,255] mapped to [0,359], Saturation range is [0,255] and Value range is [0,255].
+		  int h = (unsigned char)rowaddr[i] * 359 / 255;
 		  int s = (unsigned char)rowaddr[i+1];
 		  int v = (unsigned char)rowaddr[i+2];
 
@@ -60,6 +60,8 @@ JNIEXPORT void JNICALL Java_de_serviceflow_frankenstein_plugin_opencv_jni_Native
         int distance = keyHue - h;
         if (distance<0)
           distance = -distance;
+        if (distance>180)
+          distance  = 360 - distance;
         
         if (distance>=range-2)
           s = s >>1;
