@@ -37,7 +37,7 @@ public class FxMain extends Application {
 	private ProcessingSceneController pController;
 	private ConfigurationSceneController cController;
 
-	public static final String APP_NAME = "Frankenstein VR";
+	public static final String APP_NAME = "Frankenstein";
 
 	private Configuration configuration;
 	private static Configuration initialConfiguration;
