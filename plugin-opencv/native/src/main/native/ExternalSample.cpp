@@ -120,10 +120,11 @@ void CircleRow(int x,  int y, int radius, long rowptr, int xmid, int channels) {
   for (int xx=-x; xx<=x; xx++, i+= channels) {
     int h = degree(xx, y) * 255 / 360;
     int v = 255 - 255 * (xx * xx + y * y) / (radius * radius);
-    int s = 2 * (v - 128);
+    int s = 2 * (CLAMP(v, 0, 255) - 128);
     if (s<0)
-       s = -s;
-    s = 255 - s;
+       s = 255 + s;
+    else
+      s = 255 - s;
     data[i+0] = CLAMP(h, 0, 255);
     data[i+1] = CLAMP(s, 0, 255);
     data[i+2] = CLAMP(v, 0, 255);
