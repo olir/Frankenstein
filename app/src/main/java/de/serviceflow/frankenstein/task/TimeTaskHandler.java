@@ -20,6 +20,10 @@ public class TimeTaskHandler extends TaskHandler {
 			if (e>0)
 				progress(line.substring(s + 5, e));
 		}
+		else {
+			getLogBuffer().append(line);
+			getLogBuffer().append("\n");
+		}
 	}
 
 	@Override
@@ -33,4 +37,5 @@ public class TimeTaskHandler extends TaskHandler {
 		// System.out.println("progress "+time);
 	}
 
+	
 }

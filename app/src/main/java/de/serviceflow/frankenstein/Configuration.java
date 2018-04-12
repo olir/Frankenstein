@@ -84,6 +84,14 @@ public class Configuration implements ConfigManager {
 
 	private static final Configuration configuration = new Configuration(null);
 
+	public void init() {
+		getPluginManager().load(configuration);
+
+		// todo ...
+
+		
+	}
+	
 	public static ConfigManager getInstance() {
 		return configuration;
 	}
@@ -95,27 +103,26 @@ public class Configuration implements ConfigManager {
 		Properties optionProperties;
 
 		usage.setLength(0);
-		usage.append("frankenstein");
+		usage.append("Usage:\n\nfrankenstein");
 
-		optionKeyIndex = getOptionIndex(args, "visual");
-		configuration.setVisual(optionKeyIndex>=0);
+		optionKeyIndex = getOptionIndex(args, "cli", false, false);
+		configuration.setVisual(optionKeyIndex<0);
 
-		optionKeyIndex = getOptionIndex(args, "source");
-		optionValue = getOptionValue(args, "source", "test", optionKeyIndex, "file", "test", "slides", "camera", "stream");
+		optionKeyIndex = getOptionIndex(args, "source", true, false);
+		optionValue = getOptionValue(args, "source", "test", optionKeyIndex, false, "file", "test", "slides", "camera", "stream");
 		optionProperties = getOptionProperties(args, optionKeyIndex);
 		cliConfigureSource(configuration, optionValue, optionProperties);
 
-		configuration.getPluginManager().load(configuration);
-
-		// todo ...
-
-		if (getOptionIndex(args, "?")>=0) {
+		usage.append("\n\nfrankenstein");
+		if (getOptionIndex(args, "?", false, true)>=0) {
 			return null;
 		}
 
 		return configuration;
 	}
 
+	
+	
 	private static void cliConfigureSource(Configuration configuration, String optionValue,
 			Properties optionProperties) {
 		switch (optionValue) {
@@ -135,9 +142,14 @@ public class Configuration implements ConfigManager {
 
 	}
 
-	private static int getOptionIndex(String[] args, String optionKey) {
-		usage.append(" -");
+	private static int getOptionIndex(String[] args, String optionKey, boolean hasValues, boolean mandatory) {
+		usage.append(' ');
+		if (!mandatory)
+			usage.append('[');
+		usage.append('-');
 		usage.append(optionKey);
+		if (!mandatory && !hasValues)
+			usage.append(']');
 
 		for (int i = 0; i < args.length; i++) {
 			if (args[i].startsWith("-" + optionKey + "=") || args[i].equals("-" + optionKey)) {
@@ -148,6 +160,7 @@ public class Configuration implements ConfigManager {
 	}
 
 	private static String getOptionValue(String[] args, String optionKey, String defaultValue, int optionKeyIndex,
+			boolean mandatory, 
 			String... optionValues) {
 		usage.append("=");
 		for (String opt : optionValues) {
@@ -155,6 +168,8 @@ public class Configuration implements ConfigManager {
 			usage.append('|');
 		}
 		usage.setLength(usage.length()-1);
+		if (!mandatory)
+			usage.append(']');
 
 		if (optionKeyIndex < 0)
 			return defaultValue;

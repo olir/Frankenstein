@@ -300,6 +300,7 @@ public class ConfigurationSceneController {
 		this.stage = stage;
 	}
 
+	
 	@FXML
 	public void doneButtonPressed(ActionEvent event) {
 		List<VideoFilter> filters = configuration.getFilters();

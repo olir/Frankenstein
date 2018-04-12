@@ -16,7 +16,10 @@
 package de.serviceflow.frankenstein;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,6 +36,7 @@ import de.serviceflow.frankenstein.vf.DefaultFilterContext;
 import de.serviceflow.frankenstein.vf.FilterElement;
 import de.serviceflow.frankenstein.vf.VideoFilter;
 import de.serviceflow.frankenstein.vf.VideoStreamSource;
+import de.serviceflow.frankenstein.vf.input.TestImageInput;
 
 public class MovieProcessor {
 
@@ -174,7 +178,7 @@ public class MovieProcessor {
 
 				// 1. Detach Audio and Metadata from orginal video and store
 				// temporarily
-				if (configuration.doOutput && configuration.doInput) {
+				if (configuration.doOutput && configuration.doInput && !(configuration.getSource() instanceof TestImageInput)) {
 					if (!new Task(this,
 							ffmpeg.getAbsolutePath() + " -y -i \"" + configuration.getInputVideo() + "\""
 									+ " -f ffmetadata " + tempMetadataFile.getAbsolutePath()
@@ -195,6 +199,13 @@ public class MovieProcessor {
 									+ tempAudioFile.getAbsolutePath(),
 							new TimeTaskHandler(l, "Creating Silent Audio Audio")).run())
 						return false;
+					
+					configuration.metadata.clear();
+					PrintWriter w = new PrintWriter(new FileWriter(tempMetadataFile));
+					w.println(";FFMETADATA1");
+					w.close();
+					configuration.metadata.load(tempMetadataFile);
+
 				}
 			}
 
@@ -273,19 +284,23 @@ public class MovieProcessor {
 			if (configuration.doOutput) {
 				File of = findFreeFile(new File(configuration.outputVideo));
 
+				TaskHandler handler = null;
+				
 				if (!configuration.doInput || !(configuration.getSource() instanceof VideoStreamSource)) {
 					if (configuration.doInput) {
+						handler = new TimeTaskHandler(l, "Assembling Output");
 						if (!new Task(this, ffmpeg.getAbsolutePath() + " -y -i \"" + tempVideoFile.getAbsolutePath()
 								+ "\" -i " + tempAudioFile.getAbsolutePath() + " -i " + tempMetadataFile.getAbsolutePath()
 								+ " -map_metadata 2" + " -c:a aac -c:v libx264  -q 17 \"" + of.getAbsolutePath() + '"',
-								new TimeTaskHandler(l, "Assembling Output")).run())
+								handler).run())
 							return false;
 					} else {
+						handler = new TimeTaskHandler(l, "Processing Output");
 						if (!new Task(this,
 								ffmpeg.getAbsolutePath() + " -y -i \"" + tempVideoFile.getAbsolutePath() + "\" -i "
 										+ tempAudioFile.getAbsolutePath() + " -c:a aac -c:v libx264  -q 17 \""
 										+ of.getAbsolutePath()+ '"',
-								new TimeTaskHandler(l, "Processing Output")).run())
+										handler).run())
 							System.out.println("Warning: Task failed");
 					}
 				} else {
@@ -293,6 +308,8 @@ public class MovieProcessor {
 					tempVideoFile.renameTo(of);
 				}
 				if (!of.exists()) {
+					if (handler!=null)
+						System.err.println(handler.getLogBuffer().toString());
 					System.err.println("Missing output " + of.getAbsolutePath());
 					return false;
 				} else {
@@ -302,6 +319,9 @@ public class MovieProcessor {
 				tempAudioFile.delete();
 				tempMetadataFile.delete();
 			}
+		} catch (IOException e) {
+			e.printStackTrace();
+			return false;
 		} finally {
 			// if (!configuration.doInput || !(configuration.getSource()
 			// instanceof VideoStreamSource))

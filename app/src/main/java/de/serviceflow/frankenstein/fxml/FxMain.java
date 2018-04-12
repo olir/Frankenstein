@@ -67,6 +67,14 @@ public class FxMain extends Application {
 			theStage.setMaxWidth(WIDTH);
 			theStage.setWidth(WIDTH);
 
+			primaryStage.setOnCloseRequest(evt -> {
+		        // prevent window from closing
+		        evt.consume();
+
+		        // execute own shutdown procedure
+		        shutdown(primaryStage);
+		    });
+			
 			buildUI();
 
 			theStage.setScene(configurationScene);
@@ -152,4 +160,9 @@ public class FxMain extends Application {
 			theStage.setTitle(APP_NAME + " v" + getInitialConfiguration().getPluginManager().getImplementationVersion() );
 	}
 
+	private void shutdown(Stage stage) {
+		ExecutorThread.shutdown();
+		stage.close();
+		System.exit(0);
+	}	
 }

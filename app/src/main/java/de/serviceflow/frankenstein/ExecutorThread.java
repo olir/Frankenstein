@@ -2,12 +2,11 @@ package de.serviceflow.frankenstein;
 
 import java.util.ArrayDeque;
 import java.util.Queue;
-import java.util.concurrent.Executor;
 
-public class ExecutorThread implements Executor {
-	final Queue<Runnable> tasks = new ArrayDeque<Runnable>();
-	Runnable active;
-	boolean isAlive = true;
+public class ExecutorThread {
+	final Queue<Runnable[]> tasks = new ArrayDeque<Runnable[]>();
+	Runnable[] active;
+	private boolean isAlive = true;
 	final Thread thread = new Thread(new Runnable() {
 		@Override
 		public void run() {
@@ -29,30 +28,39 @@ public class ExecutorThread implements Executor {
 	}
 
 	private void stop() {
-		isAlive=false;
+		isAlive = false;
 	}
 
 	private static ExecutorThread instance = null;
-	
+
 	public static synchronized ExecutorThread getInstance() {
-		if (instance==null)
+		if (instance == null)
 			instance = new ExecutorThread();
 		return instance;
 	}
 
 	public static void shutdown() {
-		if (instance!=null)
+		if (instance != null)
 			instance.stop();
 	}
-	
-	public synchronized void execute(final Runnable r) {
-		tasks.offer(r);
+
+	public synchronized void execute(final Runnable... r) {
+//		System.out.println("ExecutorThread execute "+r.length);
+		Runnable[] taskSequence = r;
+		tasks.offer(taskSequence);
 	}
 
 	protected synchronized void scheduleNext() {
 		if ((active = tasks.poll()) != null) {
-			active.run();
+//			System.out.println("ExecutorThread scheduleNext active");
+			for (Runnable r : active) {
+//				System.out.println("ExecutorThread scheduleNext running...");
+				r.run();
+			}
 		}
 	}
 
+	public boolean isAlive() {
+		return isAlive;
+	}
 }
