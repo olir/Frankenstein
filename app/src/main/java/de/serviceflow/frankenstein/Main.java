@@ -4,11 +4,9 @@ import org.opencv.core.CvException;
 import org.opencv.core.Mat;
 
 import de.serviceflow.frankenstein.fxml.FxMain;
-import de.serviceflow.frankenstein.fxml.ProcessingSceneController;
-import de.serviceflow.frankenstein.plugin.api.DefaultSegmentConfigController;
+import de.serviceflow.frankenstein.plugin.api.AbstractConfigController;
 import de.serviceflow.frankenstein.plugin.api.SegmentVideoFilter;
 import de.serviceflow.frankenstein.vf.VideoStreamSource;
-import javafx.application.Platform;
 
 public class Main {
 	public static void main(String[] args) {
@@ -62,14 +60,13 @@ public class Main {
 				System.exit(0);
 			}
 		});
-		
+
 	}
-	
+
 	private class CliProcessingListener implements ProcessingListener {
 
 		@Override
-		public void configChanged(DefaultSegmentConfigController segmentConfigController,
-				SegmentVideoFilter selectedFilter) {
+		public void configChanged(AbstractConfigController segmentConfigController, SegmentVideoFilter selectedFilter) {
 			// TODO Auto-generated method stub
 
 		}

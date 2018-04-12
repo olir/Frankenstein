@@ -12,5 +12,5 @@ public interface SegmentFilterConfigListener {
 	 * @param selectedFilter
 	 *            SegmentVideoFilter
 	 */
-	void configChanged(DefaultSegmentConfigController segmentConfigController, SegmentVideoFilter selectedFilter);
+	void configChanged(AbstractConfigController segmentConfigController, SegmentVideoFilter selectedFilter);
 }

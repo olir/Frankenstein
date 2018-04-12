@@ -21,7 +21,6 @@ import java.io.IOException;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.List;
 import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 
@@ -33,7 +32,7 @@ import de.serviceflow.frankenstein.Configuration;
 import de.serviceflow.frankenstein.ExecutorThread;
 import de.serviceflow.frankenstein.MovieProcessor;
 import de.serviceflow.frankenstein.ProcessingListener;
-import de.serviceflow.frankenstein.plugin.api.DefaultSegmentConfigController;
+import de.serviceflow.frankenstein.plugin.api.AbstractConfigController;
 import de.serviceflow.frankenstein.plugin.api.SegmentVideoFilter;
 import de.serviceflow.frankenstein.vf.FilterElement;
 import de.serviceflow.frankenstein.vf.VideoStreamSource;
@@ -552,7 +551,8 @@ public class ProcessingSceneController implements ProcessingListener {
 			LocalTime lt = LocalTime.parse(t, formatter);
 			return ((double) lt.toNanoOfDay()) / 1000000000.0;
 		} catch (java.time.format.DateTimeParseException e) {
-			// ffmpeg causes DateTimeParseException: Text '-577014:32:22.77' could not be parsed
+			// ffmpeg causes DateTimeParseException: Text '-577014:32:22.77'
+			// could not be parsed
 			System.err.println(e.getLocalizedMessage() + ": t=" + t);
 			return 0.0;
 		}
@@ -590,7 +590,7 @@ public class ProcessingSceneController implements ProcessingListener {
 
 	@Override
 	public void nextFrameLoaded(VideoStreamSource s) {
-		//Mat frame = s.getFrame();
+		// Mat frame = s.getFrame();
 		int frameId = s.getCurrentPos() + 1;
 		this.frames = s.getFrames();
 		ExecutorThread.getInstance().execute(new Runnable() {
@@ -942,7 +942,7 @@ public class ProcessingSceneController implements ProcessingListener {
 	}
 
 	@Override
-	public void configChanged(DefaultSegmentConfigController segmentConfigController, SegmentVideoFilter selectedFilter) {
+	public void configChanged(AbstractConfigController segmentConfigController, SegmentVideoFilter selectedFilter) {
 		Runnable r = new Runnable() {
 			public void run() {
 				processor.setPreviewFilter(selectedFilter);
