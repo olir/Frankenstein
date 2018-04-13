@@ -7,6 +7,8 @@ public class AbstractConfigController {
 	
 	/**
 	 * Properties of this instance.
+	 * 
+	 * @return Properties
 	 */
 	public Properties getProperties() {
 		return props;

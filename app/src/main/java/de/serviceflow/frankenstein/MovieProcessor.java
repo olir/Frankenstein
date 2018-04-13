@@ -60,12 +60,13 @@ public class MovieProcessor {
 	private double movie_w;
 
 	private static boolean stopped = false;
-	private boolean streamStopped = false;
+	private boolean notStream = false;
 	int currentPos = 0;
 
 	private File ffmpeg;
 
 	private SegmentVideoFilter previewFilter = null;
+	private boolean cliStop = false;
 
 	public MovieProcessor(Configuration configuration) {
 		this.ffmpegPath = configuration.getFFmpegPath();
@@ -169,7 +170,7 @@ public class MovieProcessor {
 
 	public boolean processVideo(ProcessingListener l) {
 		try {
-			streamStopped = !configuration.doInput || !(configuration.getSource() instanceof VideoStreamSource);
+			notStream = !configuration.doInput || !(configuration.getSource() instanceof VideoStreamSource);
 			if (!configuration.doInput || !(configuration.getSource() instanceof VideoStreamSource)) {
 				System.out.print(
 						"doOutput=" + configuration.doOutput + " with source=" + (configuration.getSource() != null
@@ -217,9 +218,9 @@ public class MovieProcessor {
 
 			int i = 0;
 			while (!stopped && (configuration.getSource().getFrames() < 0 || i < configuration.getSource().getFrames()
-					|| !streamStopped)) {
+					|| !notStream)) {
 				i++;
-				if (streamStopped) {
+				if (notStream) {
 					currentPos = configuration.getSource().seek(i, l);
 					frame = configuration.getSource().getFrame();
 				} else {
@@ -242,7 +243,7 @@ public class MovieProcessor {
 						FilterContext context = new DefaultFilterContext();
 						for (FilterElement element : localFilters) {
 							if (element.filter != null) {
-								if (element.r.start <= i && (i < element.r.end || !streamStopped)) {
+								if (element.r.start <= i && (i < element.r.end || !notStream)) {
 									// System.out.println("MovieProcessor
 									// processStreamFrame
 									// " +
@@ -277,7 +278,7 @@ public class MovieProcessor {
 			if (configuration.doOutput) {
 				outputVideo.release();
 			}
-			if (stopped) {
+			if (stopped && !cliStop) {
 				return false;
 			}
 
@@ -335,7 +336,7 @@ public class MovieProcessor {
 	}
 
 	public void stopStream() {
-		streamStopped = true;
+		notStream = true;
 	}
 
 	private File findFreeFile(File f) {
@@ -585,5 +586,10 @@ public class MovieProcessor {
 
 	public void setPreviewFilter(SegmentVideoFilter selectedFilter) {
 		previewFilter = selectedFilter;
+	}
+
+	public void inputReceived(String nextLine) {
+		cliStop  = true;
+		stop();
 	}
 }

@@ -1,5 +1,7 @@
 package de.serviceflow.frankenstein;
 
+import java.util.Scanner;
+
 import org.opencv.core.CvException;
 import org.opencv.core.Mat;
 
@@ -9,6 +11,8 @@ import de.serviceflow.frankenstein.plugin.api.SegmentVideoFilter;
 import de.serviceflow.frankenstein.vf.VideoStreamSource;
 
 public class Main {
+	boolean needInput = false;
+
 	public static void main(String[] args) {
 
 		Configuration c = Configuration.cliCreateConfiguration(args);
@@ -33,34 +37,51 @@ public class Main {
 			processor.init(l);
 			runProcessing(processor, l);
 		} catch (CvException e) {
-			// taskError(e.toString());
+			taskError(e.toString());
 		}
 	}
 
+	private void taskError(String message) {
+		System.err.println(message);
+	}
+
 	private void runProcessing(MovieProcessor processor, CliProcessingListener l) {
+		needInput = true;
+		Thread inputThread = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				Scanner sc = new Scanner(System.in);
+				processor.inputReceived(sc.nextLine());
+				System.out.println("closing input scanner.");
+				sc.close();
+			}
+		});
+		inputThread.start();
+
 		Runnable r = new Runnable() {
 			public void run() {
-
 				long seconds = System.currentTimeMillis() / 1000;
 
 				if (processor.processVideo(l)) {
-
 					seconds = System.currentTimeMillis() / 1000 - seconds;
 
 					System.out.println("Done in " + seconds + "s.");
 				} else {
-					// taskError("Task failed");
+					taskError("Task failed");
 				}
+				needInput = false;
 			}
 		};
 		ExecutorThread.getInstance().execute(r, new Runnable() {
+			@SuppressWarnings("deprecation")
 			@Override
 			public void run() {
+				System.out.println("shutdown.");
 				ExecutorThread.shutdown();
+				processor.closeInput();
 				System.exit(0);
 			}
 		});
-
 	}
 
 	private class CliProcessingListener implements ProcessingListener {

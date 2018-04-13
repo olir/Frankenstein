@@ -128,18 +128,21 @@ public class Configuration implements ConfigManager {
 		switch (optionValue) {
 		case "file":
 			configuration.source = new VideoInput(optionProperties.getProperty("file", null));
+			break;
 		case "slides":
 			configuration.source = new SlideShowInput(optionProperties.getProperty("dir", "."));
+			break;
 		case "camera":
 			configuration.source = new CameraInput(0);
+			break;
 		case "stream":
 			configuration.source = new StreamInput(optionProperties.getProperty("stream", null), optionProperties.getProperty("file", null));
+			break;
 		default:
 		case "test":
 			configuration.source = new TestImageInput(Integer.valueOf(optionProperties.getProperty("width", "1024")),
 					Integer.valueOf(optionProperties.getProperty("height", "768")));
 		}
-
 	}
 
 	private static int getOptionIndex(String[] args, String optionKey, boolean hasValues, boolean mandatory) {

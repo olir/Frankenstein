@@ -71,10 +71,14 @@ public class CameraInput implements VideoStreamSource {
 		timer.schedule(new TimerTask() {
 			@Override
 			public void run() {
-				currentPos++;
-				frames++;
-				currentFrame = retrieve(currentFrame, l);
-				l.nextFrameLoaded(CameraInput.this);
+				if (movie != null && timer != null) {
+					currentPos++;
+					frames++;
+					currentFrame = retrieve(currentFrame, l);
+				}
+				if (movie != null && timer != null) {
+					l.nextFrameLoaded(CameraInput.this);
+				}
 			}
 		}, 0, (int) (1000.0 / fps));
 	}
