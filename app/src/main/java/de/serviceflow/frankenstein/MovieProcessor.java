@@ -15,12 +15,21 @@
  */
 package de.serviceflow.frankenstein;
 
+import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 
 import org.opencv.core.Mat;
 import org.opencv.core.Size;
@@ -183,7 +192,7 @@ public class MovieProcessor {
 					if (!new Task(this,
 							ffmpeg.getAbsolutePath() + " -y -i \"" + configuration.getInputVideo() + "\""
 									+ " -f ffmetadata " + tempMetadataFile.getAbsolutePath()
-									+ " -vn -ar 44100 -ac 2 -ab 192k -f mp3 -r 21 " + tempAudioFile.getAbsolutePath(),
+									+ " -vn -ar 44100 -ac 2 -ab 192k -f au -r 21 " + tempAudioFile.getAbsolutePath(),
 							new TimeTaskHandler(l, "Splitting Audio")).run())
 						return false;
 
@@ -210,7 +219,36 @@ public class MovieProcessor {
 				}
 			}
 
-			// 2. Process Video without audio ()
+			// 2. Prepare Audio Processing
+			if (configuration.doOutput && tempAudioFile != null && tempAudioFile.exists()) {
+				try {
+					System.out.println("Prepare audio.");
+					Clip clip = AudioSystem.getClip();
+					AudioInputStream stream = AudioSystem
+							.getAudioInputStream(new BufferedInputStream(new FileInputStream(tempAudioFile)));
+					if (stream != null) {
+						final AudioFormat baseFormat = stream.getFormat();
+						System.out.println("baseFormat: "+baseFormat.toString());
+						AudioFormat decodedFormat = new AudioFormat(AudioFormat.Encoding.PCM_SIGNED,
+								baseFormat.getSampleRate(), 16, baseFormat.getChannels(), baseFormat.getChannels() * 2,
+								baseFormat.getSampleRate(), false);
+						System.out.println("decodedFormat: "+decodedFormat.toString());
+						stream = AudioSystem.getAudioInputStream(decodedFormat, stream);
+						clip.open(stream);
+					}
+				} catch (LineUnavailableException e) {
+					e.printStackTrace();
+				} catch (UnsupportedAudioFileException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			else if (configuration.doOutput)  {
+				System.out.println("No tempAudioFile! Missing: "+(tempAudioFile != null?tempAudioFile.getAbsolutePath():"null"));
+			}
+			
+			// 2. Process Video
 			System.out.print("Processing video: ");
 			Mat newFrame = null;
 			if (l != null)
@@ -414,7 +452,7 @@ public class MovieProcessor {
 				tempFile.deleteOnExit();
 				tempVideoFile = new File(new File(configuration.outputVideo).getParentFile(), tempFile.getName());
 				tempVideoFile.deleteOnExit();
-				tempAudioFile = File.createTempFile("sound", ".mp3", tempPath);
+				tempAudioFile = File.createTempFile("sound", ".au", tempPath);
 				tempAudioFile.deleteOnExit();
 				tempMetadataFile = File.createTempFile("metadata", ".properties", tempPath);
 				tempMetadataFile.deleteOnExit();
@@ -589,7 +627,7 @@ public class MovieProcessor {
 	}
 
 	public void inputReceived(String nextLine) {
-		cliStop  = true;
+		cliStop = true;
 		stop();
 	}
 }
