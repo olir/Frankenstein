@@ -20,54 +20,6 @@ JNIEXPORT void JNICALL Java_de_serviceflow_frankenstein_plugin_opencv_jni_Extern
   }
 }
 
-void CircleRowT1(int x,  int y, int radius, long rowptr, int xmid, int channels, int frameId);
-
-// draw row of circle at "ymid + y" from -x to +x at xmid offset
-void CircleRowT1(int x,  int y, int radius, long rowptr, int xmid, int channels, int frameId) {
-
-  int keyHue = ((frameId - 1) % 256);
-
-  jbyte * data = (jbyte *)rowptr;
-  int i = (xmid-x) * channels;
-  for (int xx=-x; xx<=x; xx++, i+= channels) {
-    // 
-    
-    int h = atan2(xx, y) * 128 / 3.141592653589793238462643383279 + 128;
-    int v = 255 - 255 * (xx * xx + y * y) / (radius * radius);
-    int s = 2 * (CLAMP(v, 0, 255) - 128);
-    if (s<0)
-       s = 255 + s;
-    else {
-      s = 255 - s;
-      v = 255 - v;
-    }
-
-    int range = 3;
-    int hlower = keyHue - range;
-    int hupper = keyHue + range;
-
-    // if ( (h > hlower && h < hupper) || (hlower<0 && h>255+hlower) || (hupper>255 && h<hupper-255))
-    {
-      int distance = keyHue - h;
-      if (distance<0)
-        distance = -distance;
-      if (distance>127)
-        distance  = 255 - distance;
-      
-      v = v * range * 255 / (range + distance) / 255;
-    }
-    //else
-    //{
-//      v = 0;
-    //}
-    
-    data[i+0] = CLAMP(h, 0, 255);
-    data[i+1] = CLAMP(s, 0, 255);
-    data[i+2] = CLAMP(v, 0, 255);
-  }
-  
-}
-
 void CircleRow(int x,  int y, int radius, long rowptr, int xmid, int channels, int frameId);
 
 // draw row of circle at "ymid + y" from -x to +x at xmid offset
@@ -135,10 +87,10 @@ JNIEXPORT void JNICALL Java_de_serviceflow_frankenstein_plugin_opencv_jni_Extern
   rowPtr1 -= step1 * y;
   rowPtr2 += step1 * y;
   int d = 1 - radius;
-  CircleRowT1(x, y, radius, rowPtr1, cols>>1, channels, frameId);
-  CircleRowT1(x, -y, radius, rowPtr2, cols>>1, channels, frameId);
-  CircleRowT1(y, x, radius, rowPtr3, cols>>1, channels, frameId);
-  CircleRowT1(y, -x, radius, rowPtr4, cols>>1, channels, frameId);
+  CircleRow(x, y, radius, rowPtr1, cols>>1, channels, frameId);
+  CircleRow(x, -y, radius, rowPtr2, cols>>1, channels, frameId);
+  CircleRow(y, x, radius, rowPtr3, cols>>1, channels, frameId);
+  CircleRow(y, -x, radius, rowPtr4, cols>>1, channels, frameId);
   while (y > x) {
     if (d<0) {
       d+=2*x+3;
@@ -155,10 +107,10 @@ JNIEXPORT void JNICALL Java_de_serviceflow_frankenstein_plugin_opencv_jni_Extern
       rowPtr1 += step1;
       rowPtr2 -= step1;
     }
-    CircleRowT1(x, y, radius, rowPtr1, cols>>1, channels, frameId);
-    CircleRowT1(x, -y, radius, rowPtr2, cols>>1, channels, frameId);
-    CircleRowT1(y, x, radius, rowPtr3, cols>>1, channels, frameId);
-    CircleRowT1(y, -x, radius, rowPtr4, cols>>1, channels, frameId);
+    CircleRow(x, y, radius, rowPtr1, cols>>1, channels, frameId);
+    CircleRow(x, -y, radius, rowPtr2, cols>>1, channels, frameId);
+    CircleRow(y, x, radius, rowPtr3, cols>>1, channels, frameId);
+    CircleRow(y, -x, radius, rowPtr4, cols>>1, channels, frameId);
   }
 }
 
