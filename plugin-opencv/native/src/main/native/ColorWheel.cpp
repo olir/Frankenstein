@@ -11,7 +11,7 @@
 
 using namespace std;
 
-JNIEXPORT void JNICALL Java_de_serviceflow_frankenstein_plugin_opencv_jni_ExternalSample_init
+JNIEXPORT void JNICALL Java_de_serviceflow_frankenstein_plugin_opencv_jni_ColorWheel_init
   (JNIEnv* env, jobject obj)
 {
   JwMat* mat = JwMat::matptr;
@@ -20,23 +20,42 @@ JNIEXPORT void JNICALL Java_de_serviceflow_frankenstein_plugin_opencv_jni_Extern
   }
 }
 
-void CircleRow(int x,  int y, int radius, long rowptr, int xmid, int channels, int frameId);
+void CircleRow(int x,  int y, int radius, long rowptr, int xmid, int channels, int frameId, bool positive);
 
 // draw row of circle at "ymid + y" from -x to +x at xmid offset
-void CircleRow(int x,  int y, int radius, long rowptr, int xmid, int channels, int frameId) {
+void CircleRow(int x,  int y, int radius, long rowptr, int xmid, int channels, int frameId, bool positive) {
 
   jbyte * data = (jbyte *)rowptr;
   int i = (xmid-x) * channels;
+  int y2= y*y;
+
   for (int xx=-x; xx<=x; xx++, i+= channels) {
     // 
     
     int h = atan2(xx, y) * 128 / 3.141592653589793238462643383279 + 128;
-    int v = 255 - 255 * (xx * xx + y * y) / (radius * radius);
-    int s = 2 * (CLAMP(v, 0, 255) - 128);
+    int vbase = (511 * sqrt(xx * xx + y2)) / radius;
+    vbase = CLAMP(vbase, 0, 511);
+    int v = vbase;
+    if (positive) {
+    	v = 511 - v;
+    	vbase = 511 - v;
+    }
+    v = CLAMP(v, 0, 255);
+    int s = 2 * ((vbase>>1) - 128);
+//    if ((vbase%64)==0)
+//    {
+//    	s = 0;
+//    	v = 0;
+//    }
+//    else
     if (s<0)
+    {
        s = 255 + s;
-    else
+    }
+    else if (s>=0)
+    {
       s = 255 - s;
+    }
     data[i+0] = CLAMP(h, 0, 255);
     data[i+1] = CLAMP(s, 0, 255);
     data[i+2] = CLAMP(v, 0, 255);
@@ -44,9 +63,9 @@ void CircleRow(int x,  int y, int radius, long rowptr, int xmid, int channels, i
   
 }
 
-JNIEXPORT void JNICALL Java_de_serviceflow_frankenstein_plugin_opencv_jni_ExternalSample_process
+JNIEXPORT void JNICALL Java_de_serviceflow_frankenstein_plugin_opencv_jni_ColorWheel_process
   (JNIEnv* env, jobject obj,
-   jobject matobj, jint frameId, jobject context)
+   jobject matobj, jint frameId, jobject context, jboolean positive)
 {
   JwMat* mat = JwMat::matptr;
   int cols = mat->cols(env, matobj);
@@ -87,10 +106,10 @@ JNIEXPORT void JNICALL Java_de_serviceflow_frankenstein_plugin_opencv_jni_Extern
   rowPtr1 -= step1 * y;
   rowPtr2 += step1 * y;
   int d = 1 - radius;
-  CircleRow(x, y, radius, rowPtr1, cols>>1, channels, frameId);
-  CircleRow(x, -y, radius, rowPtr2, cols>>1, channels, frameId);
-  CircleRow(y, x, radius, rowPtr3, cols>>1, channels, frameId);
-  CircleRow(y, -x, radius, rowPtr4, cols>>1, channels, frameId);
+  CircleRow(x, y, radius, rowPtr1, cols>>1, channels, frameId, positive);
+  CircleRow(x, -y, radius, rowPtr2, cols>>1, channels, frameId, positive);
+  CircleRow(y, x, radius, rowPtr3, cols>>1, channels, frameId, positive);
+  CircleRow(y, -x, radius, rowPtr4, cols>>1, channels, frameId, positive);
   while (y > x) {
     if (d<0) {
       d+=2*x+3;
@@ -107,10 +126,10 @@ JNIEXPORT void JNICALL Java_de_serviceflow_frankenstein_plugin_opencv_jni_Extern
       rowPtr1 += step1;
       rowPtr2 -= step1;
     }
-    CircleRow(x, y, radius, rowPtr1, cols>>1, channels, frameId);
-    CircleRow(x, -y, radius, rowPtr2, cols>>1, channels, frameId);
-    CircleRow(y, x, radius, rowPtr3, cols>>1, channels, frameId);
-    CircleRow(y, -x, radius, rowPtr4, cols>>1, channels, frameId);
+    CircleRow(x, y, radius, rowPtr1, cols>>1, channels, frameId, positive);
+    CircleRow(x, -y, radius, rowPtr2, cols>>1, channels, frameId, positive);
+    CircleRow(y, x, radius, rowPtr3, cols>>1, channels, frameId, positive);
+    CircleRow(y, -x, radius, rowPtr4, cols>>1, channels, frameId, positive);
   }
 }
 

@@ -85,7 +85,7 @@
                 <javahClassNames>
                   <javahClassName>de.serviceflow.frankenstein.plugin.opencv.jni.NativeExample</javahClassName>
                   <javahClassName>de.serviceflow.frankenstein.plugin.opencv.jni.VideoEqualizer</javahClassName>
-                  <javahClassName>de.serviceflow.frankenstein.plugin.opencv.jni.ExternalSample</javahClassName>
+                  <javahClassName>de.serviceflow.frankenstein.plugin.opencv.jni.ColorWheel</javahClassName>
                 </javahClassNames>
                </configuration>
                <goals>

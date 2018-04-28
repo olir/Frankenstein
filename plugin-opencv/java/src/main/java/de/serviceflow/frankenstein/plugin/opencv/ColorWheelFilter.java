@@ -21,35 +21,34 @@ import org.opencv.imgproc.Imgproc;
 import de.serviceflow.frankenstein.plugin.api.DefaultSegmentFilter;
 import de.serviceflow.frankenstein.plugin.api.FilterContext;
 import de.serviceflow.frankenstein.plugin.api.DefaultSegmentConfigController;
-import de.serviceflow.frankenstein.plugin.opencv.jni.ExternalSample;
+import de.serviceflow.frankenstein.plugin.opencv.jni.ColorWheel;
 
-public class ExternalSampleFilter extends DefaultSegmentFilter {
+public class ColorWheelFilter extends DefaultSegmentFilter {
 
-	private final ExternalSample proxy;
+	private final ColorWheel proxy;
 
 	private Mat mHsvMat = new Mat();
 
-	public ExternalSampleFilter() throws UnsatisfiedLinkError {
-		super("externalsample");
+	public ColorWheelFilter() throws UnsatisfiedLinkError {
+		super("colorwheel");
 
-		proxy = new ExternalSample();
+		proxy = new ColorWheel();
 		proxy.init();
 	}
 
 	@Override
 	protected DefaultSegmentConfigController instantiateController() {
-		return new ExternalSampleConfigController();
+		return new ColorWheelConfigController();
 	}
 
 	@Override
 	public Mat process(Mat rgbaImage, int frameId, FilterContext context) {
 		Imgproc.cvtColor(rgbaImage, mHsvMat, Imgproc.COLOR_RGB2HSV_FULL);
 
-		// ExternalSampleConfigController c = ((ExternalSampleConfigController)
-		// getConfigController());
-		// pass c data to proxy...
+		ColorWheelConfigController c = ((ColorWheelConfigController)
+		 getConfigController());
 
-		proxy.process(mHsvMat, frameId, context);
+		proxy.process(mHsvMat, frameId, context, c.isPositive());
 
 		Imgproc.cvtColor(mHsvMat, rgbaImage, Imgproc.COLOR_HSV2RGB_FULL);
 
@@ -58,9 +57,8 @@ public class ExternalSampleFilter extends DefaultSegmentFilter {
 
 	@Override
 	protected void initializeController() {
-		// ExternalSampleConfigController c = ((ExternalSampleConfigController)
-		// getConfigController());
-		// c.set...(...);
-		// c.initialize();
+		 ColorWheelConfigController c = ((ColorWheelConfigController)
+		 getConfigController());
+		 c.initialize();
 	}
 }

@@ -48,8 +48,9 @@ public class NativeExampleFilter extends DefaultSegmentFilter {
 		NativeExampleConfigController c = ((NativeExampleConfigController) getConfigController());
 		int farbe = c.getFarbe();
 		int range = c.getRange();
+		int satmin = c.getSatMin();
 
-		proxy.process(mHsvMat, frameId, context, farbe, range);
+		proxy.process(mHsvMat, frameId, context, farbe, range, satmin);
 
 		Imgproc.cvtColor(mHsvMat, rgbaImage, Imgproc.COLOR_HSV2RGB_FULL);
 
@@ -63,5 +64,7 @@ public class NativeExampleFilter extends DefaultSegmentFilter {
 		c.setFarbe(farbe);
 		int range = 20;
 		c.setRange(range);
+		int satmin = 128;
+		c.setSatMin(satmin);
 	}
 }

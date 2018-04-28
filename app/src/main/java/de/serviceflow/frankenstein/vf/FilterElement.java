@@ -6,21 +6,30 @@ import de.serviceflow.frankenstein.fxml.ProcessingSceneController;
 import de.serviceflow.frankenstein.plugin.api.SegmentVideoFilter;
 
 public class FilterElement {
-	public Range r;
-	public SegmentVideoFilter filter = null;
-	ProcessingSceneController psc;
+	public final Range r;
+	final ProcessingSceneController psc;
+	final String name;
 	
-	public FilterElement(Range r, ProcessingSceneController psc) {
-		FilterElement.this.r = r;
+	public SegmentVideoFilter filter = null;
+
+	
+	public FilterElement(Range r, ProcessingSceneController psc, String name) {
+		this.r = r;
 		this.psc = psc;
+		this.name = name;
 	}
 
+	public FilterElement(Range r, ProcessingSceneController psc) {
+		this(r, psc, null);
+	}
+	
 	public void setType(SegmentVideoFilter selectedFilterType) {
 		filter = selectedFilterType;
 	}
 
-	public String toString() {
-		return toStringRange() + " " + (filter != null ? filter : "<none>");
+	public String toString() 
+	{
+		return (name!=null ? name : toStringRange()) + " " + (filter != null ? filter : "<none>");
 	}
 
 	public String toStringRange() {

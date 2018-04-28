@@ -513,7 +513,9 @@ public class ProcessingSceneController implements ProcessingListener {
 			currentFrameIndex.setDisable(false);
 		});
 
-		FilterElement val = new FilterElement(new Range(1, frames), this);
+		FilterElement val = new FilterElement(new Range(1, frames), this, "Preprocessing");
+		filterListData.add(val);
+		val = new FilterElement(new Range(1, frames), this, "Postprocessing");
 		filterListData.add(val);
 		Platform.runLater(() -> {
 			drawEditCanvas();

@@ -2,8 +2,8 @@ package de.serviceflow.frankenstein.plugin.opencv.jni;
 
 import de.serviceflow.frankenstein.plugin.api.NativeJniProxy;
 
-public class ExternalSample extends NativeJniProxy {
-	public ExternalSample() throws UnsatisfiedLinkError {
+public class ColorWheel extends NativeJniProxy {
+	public ColorWheel() throws UnsatisfiedLinkError {
 	}
 	
   protected void loadLibrary(String name) {
@@ -11,5 +11,5 @@ public class ExternalSample extends NativeJniProxy {
   }
   
 	public native void init();
-	public native void process(Object mat, int frameId, Object context);
+	public native void process(Object mat, int frameId, Object context, boolean positive);
 }

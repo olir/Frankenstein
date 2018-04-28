@@ -10,9 +10,12 @@ public class NativeExampleConfigController extends DefaultSegmentConfigControlle
 	Slider slColor;
 	@FXML
 	Slider slRange;
+	@FXML
+	Slider slSatMin;
 	
 	private int farbe = 0;
 	private int range = 20;
+	private int satmin = 128;
 	
 	public int getFarbe() {
 		return farbe;
@@ -33,6 +36,11 @@ public class NativeExampleConfigController extends DefaultSegmentConfigControlle
 			range = newvalue.intValue();
 			fireChange();
 		});
+		slSatMin.setValue(satmin);
+		slSatMin.valueProperty().addListener((observable, oldvalue, newvalue) -> {
+			satmin = newvalue.intValue();
+			fireChange();
+		});
 	}
 
 	public void setRange(int range) {
@@ -41,6 +49,14 @@ public class NativeExampleConfigController extends DefaultSegmentConfigControlle
 
 	public int getRange() {
 		return range;
+	}
+
+	public int getSatMin() {
+		return satmin;
+	}
+
+	public void setSatMin(int satmin) {
+		this.satmin = satmin;
 	}
 	
 }

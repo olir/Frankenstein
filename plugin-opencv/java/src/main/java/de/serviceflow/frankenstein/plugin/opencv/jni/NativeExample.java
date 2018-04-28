@@ -11,5 +11,5 @@ public class NativeExample extends NativeJniProxy {
   }
   
 	public native void init();
-	public native void process(Object mat, int frameId, Object context, int farbe, int range);
+	public native void process(Object mat, int frameId, Object context, int farbe, int range, int satmin);
 }
