@@ -37,6 +37,14 @@ Install Pre-Requisites first (see below), then you have 3 options to start it:
  * Download and execute the jar file from the release (see section below) 
  * or build jar (maven and Java JDK required, setup JAVA_HOME) with 'mvn clean package' and execute app with 'java -jar app/target/frankenstein.jar'
 
+# HOWTO change it
+
+I support eclipse. 
+
+- First build it with maven as decribed above.
+- In Eclipse go to File->Import / Maven / Existing Maven Projects and import it.
+- Then run it as application  app -> src/main/java -> de.serviceflow.frankenstein.Main
+
 ## Pre-Requisites
 - [FFmpeg 3.1.1+](https://ffmpeg.org) installed. Select path at first startup (is stored in frankenstein.ini at user-home)
 - [Java JRE 1.8+](https://java.com) installed.
