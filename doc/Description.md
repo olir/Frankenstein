@@ -40,7 +40,7 @@ Install Pre-Requisites first (see below), then you have 3 options to start it:
 ## Pre-Requisites
 - [FFmpeg 3.1.1+](https://ffmpeg.org) installed. Select path at first startup (is stored in frankenstein.ini at user-home)
 - [Java JRE 1.8+](https://java.com) installed.
-- [VLC 2.2.8](https://mirror.de.leaseweb.net/videolan/vlc/2.2.8/) installed for network stream recording support.
+- [VLC 2.2.8](https://www.vlc.de/vlc_archiv.php) installed for network stream recording support.
 - Codecs. See section below.
 
 ### FFMPEG OpenH264 support ###
