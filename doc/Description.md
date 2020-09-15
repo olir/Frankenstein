@@ -37,6 +37,10 @@ Install Pre-Requisites first (see below), then you have 3 options to start it:
  * Download and execute the jar file from the release (see section below) 
  * or build jar (maven and Java JDK required, setup JAVA_HOME) with 'mvn clean package' and execute app with 'java -jar app/target/frankenstein.jar'
 
+To build the plugin:
+* [install mingw64](https://superuser.com/questions/1294343/install-gcc-in-git-for-windows-bash-environment).
+* go into plugin-opencv module and compile with 'mvn clean package'.
+
 # HOWTO change it
 
 I support eclipse. 
