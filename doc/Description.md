@@ -2,7 +2,7 @@
 A Video Stream Analysis and Manipulation Framework for Java™ and C++, 
 where custom filters can be simply added into the processing pipeline.
 
-Plattforms: Windows 64. Linux will follow "soon".
+Plattforms: Windows 64.
 
 The Tool supports 
 * [OpenCV](http://www.opencv.org/releases.html) - computer vision and machine learning
@@ -35,7 +35,7 @@ The pipeline allows input as video file, camera, network stream or pictures stor
 Install Pre-Requisites first (see below), then you have 3 options to start it:
 * _Jar execution:_ 
  * Download and execute the jar file from the release (see section below) 
- * or build jar in app module with maven via 'mvn clean package' and execute jar in app/target
+ * or build jar (maven and Java JDK required) in app module with 'mvn clean package' and execute jar in app/target
 
 ## Pre-Requisites
 - [FFmpeg 3.1.1+](https://ffmpeg.org) installed. Select path at first startup (is stored in frankenstein.ini at user-home)
